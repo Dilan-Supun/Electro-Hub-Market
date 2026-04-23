@@ -340,6 +340,106 @@ ul.features li {
   margin-top: var(--space-2);
 }
 
+/* ---------- Site navigation ---------- */
+.site-nav {
+  display: none;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+.site-nav a {
+  color: var(--color-text-muted);
+  transition: color .15s;
+}
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
+  color: var(--color-text);
+}
+@media (min-width: 640px) {
+  .site-nav { display: flex; }
+}
+
+/* ---------- Footer nav ---------- */
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+.footer-nav a {
+  color: var(--color-text-muted);
+  transition: color .15s;
+}
+.footer-nav a:hover { color: var(--color-text); }
+
+/* ---------- About page grid ---------- */
+.about-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+.about-intro-card {
+  grid-column: 1 / -1;
+}
+@media (min-width: 640px) {
+  .about-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .about-intro-card {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- Contact form ---------- */
+.contact-form {
+  display: grid;
+  gap: var(--space-4);
+}
+.form-row {
+  display: grid;
+  gap: var(--space-4);
+}
+@media (min-width: 640px) {
+  .form-row { grid-template-columns: 1fr 1fr; }
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+}
+.form-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text);
+}
+.form-required { color: var(--color-accent); }
+.form-input {
+  width: 100%;
+  padding: .75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  transition: border-color .15s, box-shadow .15s;
+}
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-highlight);
+}
+.form-input::placeholder { color: var(--color-text-muted); }
+.form-textarea { resize: vertical; min-height: 120px; }
+
+/* ---------- Contact card 4-col variant ---------- */
+@media (min-width: 900px) {
+  .contact-card-4col {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
 /* ---------- Footer ---------- */
 .footer {
   padding: var(--space-8) 0 var(--space-10);
