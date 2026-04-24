@@ -16,18 +16,6 @@
     "link": "product.html?id=dji-neo-propellers"
   },
   {
-    "id": "szdq-wifi-power-meter",
-    "title": "SZDQ WiFi Smart Power Meter 40A",
-    "category": "modules",
-    "condition": "Brand new",
-    "meta": "DIN Rail · 40A",
-    "description": "Smart Life / Tuya / Google Home / Alexa. Monitors voltage, current, power, frequency, energy, temperature.",
-    "price": "Rs. 6,990",
-    "link": "products/szdq-wifi-power-meter.html",
-    "image": null,
-    "svg": "<rect x=\"100\" y=\"50\" width=\"220\" height=\"210\" rx=\"12\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><rect x=\"120\" y=\"70\" width=\"180\" height=\"70\" rx=\"6\" fill=\"currentColor\" opacity=\"0.08\"/><text x=\"210\" y=\"113\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"18\" fill=\"currentColor\" opacity=\"0.65\" font-family=\"sans-serif\" font-weight=\"bold\">230V 40A</text><text x=\"210\" y=\"178\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.45\" font-family=\"sans-serif\">kWh · W · A · V · Hz</text><circle cx=\"210\" cy=\"218\" r=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.40\"/>"
-  },
-  {
     "id": "xh-a901-preamp",
     "title": "XH-A901 NE5532 Tone Control PreAmp",
     "category": "audio",
@@ -167,5 +155,47 @@
     "svg": "",
     "link": "product.html?id=dji-neo-6-in-1-filter-pack",
     "badge": "DJI"
+  },
+  {
+    "id": "wifi-smart-power-meter-with-40a-switch",
+    "title": "WiFi Smart Power Meter with 40A Switch",
+    "price": "LKR:6990",
+    "category": "modules",
+    "condition": "Brand New",
+    "meta": "Smart home · Energy monitoring",
+    "description": "Wi-Fi smart power meter with 40A built-in switch. Supports Smart Life, Tuya Smart, Google Home, and Amazon Alexa. Monitors voltage, current, power, frequency, energy usage, and more.",
+    "image": "images/products/dji_neo_drone_with_remote_camera_fly_more_combo_5_1777049726873.jpg",
+    "images": [],
+    "features": [
+      "Brand: SZDQ",
+      "Type: WiFi Smart Power Meter with built-in switch",
+      "Rated switch capacity: 40A",
+      "App support: Smart Life",
+      "Tuya Smart",
+      "Voice assistant: Google Home",
+      "Amazon Alexa",
+      "Display: electricity usage",
+      "power factor",
+      "voltage",
+      "current",
+      "power",
+      "frequency",
+      "temperature",
+      "alarm",
+      "on/off status",
+      "Control: WiFi app + manual buttons on device",
+      "Mounting type: DIN rail",
+      "Use: power line control",
+      "electricity monitoring",
+      "smart home automation"
+    ],
+    "buyingDelivery": [
+      "Call or WhatsApp to confirm availability",
+      "Cash on delivery available",
+      "Delivery fee depends on item weight and location"
+    ],
+    "svg": "",
+    "link": "product.html?id=wifi-smart-power-meter-with-40a-switch",
+    "badge": "Smart home · Energy monitoring"
   }
 ]
