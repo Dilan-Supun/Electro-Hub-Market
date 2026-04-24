@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electro Hub - Admin Panel</title>
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <!-- Login View -->
+    <div id="login-view" class="view active">
+        <div class="login-card">
+            <h2>Admin Login</h2>
+            <form id="login-form">
+                <input type="password" id="password" placeholder="Enter Admin Password" required>
+                <button type="submit">Login</button>
+                <p id="login-error" class="error-msg"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="dashboard-view" class="view">
+        <header class="admin-header">
+            <div class="header-content">
+                <h1>Electro Hub Admin</h1>
+                <div class="header-actions">
+                    <button id="btn-publish" class="btn-publish">🚀 Publish to Live Site</button>
+                    <button id="btn-logout" class="btn-logout">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="admin-main">
+            <div class="main-top">
+                <h2>Manage Inventory</h2>
+                <button id="btn-add-product" class="btn-primary">+ Add New Product</button>
+            </div>
+
+            <div class="table-container">
+                <table class="products-table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Price (LKR)</th>
+                            <th>Condition</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-tbody">
+                        <!-- Products will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="modal-close">&times;</span>
+            <h2 id="modal-title">Add Product</h2>
+            <form id="product-form">
+                <div class="form-group">
+                    <label>Product ID (e.g. drone-01)</label>
+                    <input type="text" id="p-id" required>
+                </div>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="p-title" required>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="p-category" required>
+                        <option value="drone">Drone</option>
+                        <option value="audio">Audio</option>
+                        <option value="modules">Modules</option>
+                        <option value="accessories">Accessories</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Price (LKR)</label>
+                    <input type="number" id="p-price" required>
+                </div>
+                <div class="form-group">
+                    <label>Condition</label>
+                    <select id="p-condition" required>
+                        <option value="New">New</option>
+                        <option value="Used">Used</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Badge (Optional, e.g. "Sale")</label>
+                    <input type="text" id="p-badge">
+                </div>
+                <div class="form-group">
+                    <label>Product Image</label>
+                    <input type="file" id="p-image" accept="image/*">
+                    <p class="help-text">Leave blank to keep existing image</p>
+                    <input type="hidden" id="p-image-url">
+                </div>
+                <div class="form-group">
+                    <label>Specs (JSON Format or comma separated, e.g. "4K Camera, 30min flight")</label>
+                    <input type="text" id="p-specs" placeholder="Spec 1, Spec 2, Spec 3">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="p-description" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn-primary w-100">Save Product</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
