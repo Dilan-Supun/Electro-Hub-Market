@@ -78,3 +78,6 @@ function updateCartBadges() {
         badge.style.display = count > 0 ? 'flex' : 'none';
     });
 }
+
+// Initial call
+updateCartBadges();

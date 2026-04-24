@@ -40,15 +40,31 @@ document.addEventListener('DOMContentLoaded', () => {
   const addToCartBtn = document.getElementById('add-to-cart-btn');
   if (addToCartBtn) {
     addToCartBtn.addEventListener('click', () => {
-      Cart.add(product);
-      // Optional: Visual feedback
-      const originalText = addToCartBtn.innerHTML;
-      addToCartBtn.innerHTML = '✓ Added to Cart';
-      addToCartBtn.style.background = '#065f46';
-      setTimeout(() => {
-        addToCartBtn.innerHTML = originalText;
-        addToCartBtn.style.background = '';
-      }, 2000);
+      try {
+        Cart.add(product);
+        // Visual feedback
+        const originalHtml = addToCartBtn.innerHTML;
+        addToCartBtn.innerHTML = '✓ Added! <span style="margin-left:8px; text-decoration:underline;">View Cart</span>';
+        addToCartBtn.classList.add('btn-success');
+        
+        // After 3 seconds, if they haven't clicked to view cart, reset but keep count updated
+        setTimeout(() => {
+          if (addToCartBtn.innerHTML.includes('View Cart')) {
+            addToCartBtn.innerHTML = originalHtml;
+            addToCartBtn.classList.remove('btn-success');
+          }
+        }, 4000);
+
+        // If they click again while it says "View Cart", take them to cart
+        addToCartBtn.onclick = (e) => {
+          if (addToCartBtn.innerHTML.includes('View Cart')) {
+            window.location.href = 'cart.html';
+          }
+        };
+      } catch (err) {
+        console.error("Cart Error:", err);
+        alert("Could not add to cart. Please ensure cookies/local storage are enabled.");
+      }
     });
   }
 

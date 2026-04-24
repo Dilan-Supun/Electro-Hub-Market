@@ -14,10 +14,12 @@ const productsFilePath = path.join(__dirname, '../js/products.json');
 
 app.use(cors());
 app.use(express.json());
-// Serve static admin files
-app.use(express.static(path.join(__dirname, 'public')));
-// Serve main project images so admin panel can preview them
+// Serve admin panel at /admin
+app.use('/admin', express.static(path.join(__dirname, 'public')));
+// Serve main project images
 app.use('/images', express.static(path.join(__dirname, '../images')));
+// Serve the main storefront at the root
+app.use('/', express.static(path.join(__dirname, '..')));
 
 // Authentication middleware
 const authenticate = (req, res, next) => {

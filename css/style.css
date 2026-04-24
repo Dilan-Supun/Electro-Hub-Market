@@ -168,6 +168,7 @@ a { color: inherit; text-decoration: none; }
 .btn-primary:hover { background: var(--color-primary-hover); }
 .btn-secondary { background: var(--color-surface); }
 .btn-secondary:hover { background: var(--color-surface-2); }
+.btn-success { background: #059669 !important; color: #fff !important; border-color: transparent !important; }
 
 /* ---------- Cards ---------- */
 .card, .meta-card, .photo-card {

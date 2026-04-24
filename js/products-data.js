@@ -23,7 +23,7 @@ const productsData = [
     "meta": "ND8/16/32/64 · CPL · MCUV",
     "description": "Complete filter set for DJI Neo. Unused, neat pack. Improves video and photo quality in varied lighting.",
     "price": "Rs. 6,950",
-    "link": "products/dji-neo-filters.html",
+    "link": "product.html?id=dji-neo-filters",
     "image": null,
     "svg": "<circle cx=\"210\" cy=\"157\" r=\"110\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.14\"/><circle cx=\"210\" cy=\"157\" r=\"85\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.22\"/><circle cx=\"210\" cy=\"157\" r=\"60\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.32\"/><circle cx=\"210\" cy=\"157\" r=\"36\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.48\"/><circle cx=\"210\" cy=\"157\" r=\"14\" fill=\"currentColor\" opacity=\"0.65\"/>"
   },
@@ -35,7 +35,7 @@ const productsData = [
     "meta": "DIN Rail · 40A",
     "description": "Smart Life / Tuya / Google Home / Alexa. Monitors voltage, current, power, frequency, energy, temperature.",
     "price": "Rs. 6,990",
-    "link": "products/szdq-wifi-power-meter.html",
+    "link": "product.html?id=szdq-wifi-power-meter",
     "image": null,
     "svg": "<rect x=\"100\" y=\"50\" width=\"220\" height=\"210\" rx=\"12\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><rect x=\"120\" y=\"70\" width=\"180\" height=\"70\" rx=\"6\" fill=\"currentColor\" opacity=\"0.08\"/><text x=\"210\" y=\"113\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"18\" fill=\"currentColor\" opacity=\"0.65\" font-family=\"sans-serif\" font-weight=\"bold\">230V 40A</text><text x=\"210\" y=\"178\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.45\" font-family=\"sans-serif\">kWh · W · A · V · Hz</text><circle cx=\"210\" cy=\"218\" r=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.40\"/>"
   },
@@ -47,7 +47,7 @@ const productsData = [
     "meta": "2ch Stereo · 12–24V",
     "description": "Dual NE5532 preamp board. Bass, mid, treble, volume controls. DIY amplifier and home audio.",
     "price": "Contact for price",
-    "link": "products/xh-a901-preamp.html",
+    "link": "product.html?id=xh-a901-preamp",
     "image": null,
     "svg": "<rect x=\"70\" y=\"108\" width=\"280\" height=\"100\" rx=\"8\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><circle cx=\"140\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><circle cx=\"210\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><circle cx=\"280\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><text x=\"140\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">BASS</text><text x=\"210\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">MID</text><text x=\"280\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">TRB</text>"
   },
@@ -59,7 +59,7 @@ const productsData = [
     "meta": "5V · Class D",
     "description": "Compact Class D amp, 3W+3W at 5V. USB power, short-circuit protection. DIY speakers and Bluetooth builds.",
     "price": "Contact for price",
-    "link": "products/pam8403-amplifier.html",
+    "link": "product.html?id=pam8403-amplifier",
     "image": null,
     "svg": "<rect x=\"110\" y=\"103\" width=\"200\" height=\"110\" rx=\"8\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><rect x=\"170\" y=\"133\" width=\"80\" height=\"50\" rx=\"4\" fill=\"currentColor\" opacity=\"0.10\"/><text x=\"210\" y=\"161\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.68\" font-family=\"sans-serif\" font-weight=\"bold\">PAM8403</text><text x=\"210\" y=\"246\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.42\" font-family=\"sans-serif\">3W+3W · 5V · Class D</text>"
   },
@@ -71,7 +71,7 @@ const productsData = [
     "meta": "BT 5.0 · Stereo",
     "description": "Wireless audio receiver module. Converts any speaker system to Bluetooth. 15m+ range, A2DP / AVRCP.",
     "price": "Contact for price",
-    "link": "products/vhm-314-bluetooth.html",
+    "link": "product.html?id=vhm-314-bluetooth",
     "image": null,
     "svg": "<rect x=\"100\" y=\"88\" width=\"220\" height=\"140\" rx=\"10\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><path d=\"M200 138 l20 20 -20 20 m20-40 l0 80\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\" opacity=\"0.60\"/><path d=\"M200 158 l-12-12 m12 12 l-12 12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" opacity=\"0.38\"/><text x=\"210\" y=\"268\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.42\" font-family=\"sans-serif\">BT 5.0 · A2DP · AVRCP</text>"
   },
@@ -83,7 +83,7 @@ const productsData = [
     "meta": "12V · Class D",
     "description": "Class D stereo amp board. 2×10W at 8Ω or 2×15W at 4Ω. Low EMI, mute control, 7–15V supply.",
     "price": "Contact for price",
-    "link": "products/pam8610-amplifier.html",
+    "link": "product.html?id=pam8610-amplifier",
     "image": null,
     "svg": "<rect x=\"80\" y=\"93\" width=\"260\" height=\"130\" rx=\"8\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><rect x=\"155\" y=\"123\" width=\"110\" height=\"70\" rx=\"4\" fill=\"currentColor\" opacity=\"0.10\"/><text x=\"210\" y=\"161\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"13\" fill=\"currentColor\" opacity=\"0.68\" font-family=\"sans-serif\" font-weight=\"bold\">PAM8610</text><text x=\"210\" y=\"262\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.42\" font-family=\"sans-serif\">2×10W (8Ω) · 2×15W (4Ω)</text>"
   },
@@ -95,7 +95,7 @@ const productsData = [
     "meta": "Up to 3A · 96% eff.",
     "description": "Adjustable DC-DC step down converter. Input 4.75–23V, output 1–17V. Compact, high efficiency.",
     "price": "Rs. 250",
-    "link": "products/mp1584-buck-converter.html",
+    "link": "product.html?id=mp1584-buck-converter",
     "image": null,
     "svg": "<rect x=\"130\" y=\"113\" width=\"160\" height=\"90\" rx=\"6\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><rect x=\"165\" y=\"138\" width=\"90\" height=\"40\" rx=\"4\" fill=\"currentColor\" opacity=\"0.10\"/><text x=\"210\" y=\"161\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.68\" font-family=\"sans-serif\" font-weight=\"bold\">MP1584</text><circle cx=\"312\" cy=\"158\" r=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.42\"/><text x=\"312\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"8\" fill=\"currentColor\" opacity=\"0.55\" font-family=\"sans-serif\">ADJ</text><text x=\"210\" y=\"252\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.42\" font-family=\"sans-serif\">4.75–23V → 1–17V · 96% eff.</text>"
   },
@@ -107,7 +107,7 @@ const productsData = [
     "meta": "Dual mic · Receiver",
     "description": "2 wireless handheld mics with receiver circuit. Karaoke, PA, stage, meetings, church, events.",
     "price": "Rs. 5,450",
-    "link": "products/wireless-microphone-set.html",
+    "link": "product.html?id=wireless-microphone-set",
     "image": null,
     "svg": "<rect x=\"130\" y=\"68\" width=\"40\" height=\"80\" rx=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" opacity=\"0.55\"/><line x1=\"150\" y1=\"148\" x2=\"150\" y2=\"188\" stroke=\"currentColor\" stroke-width=\"2.2\" opacity=\"0.45\"/><line x1=\"130\" y1=\"188\" x2=\"170\" y2=\"188\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.40\"/><rect x=\"250\" y=\"68\" width=\"40\" height=\"80\" rx=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" opacity=\"0.55\"/><line x1=\"270\" y1=\"148\" x2=\"270\" y2=\"188\" stroke=\"currentColor\" stroke-width=\"2.2\" opacity=\"0.45\"/><line x1=\"250\" y1=\"188\" x2=\"290\" y2=\"188\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.40\"/><rect x=\"140\" y=\"218\" width=\"140\" height=\"46\" rx=\"8\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.45\"/><text x=\"210\" y=\"245\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"10\" fill=\"currentColor\" opacity=\"0.55\" font-family=\"sans-serif\">Receiver Circuit</text>"
   },
@@ -119,7 +119,7 @@ const productsData = [
     "meta": "Sub / PA · 10–18″",
     "description": "IRS2092 Class D amp with speaker protection. Subwoofer, PA, bass bin builds. Full multi-protection.",
     "price": "Contact for price",
-    "link": "products/irs2092-class-d-amplifier.html",
+    "link": "product.html?id=irs2092-class-d-amplifier",
     "image": null,
     "svg": "<rect x=\"55\" y=\"78\" width=\"310\" height=\"160\" rx=\"10\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><rect x=\"155\" y=\"118\" width=\"110\" height=\"80\" rx=\"6\" fill=\"currentColor\" opacity=\"0.10\"/><text x=\"210\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"13\" fill=\"currentColor\" opacity=\"0.68\" font-family=\"sans-serif\" font-weight=\"bold\">IRS2092</text><rect x=\"65\" y=\"88\" width=\"12\" height=\"140\" rx=\"2\" fill=\"currentColor\" opacity=\"0.12\"/><rect x=\"82\" y=\"88\" width=\"12\" height=\"140\" rx=\"2\" fill=\"currentColor\" opacity=\"0.12\"/><rect x=\"99\" y=\"88\" width=\"12\" height=\"140\" rx=\"2\" fill=\"currentColor\" opacity=\"0.12\"/><text x=\"210\" y=\"278\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.42\" font-family=\"sans-serif\">High Power · Sub / PA · 10–18″</text>"
   },
