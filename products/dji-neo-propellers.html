@@ -94,25 +94,28 @@
 
           <!-- Right: product image -->
           <div class="photo-card">
-            <!--
-              TO ADD PHOTOS:
-              1. Upload your images to: images/products/dji-neo-propellers/
-              2. Replace the SVG below with an <img> tag, e.g.:
-                 <img class="product-img" src="../images/products/dji-neo-propellers/cover.jpg" alt="DJI Neo Propellers" />
-              3. Add a gallery below using .img-grid
-            -->
-            <svg class="product-art" viewBox="0 0 420 420" role="img" aria-label="DJI Neo propellers illustration">
-              <rect x="18" y="18" width="384" height="384" rx="32" fill="none" stroke="currentColor" opacity="0.08"/>
-              <circle cx="210" cy="210" r="28" fill="currentColor" opacity="0.08"/>
-              <g fill="currentColor" opacity="0.88">
-                <path d="M220 180c38-44 88-59 111-37 15 14 10 42-12 64-27 27-79 24-117 8l18-35Z"/>
-                <path d="M240 220c44 38 59 88 37 111-14 15-42 10-64-12-27-27-24-79-8-117l35 18Z"/>
-                <path d="M200 240c-38 44-88 59-111 37-15-14-10-42 12-64 27-27 79-24 117-8l-18 35Z"/>
-                <path d="M180 200c-44-38-59-88-37-111 14-15 42-10 64 12 27 27 24 79 8 117l-35-18Z"/>
-              </g>
-              <circle cx="210" cy="210" r="14" fill="currentColor"/>
-            </svg>
-            <p class="placeholder">Upload your product photos to <code>images/products/dji-neo-propellers/</code> and replace this illustration.</p>
+            <img
+              class="product-img"
+              src="../images/products/dji-neo-propellers/cover.jpg"
+              alt="DJI Neo propellers cover photo"
+              loading="eager"
+            />
+            <div class="img-grid" style="margin-top: var(--space-4); display:grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-3);">
+              <img
+                class="product-img"
+                src="../images/products/dji-neo-propellers/cover.jpg"
+                alt="DJI Neo propellers main view"
+                loading="lazy"
+                style="border-radius: var(--radius-lg); aspect-ratio: 4 / 3; object-fit: cover;"
+              />
+              <img
+                class="product-img"
+                src="../images/products/dji-neo-propellers/photo-2.jpg"
+                alt="DJI Neo propellers second photo"
+                loading="lazy"
+                style="border-radius: var(--radius-lg); aspect-ratio: 4 / 3; object-fit: cover;"
+              />
+            </div>
           </div>
         </div>
       </div>
