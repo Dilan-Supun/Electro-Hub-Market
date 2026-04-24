@@ -124,17 +124,26 @@
     "svg": "<rect x=\"55\" y=\"78\" width=\"310\" height=\"160\" rx=\"10\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><rect x=\"155\" y=\"118\" width=\"110\" height=\"80\" rx=\"6\" fill=\"currentColor\" opacity=\"0.10\"/><text x=\"210\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"13\" fill=\"currentColor\" opacity=\"0.68\" font-family=\"sans-serif\" font-weight=\"bold\">IRS2092</text><rect x=\"65\" y=\"88\" width=\"12\" height=\"140\" rx=\"2\" fill=\"currentColor\" opacity=\"0.12\"/><rect x=\"82\" y=\"88\" width=\"12\" height=\"140\" rx=\"2\" fill=\"currentColor\" opacity=\"0.12\"/><rect x=\"99\" y=\"88\" width=\"12\" height=\"140\" rx=\"2\" fill=\"currentColor\" opacity=\"0.12\"/><text x=\"210\" y=\"278\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.42\" font-family=\"sans-serif\">High Power · Sub / PA · 10–18″</text>"
   },
   {
-    "id": "amplifure60W",
-    "title": "amp",
-    "price": "200",
+    "id": "test1",
+    "title": "testTitle",
+    "price": "Rs. 6,99",
     "category": "drone",
-    "condition": "New",
-    "description": "dafdasfasdfa\n\nafasdfa",
-    "image": "images/products/dji-neo-propellers/cover.jpg",
-    "features": [
-      "spec 1",
-      "spec 2"
+    "condition": "Brand New",
+    "meta": "meta info",
+    "description": "this is disceptation ",
+    "image": "images/products/dji_neo_drone_with_remote_camera_fly_more_combo_5_1777048699435.jpg",
+    "images": [
+      "images/products/hq720_1777048699437.jpg"
     ],
-    "badge": "sale"
+    "features": [
+      "Feature 1"
+    ],
+    "buyingDelivery": [
+      "free",
+      "one month cehcking"
+    ],
+    "svg": "",
+    "link": "product.html?id=test1",
+    "badge": "sele badge "
   }
 ]
