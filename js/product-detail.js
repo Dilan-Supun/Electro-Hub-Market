@@ -36,6 +36,22 @@ document.addEventListener('DOMContentLoaded', () => {
     waBtn.href = `https://wa.me/94764413256?text=${waMessage}`;
   }
 
+  // Add to Cart Button
+  const addToCartBtn = document.getElementById('add-to-cart-btn');
+  if (addToCartBtn) {
+    addToCartBtn.addEventListener('click', () => {
+      Cart.add(product);
+      // Optional: Visual feedback
+      const originalText = addToCartBtn.innerHTML;
+      addToCartBtn.innerHTML = '✓ Added to Cart';
+      addToCartBtn.style.background = '#065f46';
+      setTimeout(() => {
+        addToCartBtn.innerHTML = originalText;
+        addToCartBtn.style.background = '';
+      }, 2000);
+    });
+  }
+
   // Populate Features
   const featuresList = document.getElementById('features-list');
   if (product.features && product.features.length > 0) {

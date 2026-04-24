@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shopping Cart — Electro Hub Market</title>
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .cart-grid {
+      display: grid;
+      gap: var(--space-6);
+      margin-top: var(--space-8);
+    }
+    .cart-item {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: var(--space-4);
+      align-items: center;
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .cart-item img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+    }
+    .cart-item-info h3 {
+      font-size: var(--text-base);
+      margin-bottom: 0.25rem;
+    }
+    .cart-item-price {
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+    .cart-qty {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .qty-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+    .cart-summary {
+      margin-top: var(--space-8);
+      padding: var(--space-6);
+      background: var(--color-surface-2);
+      border-radius: var(--radius-xl);
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: var(--space-3);
+    }
+    .summary-total {
+      font-size: var(--text-lg);
+      font-weight: 700;
+      border-top: 1px solid var(--color-border);
+      padding-top: var(--space-4);
+      margin-top: var(--space-4);
+    }
+    .empty-cart {
+      text-align: center;
+      padding: var(--space-16) 0;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <div class="brand-mark">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+        </div>
+        <div>Electro Hub Market</div>
+      </a>
+      <div class="header-right">
+        <a href="index.html" class="btn btn-secondary">Continue Shopping</a>
+        <button class="theme-toggle" data-theme-toggle aria-label="Switch theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding: var(--space-12) 0;">
+    <h1>Your Shopping Cart</h1>
+    
+    <div id="cart-container">
+      <!-- Cart items injected here -->
+      <div class="loading-state">
+        <div class="spinner"></div>
+      </div>
+    </div>
+
+    <div id="cart-summary" style="display: none;">
+      <div class="cart-summary">
+        <div class="summary-row summary-total">
+          <span>Estimated Total</span>
+          <span id="cart-total-value">Rs. 0</span>
+        </div>
+        <p class="notice">Note: Delivery charges will be calculated based on your location during WhatsApp confirmation.</p>
+        <button id="whatsapp-checkout-btn" class="btn btn-primary" style="width: 100%; margin-top: var(--space-6); font-size: var(--text-lg);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Checkout via WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <div id="empty-cart-msg" class="empty-cart" style="display: none;">
+      <p style="font-size: var(--text-lg); color: var(--color-text-muted); margin-bottom: var(--space-6);">Your cart is empty.</p>
+      <a href="index.html" class="btn btn-primary">Start Shopping</a>
+    </div>
+  </main>
+
+  <script src="js/cart.js"></script>
+  <script src="js/cart-page.js"></script>
+  
+  <script>
+    // Simple theme toggle for cart page
+    (function(){
+      const t = document.querySelector('[data-theme-toggle]');
+      const r = document.documentElement;
+      let d = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      r.setAttribute('data-theme', d);
+      t.addEventListener('click', () => {
+        d = d === 'dark' ? 'light' : 'dark';
+        r.setAttribute('data-theme', d);
+        localStorage.setItem('theme', d);
+      });
+    })();
+  </script>
+</body>
+</html>

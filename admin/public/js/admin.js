@@ -121,11 +121,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('p-category').value = p.category || 'drone';
                 document.getElementById('p-price').value = p.price || '';
                 document.getElementById('p-condition').value = p.condition || 'New';
+                document.getElementById('p-meta').value = p.meta || '';
                 document.getElementById('p-badge').value = p.badge || '';
                 document.getElementById('p-specs').value = (p.features || []).join(', ');
+                document.getElementById('p-delivery').value = (p.buyingDelivery || []).join(', ');
+                document.getElementById('p-svg').value = p.svg || '';
                 document.getElementById('p-description').value = p.description || '';
                 document.getElementById('p-image-url').value = p.image || '';
-                document.getElementById('p-image').value = ''; // Reset file input
+                document.getElementById('p-image').value = ''; 
+                document.getElementById('p-gallery').value = ''; 
 
                 document.getElementById('modal-title').textContent = 'Edit Product';
                 modal.classList.add('active');
@@ -168,13 +172,18 @@ document.addEventListener('DOMContentLoaded', () => {
     productForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // 1. Upload image if selected
+        // 1. Upload images if selected
         const imageFile = document.getElementById('p-image').files[0];
-        let imageUrl = document.getElementById('p-image-url').value; // In case of edit, though we only add for now
+        const galleryFiles = document.getElementById('p-gallery').files;
+        let imageUrl = document.getElementById('p-image-url').value;
+        let galleryUrls = editingIndex !== -1 ? (currentProducts[editingIndex].images || []) : [];
 
-        if (imageFile) {
+        if (imageFile || galleryFiles.length > 0) {
             const formData = new FormData();
-            formData.append('image', imageFile);
+            if (imageFile) formData.append('image', imageFile);
+            for (let i = 0; i < galleryFiles.length; i++) {
+                formData.append('gallery', galleryFiles[i]);
+            }
             
             try {
                 const res = await fetch('/api/upload', {
@@ -183,8 +192,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: formData
                 });
                 const data = await res.json();
-                if (data.imageUrl) {
-                    imageUrl = data.imageUrl;
+                if (data.imageUrl) imageUrl = data.imageUrl;
+                if (data.galleryUrls) {
+                    // If uploading new gallery files, replace the gallery
+                    galleryUrls = data.galleryUrls;
                 }
             } catch (e) {
                 alert('Image upload failed');
@@ -193,27 +204,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (!imageUrl && editingIndex === -1) {
-            alert('Please select an image for the new product.');
+            alert('Please select a main cover image for the new product.');
             return;
         }
 
-        // Parse specs
+        // Parse features and delivery info
         const specsRaw = document.getElementById('p-specs').value;
-        let specs = [];
-        if (specsRaw) {
-            specs = specsRaw.split(',').map(s => s.trim()).filter(s => s);
-        }
+        const features = specsRaw ? specsRaw.split(',').map(s => s.trim()).filter(s => s) : [];
+        
+        const deliveryRaw = document.getElementById('p-delivery').value;
+        const buyingDelivery = deliveryRaw ? deliveryRaw.split(',').map(s => s.trim()).filter(s => s) : [];
+
+        const prodId = document.getElementById('p-id').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
 
         const newProduct = {
             ...(editingIndex !== -1 ? currentProducts[editingIndex] : {}),
-            id: document.getElementById('p-id').value,
+            id: prodId,
             title: document.getElementById('p-title').value,
             price: document.getElementById('p-price').value,
             category: document.getElementById('p-category').value,
             condition: document.getElementById('p-condition').value,
+            meta: document.getElementById('p-meta').value,
             description: document.getElementById('p-description').value,
             image: imageUrl,
-            features: specs,
+            images: galleryUrls,
+            features: features,
+            buyingDelivery: buyingDelivery,
+            svg: document.getElementById('p-svg').value,
+            link: `product.html?id=${prodId}`
         };
 
         const badge = document.getElementById('p-badge').value;

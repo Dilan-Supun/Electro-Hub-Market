@@ -87,10 +87,15 @@
                     <input type="text" id="p-price" required>
                 </div>
                 <div class="form-group">
+                    <label>Meta Info (e.g. "40A · DIN Rail")</label>
+                    <input type="text" id="p-meta">
+                </div>
+                <div class="form-group">
                     <label>Condition</label>
                     <select id="p-condition" required>
                         <option value="New">New</option>
                         <option value="Used">Used</option>
+                        <option value="Brand New">Brand New</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -98,14 +103,27 @@
                     <input type="text" id="p-badge">
                 </div>
                 <div class="form-group">
-                    <label>Product Image</label>
+                    <label>Main Cover Image</label>
                     <input type="file" id="p-image" accept="image/*">
                     <p class="help-text">Leave blank to keep existing image</p>
                     <input type="hidden" id="p-image-url">
                 </div>
                 <div class="form-group">
-                    <label>Specs (JSON Format or comma separated, e.g. "4K Camera, 30min flight")</label>
-                    <input type="text" id="p-specs" placeholder="Spec 1, Spec 2, Spec 3">
+                    <label>Gallery Images</label>
+                    <input type="file" id="p-gallery" accept="image/*" multiple>
+                    <p class="help-text">Select multiple images for the product gallery</p>
+                </div>
+                <div class="form-group">
+                    <label>Features / Specs (comma separated)</label>
+                    <textarea id="p-specs" rows="2" placeholder="Feature 1, Feature 2, Feature 3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Buying & Delivery Info (comma separated)</label>
+                    <textarea id="p-delivery" rows="2" placeholder="Free delivery, 1 year warranty"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>SVG Illustration Fallback (Optional SVG code)</label>
+                    <textarea id="p-svg" rows="2" placeholder="<circle ... />"></textarea>
                 </div>
                 <div class="form-group">
                     <label>Description</label>

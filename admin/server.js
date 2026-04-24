@@ -89,13 +89,26 @@ app.post('/api/products', authenticate, (req, res) => {
     }
 });
 
-// API: Upload image
-app.post('/api/upload', authenticate, upload.single('image'), (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ error: 'No image uploaded' });
+// API: Upload images (Main and Gallery)
+app.post('/api/upload', authenticate, upload.fields([
+    { name: 'image', maxCount: 1 },
+    { name: 'gallery', maxCount: 10 }
+]), (req, res) => {
+    const response = {};
+    
+    if (req.files['image']) {
+        response.imageUrl = `images/products/${req.files['image'][0].filename}`;
     }
-    // Return the relative path to be stored in products.json
-    res.json({ imageUrl: `images/products/${req.file.filename}` });
+    
+    if (req.files['gallery']) {
+        response.galleryUrls = req.files['gallery'].map(file => `images/products/${file.filename}`);
+    }
+    
+    if (Object.keys(response).length === 0) {
+        return res.status(400).json({ error: 'No images uploaded' });
+    }
+    
+    res.json(response);
 });
 
 // API: Publish to GitHub
