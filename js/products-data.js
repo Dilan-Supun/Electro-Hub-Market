@@ -16,40 +16,6 @@ const productsData = [
     "link": "product.html?id=dji-neo-propellers"
   },
   {
-    "id": "dji-neo-filters",
-    "title": "DJI Neo 6-in-1 Filter Pack",
-    "category": "drone",
-    "condition": "Brand New",
-    "meta": "ND8/16/32/64 · CPL · MCUV",
-    "description": "Complete filter set for DJI Neo. Unused, neat pack. Improves video and photo quality in varied lighting.",
-    "price": "Rs. 6,950",
-    "link": "product.html?id=dji-neo-filters",
-    "image": "",
-    "svg": "<circle cx=\"210\" cy=\"157\" r=\"110\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.14\"/><circle cx=\"210\" cy=\"157\" r=\"85\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.22\"/><circle cx=\"210\" cy=\"157\" r=\"60\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.32\"/><circle cx=\"210\" cy=\"157\" r=\"36\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.48\"/><circle cx=\"210\" cy=\"157\" r=\"14\" fill=\"currentColor\" opacity=\"0.65\"/>",
-    "images": [],
-    "features": [
-      "Pack includes: ND8",
-      "ND16",
-      "ND32",
-      "ND64",
-      "CPL",
-      "MCUV (6 filters total)",
-      "Designed for DJI Neo drone camera",
-      "Condition: brand new and unused",
-      "Helps improve video and photo quality in different lighting conditions",
-      "Neat set",
-      "ready to use straight from the pack."
-    ],
-    "buyingDelivery": [
-      "Call or WhatsApp to confirm availability",
-      "Location: Negombo",
-      "Kochchikade",
-      "Pickup or delivery can be discussed",
-      "Cash on delivery available"
-    ],
-    "badge": "DJI"
-  },
-  {
     "id": "szdq-wifi-power-meter",
     "title": "SZDQ WiFi Smart Power Meter 40A",
     "category": "modules",
@@ -167,5 +133,39 @@ const productsData = [
     "svg": "",
     "link": "product.html?id=test1",
     "badge": "sele badge "
+  },
+  {
+    "id": "dji-neo-6-in-1-filter-pack",
+    "title": "DJI Neo 6-in-1 Filter Pack",
+    "price": "Rs. 6,950",
+    "category": "drone",
+    "condition": "Brand New",
+    "meta": "ND8/16/32/64 · CPL · MCUV",
+    "description": "Selling a brand new 6-in-1 filter pack for DJI Neo. Includes ND8, ND16, ND32, ND64, CPL, and MCUV filters. Neat set, unused, and ready to use.",
+    "image": "images/products/dji_neo_drone_with_remote_camera_fly_more_combo_5_1777049546959.jpg",
+    "images": [],
+    "features": [
+      "Pack includes: ND8",
+      "ND16",
+      "ND32",
+      "ND64",
+      "CPL",
+      "MCUV (6 filters total)",
+      "Designed for DJI Neo drone camera",
+      "Condition: brand new and unused",
+      "Helps improve video and photo quality in different lighting conditions",
+      "Neat set",
+      "ready to use straight from the pack"
+    ],
+    "buyingDelivery": [
+      "Call or WhatsApp to confirm availability",
+      "Location: Negombo",
+      "Kochchikade",
+      "Pickup or delivery can be discussed",
+      "Cash on delivery available"
+    ],
+    "svg": "",
+    "link": "product.html?id=dji-neo-6-in-1-filter-pack",
+    "badge": "DJI"
   }
 ];
