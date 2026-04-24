@@ -2,12 +2,13 @@
   {
     "id": "dji-neo-propellers",
     "title": "DJI Neo Propellers",
-    "price": 1950,
+    "price": "2100",
     "category": "drone",
     "condition": "New",
     "description": "Genuine spare replacement propellers for DJI Neo. Unused, original packaging.",
     "image": "images/products/dji-neo-propellers/cover.jpg",
-    "specs": []
+    "specs": [],
+    "features": []
   },
   {
     "id": "dji-neo-filters",

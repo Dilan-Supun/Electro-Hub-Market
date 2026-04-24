@@ -74,7 +74,14 @@ app.get('/api/products', authenticate, (req, res) => {
 app.post('/api/products', authenticate, (req, res) => {
     try {
         const products = req.body;
+        // Save to products.json
         fs.writeFileSync(productsFilePath, JSON.stringify(products, null, 2));
+        
+        // Save to products-data.js so the live site gets the updates immediately
+        const jsFilePath = path.join(__dirname, '../js/products-data.js');
+        const jsContent = `const productsData = ${JSON.stringify(products, null, 2)};\n`;
+        fs.writeFileSync(jsFilePath, jsContent);
+        
         res.json({ success: true });
     } catch (err) {
         console.error(err);

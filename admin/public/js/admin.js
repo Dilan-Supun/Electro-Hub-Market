@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${p.id}</td>
                 <td>${p.title}</td>
                 <td>${p.category}</td>
-                <td>${p.price.toLocaleString()}</td>
+                <td>${p.price}</td>
                 <td>${p.condition}</td>
                 <td style="white-space: nowrap;">
                     <button class="btn-edit" data-index="${index}">Edit</button>
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('p-price').value = p.price || '';
                 document.getElementById('p-condition').value = p.condition || 'New';
                 document.getElementById('p-badge').value = p.badge || '';
-                document.getElementById('p-specs').value = (p.specs || []).join(', ');
+                document.getElementById('p-specs').value = (p.features || []).join(', ');
                 document.getElementById('p-description').value = p.description || '';
                 document.getElementById('p-image-url').value = p.image || '';
                 document.getElementById('p-image').value = ''; // Reset file input
@@ -205,14 +205,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const newProduct = {
+            ...(editingIndex !== -1 ? currentProducts[editingIndex] : {}),
             id: document.getElementById('p-id').value,
             title: document.getElementById('p-title').value,
-            price: parseInt(document.getElementById('p-price').value),
+            price: document.getElementById('p-price').value,
             category: document.getElementById('p-category').value,
             condition: document.getElementById('p-condition').value,
             description: document.getElementById('p-description').value,
             image: imageUrl,
-            specs: specs,
+            features: specs,
         };
 
         const badge = document.getElementById('p-badge').value;
