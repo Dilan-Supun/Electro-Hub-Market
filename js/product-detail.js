@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Populate meta grid
   document.getElementById('meta-category').textContent = product.category;
-  document.getElementById('meta-details').textContent = product.meta;
   document.getElementById('meta-price').textContent = product.price;
 
   // WhatsApp Button
