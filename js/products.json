@@ -28,18 +28,6 @@
     "svg": "<rect x=\"70\" y=\"108\" width=\"280\" height=\"100\" rx=\"8\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><circle cx=\"140\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><circle cx=\"210\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><circle cx=\"280\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><text x=\"140\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">BASS</text><text x=\"210\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">MID</text><text x=\"280\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">TRB</text>"
   },
   {
-    "id": "pam8403-amplifier",
-    "title": "PAM8403 Stereo Amplifier 3W+3W",
-    "category": "audio",
-    "condition": "Brand new",
-    "meta": "5V · Class D",
-    "description": "Compact Class D amp, 3W+3W at 5V. USB power, short-circuit protection. DIY speakers and Bluetooth builds.",
-    "price": "Contact for price",
-    "link": "products/pam8403-amplifier.html",
-    "image": null,
-    "svg": "<rect x=\"110\" y=\"103\" width=\"200\" height=\"110\" rx=\"8\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><rect x=\"170\" y=\"133\" width=\"80\" height=\"50\" rx=\"4\" fill=\"currentColor\" opacity=\"0.10\"/><text x=\"210\" y=\"161\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.68\" font-family=\"sans-serif\" font-weight=\"bold\">PAM8403</text><text x=\"210\" y=\"246\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.42\" font-family=\"sans-serif\">3W+3W · 5V · Class D</text>"
-  },
-  {
     "id": "vhm-314-bluetooth",
     "title": "VHM-314 Bluetooth 5.0 Audio Receiver",
     "category": "audio",
@@ -74,18 +62,6 @@
     "link": "products/mp1584-buck-converter.html",
     "image": null,
     "svg": "<rect x=\"130\" y=\"113\" width=\"160\" height=\"90\" rx=\"6\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><rect x=\"165\" y=\"138\" width=\"90\" height=\"40\" rx=\"4\" fill=\"currentColor\" opacity=\"0.10\"/><text x=\"210\" y=\"161\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.68\" font-family=\"sans-serif\" font-weight=\"bold\">MP1584</text><circle cx=\"312\" cy=\"158\" r=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.42\"/><text x=\"312\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"8\" fill=\"currentColor\" opacity=\"0.55\" font-family=\"sans-serif\">ADJ</text><text x=\"210\" y=\"252\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.42\" font-family=\"sans-serif\">4.75–23V → 1–17V · 96% eff.</text>"
-  },
-  {
-    "id": "wireless-microphone-set",
-    "title": "Wireless Microphone Set (2 Mics + Receiver)",
-    "category": "audio",
-    "condition": "Brand new",
-    "meta": "Dual mic · Receiver",
-    "description": "2 wireless handheld mics with receiver circuit. Karaoke, PA, stage, meetings, church, events.",
-    "price": "Rs. 5,450",
-    "link": "products/wireless-microphone-set.html",
-    "image": null,
-    "svg": "<rect x=\"130\" y=\"68\" width=\"40\" height=\"80\" rx=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" opacity=\"0.55\"/><line x1=\"150\" y1=\"148\" x2=\"150\" y2=\"188\" stroke=\"currentColor\" stroke-width=\"2.2\" opacity=\"0.45\"/><line x1=\"130\" y1=\"188\" x2=\"170\" y2=\"188\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.40\"/><rect x=\"250\" y=\"68\" width=\"40\" height=\"80\" rx=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" opacity=\"0.55\"/><line x1=\"270\" y1=\"148\" x2=\"270\" y2=\"188\" stroke=\"currentColor\" stroke-width=\"2.2\" opacity=\"0.45\"/><line x1=\"250\" y1=\"188\" x2=\"290\" y2=\"188\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.40\"/><rect x=\"140\" y=\"218\" width=\"140\" height=\"46\" rx=\"8\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.45\"/><text x=\"210\" y=\"245\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"10\" fill=\"currentColor\" opacity=\"0.55\" font-family=\"sans-serif\">Receiver Circuit</text>"
   },
   {
     "id": "irs2092-class-d-amplifier",
@@ -197,5 +173,38 @@
     "svg": "",
     "link": "product.html?id=wifi-smart-power-meter-with-40a-switch",
     "badge": "Smart home · Energy monitoring"
+  },
+  {
+    "id": "irs2092-class-d-amplifier",
+    "title": "IRS2092 High Power Class D Amplifier Board with Speaker Protection",
+    "price": "2950",
+    "category": "audio",
+    "condition": "Brand New",
+    "meta": "Audio electronics · High power Class D amp",
+    "description": "High power Class D amplifier board using IRS2092/IRS2092S. Designed for subwoofer systems, bass bins, PA audio, and DIY sound projects. Includes speaker protection with short-circuit, over-current, over-temperature, under-voltage, and over-voltage protection.",
+    "image": "images/products/media__1__1777089796499.jpeg",
+    "images": [],
+    "features": [
+      "Main chip: IRS2092 / IRS2092S",
+      "Gain: 18.9×",
+      "25.2×",
+      "or 30.2× depending on board version",
+      "Input sensitivity: approx. 1.48V–1.49V",
+      "Working voltage: typically ±40V–±77V; some versions rated up to ±85V",
+      "SNR: more than 96dB (low-noise input stage)",
+      "Protection: speaker protection circuits included",
+      "Additional protection: short-circuit",
+      "over-current; over-temperature; under-voltage; over-voltage\nSpeaker support: 10″",
+      "12″",
+      "15″",
+      "18″ when matched correctly with power supply and speaker rating"
+    ],
+    "buyingDelivery": [
+      "Buying & delivery\nCall or WhatsApp to confirm availability",
+      "Cash on delivery available",
+      "Delivery fee depends on item weight and location"
+    ],
+    "svg": "",
+    "link": "product.html?id=irs2092-class-d-amplifier"
   }
 ]
