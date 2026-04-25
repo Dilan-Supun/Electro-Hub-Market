@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentProducts = [];
     let editingIndex = -1;
+    let statsChart = null;
 
     // Check if already logged in (password in localStorage)
     const savedPassword = localStorage.getItem('adminPassword');
@@ -83,12 +84,14 @@ document.addEventListener('DOMContentLoaded', () => {
         tbody.innerHTML = '';
         currentProducts.forEach((p, index) => {
             const tr = document.createElement('tr');
+            const displayPrice = p.price.toString().startsWith('Rs.') ? p.price : `Rs. ${p.price}`;
             tr.innerHTML = `
                 <td><img src="/${p.image}" alt="Product"></td>
                 <td>${p.id}</td>
                 <td>${p.title}</td>
                 <td>${p.category}</td>
-                <td>${p.price}</td>
+                <td>${displayPrice}</td>
+                <td>${p.stock || 0}</td>
                 <td>${p.condition}</td>
                 <td style="white-space: nowrap;">
                     <button class="btn-edit" data-index="${index}">Edit</button>
@@ -97,6 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             tbody.appendChild(tr);
         });
+
+        updateDashboardStats();
 
         // Delete handlers
         document.querySelectorAll('.btn-delete').forEach(btn => {
@@ -119,12 +124,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('p-id').value = p.id || '';
                 document.getElementById('p-title').value = p.title || '';
                 document.getElementById('p-category').value = p.category || 'drone';
-                document.getElementById('p-price').value = p.price || '';
+                document.getElementById('p-price').value = p.price ? p.price.toString().replace(/[^0-9]/g, '') : '';
+                document.getElementById('p-stock').value = p.stock || 0;
                 document.getElementById('p-condition').value = p.condition || 'New';
                 document.getElementById('p-meta').value = p.meta || '';
                 document.getElementById('p-badge').value = p.badge || '';
-                document.getElementById('p-specs').value = (p.features || []).join(', ');
-                document.getElementById('p-delivery').value = (p.buyingDelivery || []).join(', ');
+                document.getElementById('p-specs').value = (p.features || []).join('; ');
+                document.getElementById('p-delivery').value = (p.buyingDelivery || []).join('; ');
                 document.getElementById('p-svg').value = p.svg || '';
                 document.getElementById('p-description').value = p.description || '';
                 document.getElementById('p-image-url').value = p.image || '';
@@ -134,6 +140,50 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('modal-title').textContent = 'Edit Product';
                 modal.classList.add('active');
             });
+        });
+    }
+
+    function updateDashboardStats() {
+        const totalProducts = currentProducts.length;
+        const totalStock = currentProducts.reduce((sum, p) => sum + (parseInt(p.stock) || 0), 0);
+        const lowStock = currentProducts.filter(p => (parseInt(p.stock) || 0) < 5).length;
+
+        document.getElementById('stat-total-products').textContent = totalProducts;
+        document.getElementById('stat-total-stock').textContent = totalStock;
+        document.getElementById('stat-low-stock').textContent = lowStock;
+
+        renderChart();
+    }
+
+    function renderChart() {
+        const ctx = document.getElementById('statsChart').getContext('2d');
+        if (statsChart) statsChart.destroy();
+
+        // Generate some mock data based on categories
+        const categories = [...new Set(currentProducts.map(p => p.category))];
+        const stockData = categories.map(cat => 
+            currentProducts.filter(p => p.category === cat).reduce((sum, p) => sum + (parseInt(p.stock) || 0), 0)
+        );
+
+        statsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: categories.map(c => c.charAt(0).toUpperCase() + c.slice(1)),
+                datasets: [{
+                    label: 'Stock Level by Category',
+                    data: stockData,
+                    backgroundColor: 'rgba(37, 99, 235, 0.5)',
+                    borderColor: 'rgb(37, 99, 235)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
         });
     }
 
@@ -210,10 +260,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Parse features and delivery info
         const specsRaw = document.getElementById('p-specs').value;
-        const features = specsRaw ? specsRaw.split(',').map(s => s.trim()).filter(s => s) : [];
+        const features = specsRaw ? specsRaw.split(';').map(s => s.trim()).filter(s => s) : [];
         
         const deliveryRaw = document.getElementById('p-delivery').value;
-        const buyingDelivery = deliveryRaw ? deliveryRaw.split(',').map(s => s.trim()).filter(s => s) : [];
+        const buyingDelivery = deliveryRaw ? deliveryRaw.split(';').map(s => s.trim()).filter(s => s) : [];
 
         const prodId = document.getElementById('p-id').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
 
@@ -230,6 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
             images: galleryUrls,
             features: features,
             buyingDelivery: buyingDelivery,
+            stock: parseInt(document.getElementById('p-stock').value) || 0,
             svg: document.getElementById('p-svg').value,
             link: `product.html?id=${prodId}`
         };

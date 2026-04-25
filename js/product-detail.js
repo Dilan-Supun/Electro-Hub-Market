@@ -21,13 +21,30 @@ document.addEventListener('DOMContentLoaded', () => {
   // Populate basic text fields
   document.title = `${product.title} — Electro Hub Market`;
   document.getElementById('meta-description').content = product.description;
+  
+  // Update UI
+  const displayPrice = product.price.toString().startsWith('Rs.') ? product.price : `Rs. ${product.price}`;
   document.getElementById('product-title').textContent = product.title;
   document.getElementById('product-condition').textContent = product.condition;
   document.getElementById('product-description').textContent = product.description;
-  
-  // Populate meta grid
   document.getElementById('meta-category').textContent = product.category;
-  document.getElementById('meta-price').textContent = product.price;
+  document.getElementById('meta-price').textContent = displayPrice;
+  
+  // Stock status
+  const stockEl = document.getElementById('product-stock-status');
+  const stockCount = parseInt(product.stock) || 0;
+  if (stockCount > 0) {
+    stockEl.innerHTML = `<span style="color: #059669;">● In Stock: ${stockCount} available</span>`;
+  } else {
+    stockEl.innerHTML = `<span style="color: #dc2626;">● Out of Stock</span>`;
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
+    if (addToCartBtn) {
+      addToCartBtn.disabled = true;
+      addToCartBtn.innerHTML = 'Out of Stock';
+      addToCartBtn.style.opacity = '0.5';
+      addToCartBtn.style.cursor = 'not-allowed';
+    }
+  }
 
   // WhatsApp Button
   const waBtn = document.getElementById('whatsapp-btn');

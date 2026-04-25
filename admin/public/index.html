@@ -6,6 +6,7 @@
     <title>Electro Hub - Admin Panel</title>
     <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <!-- Login View -->
@@ -26,16 +27,43 @@
             <div class="header-content">
                 <h1>Electro Hub Admin</h1>
                 <div class="header-actions">
+                    <a href="https://dilan-supun.github.io/Electro-Hub-Market/" target="_blank" class="btn-secondary" style="text-decoration: none;">🌐 View Live Site</a>
                     <button id="btn-publish" class="btn-publish">🚀 Publish to Live Site</button>
-                    <button id="btn-logout" class="btn-logout">Logout</button>
+                    <button id="btn-logout" class="btn-secondary">Logout</button>
                 </div>
             </div>
         </header>
 
         <main class="admin-main">
             <div class="main-top">
-                <h2>Manage Inventory</h2>
+                <h2>Dashboard Overview</h2>
                 <button id="btn-add-product" class="btn-primary">+ Add New Product</button>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Total Products</span>
+                    <span class="stat-value" id="stat-total-products">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Total Stock Items</span>
+                    <span class="stat-value" id="stat-total-stock">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Low Stock Alerts</span>
+                    <span class="stat-value" id="stat-low-stock">0</span>
+                </div>
+            </div>
+
+            <!-- Graph Section -->
+            <div class="graph-container">
+                <h3>Sales & Inventory Trends (Mock)</h3>
+                <canvas id="statsChart"></canvas>
+            </div>
+
+            <div class="main-top" style="margin-top: 2rem;">
+                <h2>Product Inventory</h2>
             </div>
 
             <div class="table-container">
@@ -47,6 +75,7 @@
                             <th>Title</th>
                             <th>Category</th>
                             <th>Price (LKR)</th>
+                            <th>Stock</th>
                             <th>Condition</th>
                             <th>Actions</th>
                         </tr>
@@ -83,8 +112,13 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Price (e.g. "Rs. 6,950" or "Contact for price")</label>
-                    <input type="text" id="p-price" required>
+                    <label>Price (LKR)</label>
+                    <input type="number" id="p-price" placeholder="e.g. 6950" required>
+                    <p class="help-text">Enter numbers only. "Rs." will be added automatically.</p>
+                </div>
+                <div class="form-group">
+                    <label>Stock Quantity on Hand</label>
+                    <input type="number" id="p-stock" value="0" required>
                 </div>
                 <div class="form-group">
                     <label>Meta Info (e.g. "40A · DIN Rail")</label>
@@ -114,12 +148,12 @@
                     <p class="help-text">Select multiple images for the product gallery</p>
                 </div>
                 <div class="form-group">
-                    <label>Features / Specs (comma separated)</label>
-                    <textarea id="p-specs" rows="2" placeholder="Feature 1, Feature 2, Feature 3"></textarea>
+                    <label>Features / Specs (semicolon ; separated)</label>
+                    <textarea id="p-specs" rows="2" placeholder="Feature 1; Feature 2; Feature 3"></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Buying & Delivery Info (comma separated)</label>
-                    <textarea id="p-delivery" rows="2" placeholder="Free delivery, 1 year warranty"></textarea>
+                    <label>Buying & Delivery Info (semicolon ; separated)</label>
+                    <textarea id="p-delivery" rows="2" placeholder="Free delivery; 1 year warranty"></textarea>
                 </div>
                 <div class="form-group">
                     <label>SVG Illustration Fallback (Optional SVG code)</label>

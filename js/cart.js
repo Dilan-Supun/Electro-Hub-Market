@@ -19,6 +19,13 @@ const Cart = {
     add(product, quantity = 1) {
         const cart = this.get();
         const existing = cart.find(item => item.id === product.id);
+        const currentQty = existing ? existing.quantity : 0;
+        const maxAvailable = parseInt(product.stock) || 0;
+
+        if (currentQty + quantity > maxAvailable) {
+            alert(`Sorry, only ${maxAvailable} units are available in stock.`);
+            return cart;
+        }
         
         if (existing) {
             existing.quantity += quantity;
@@ -28,6 +35,7 @@ const Cart = {
                 title: product.title,
                 price: product.price,
                 image: product.image,
+                stock: product.stock, // Store stock to check during updates
                 quantity: quantity
             });
         }
@@ -46,7 +54,13 @@ const Cart = {
         const cart = this.get();
         const item = cart.find(item => item.id === id);
         if (item) {
-            item.quantity = Math.max(1, quantity);
+            const maxAvailable = parseInt(item.stock) || 999; // fallback if stock missing
+            if (quantity > maxAvailable) {
+                alert(`Only ${maxAvailable} units available.`);
+                item.quantity = maxAvailable;
+            } else {
+                item.quantity = Math.max(1, quantity);
+            }
             this.save(cart);
         }
         return cart;

@@ -2,9 +2,9 @@
   {
     "id": "dji-neo-propellers",
     "title": "DJI Neo Propellers",
-    "price": "1850",
+    "price": "1500",
     "category": "drone",
-    "condition": "New",
+    "condition": "Brand New",
     "description": "Genuine spare replacement propellers for DJI Neo. Unused, original packaging.",
     "image": "images/products/dji-neo-propellers/cover.jpg",
     "specs": [],
@@ -13,7 +13,8 @@
     "images": [],
     "buyingDelivery": [],
     "svg": "",
-    "link": "product.html?id=dji-neo-propellers"
+    "link": "product.html?id=dji-neo-propellers",
+    "stock": 10
   },
   {
     "id": "xh-a901-preamp",
@@ -64,21 +65,9 @@
     "svg": "<rect x=\"130\" y=\"113\" width=\"160\" height=\"90\" rx=\"6\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><rect x=\"165\" y=\"138\" width=\"90\" height=\"40\" rx=\"4\" fill=\"currentColor\" opacity=\"0.10\"/><text x=\"210\" y=\"161\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.68\" font-family=\"sans-serif\" font-weight=\"bold\">MP1584</text><circle cx=\"312\" cy=\"158\" r=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.42\"/><text x=\"312\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"8\" fill=\"currentColor\" opacity=\"0.55\" font-family=\"sans-serif\">ADJ</text><text x=\"210\" y=\"252\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.42\" font-family=\"sans-serif\">4.75–23V → 1–17V · 96% eff.</text>"
   },
   {
-    "id": "irs2092-class-d-amplifier",
-    "title": "IRS2092 High Power Class D Amplifier",
-    "category": "audio",
-    "condition": "Brand new",
-    "meta": "Sub / PA · 10–18″",
-    "description": "IRS2092 Class D amp with speaker protection. Subwoofer, PA, bass bin builds. Full multi-protection.",
-    "price": "Contact for price",
-    "link": "products/irs2092-class-d-amplifier.html",
-    "image": null,
-    "svg": "<rect x=\"55\" y=\"78\" width=\"310\" height=\"160\" rx=\"10\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><rect x=\"155\" y=\"118\" width=\"110\" height=\"80\" rx=\"6\" fill=\"currentColor\" opacity=\"0.10\"/><text x=\"210\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"13\" fill=\"currentColor\" opacity=\"0.68\" font-family=\"sans-serif\" font-weight=\"bold\">IRS2092</text><rect x=\"65\" y=\"88\" width=\"12\" height=\"140\" rx=\"2\" fill=\"currentColor\" opacity=\"0.12\"/><rect x=\"82\" y=\"88\" width=\"12\" height=\"140\" rx=\"2\" fill=\"currentColor\" opacity=\"0.12\"/><rect x=\"99\" y=\"88\" width=\"12\" height=\"140\" rx=\"2\" fill=\"currentColor\" opacity=\"0.12\"/><text x=\"210\" y=\"278\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.42\" font-family=\"sans-serif\">High Power · Sub / PA · 10–18″</text>"
-  },
-  {
     "id": "test1",
     "title": "testTitle",
-    "price": "Rs. 6,99",
+    "price": "699",
     "category": "drone",
     "condition": "Brand New",
     "meta": "meta info",
@@ -96,7 +85,8 @@
     ],
     "svg": "",
     "link": "product.html?id=test1",
-    "badge": "sele badge "
+    "badge": "sele badge ",
+    "stock": 0
   },
   {
     "id": "dji-neo-6-in-1-filter-pack",
@@ -135,7 +125,7 @@
   {
     "id": "wifi-smart-power-meter-with-40a-switch",
     "title": "WiFi Smart Power Meter with 40A Switch",
-    "price": "LKR:6990",
+    "price": "6990",
     "category": "modules",
     "condition": "Brand New",
     "meta": "Smart home · Energy monitoring",
@@ -172,7 +162,8 @@
     ],
     "svg": "",
     "link": "product.html?id=wifi-smart-power-meter-with-40a-switch",
-    "badge": "Smart home · Energy monitoring"
+    "badge": "Smart home · Energy monitoring",
+    "stock": 1
   },
   {
     "id": "irs2092-class-d-amplifier",
@@ -190,11 +181,15 @@
       "25.2×",
       "or 30.2× depending on board version",
       "Input sensitivity: approx. 1.48V–1.49V",
-      "Working voltage: typically ±40V–±77V; some versions rated up to ±85V",
+      "Working voltage: typically ±40V–±77V",
+      "some versions rated up to ±85V",
       "SNR: more than 96dB (low-noise input stage)",
       "Protection: speaker protection circuits included",
       "Additional protection: short-circuit",
-      "over-current; over-temperature; under-voltage; over-voltage\nSpeaker support: 10″",
+      "over-current",
+      "over-temperature",
+      "under-voltage",
+      "over-voltage\nSpeaker support: 10″",
       "12″",
       "15″",
       "18″ when matched correctly with power supply and speaker rating"
@@ -205,6 +200,7 @@
       "Delivery fee depends on item weight and location"
     ],
     "svg": "",
-    "link": "product.html?id=irs2092-class-d-amplifier"
+    "link": "product.html?id=irs2092-class-d-amplifier",
+    "stock": 10
   }
 ]
