@@ -1,14 +1,15 @@
 const axios = require('axios');
 const fs = require('fs-extra');
-const path = require('path');
 require('dotenv').config();
 
-const API_KEY = process.env.GEMINI_API_KEY;
-const MODEL = 'gemini-2.5-flash-image'; 
+const API_KEY = process.env.GEMINI_API_KEY || 'AIzaSyBakn6N88UpfOEne2Il5OwN9uHsr9PQuts';
+const MODEL = 'nano-banana-pro-preview'; 
 
 const geminiService = {
     async enhanceImage(imagePath, prompt) {
         try {
+            console.log(`[AI] Attempting Gemini API processing for prompt: "${prompt}" using model: ${MODEL}`);
+            
             const imageData = await fs.readFile(imagePath);
             const base64Image = imageData.toString('base64');
 
@@ -26,26 +27,27 @@ const geminiService = {
                 }]
             };
 
+            // Call the Gemini API natively
             const response = await axios.post(
                 `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`,
                 payload,
                 { headers: { 'Content-Type': 'application/json' } }
             );
 
-            // Assuming the model returns a base64 image string in the response parts
-            // This structure depends on the specific Gemini model capabilities for image output
-            const part = response.data.candidates[0].content.parts.find(p => p.inline_data);
-            
+            // Parse response - assuming the model returns an edited inline_data image
+            const part = response.data.candidates?.[0]?.content?.parts?.find(p => p.inline_data);
             if (part && part.inline_data && part.inline_data.data) {
+                console.log('[AI] Successfully generated image via Gemini API');
                 return Buffer.from(part.inline_data.data, 'base64');
             }
+            
+            console.error('Gemini API response did not contain inline_data image:', JSON.stringify(response.data, null, 2));
+            throw new Error('No image data returned from Gemini API. Check console logs for response format.');
 
-            // Fallback: If it returns text, it might be a description or error
-            console.error('Gemini response did not contain image data:', response.data);
-            throw new Error('AI failed to generate an edited image. Check API response format.');
         } catch (error) {
-            console.error('Gemini API Error:', error.response ? error.response.data : error.message);
-            throw new Error(`Gemini Enhancement Failed: ${error.message}`);
+            const apiErrorMsg = error.response?.data?.error?.message || error.message;
+            console.error('[AI] Gemini API failed:', apiErrorMsg);
+            throw new Error(`Gemini API Error: ${apiErrorMsg}`);
         }
     }
 };
