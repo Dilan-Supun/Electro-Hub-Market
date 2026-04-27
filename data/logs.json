@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1777278034706,
+    "timestamp": "2026-04-27T08:20:34.706Z",
+    "action": "edit product",
+    "details": {
+      "id": "xh-a901-preamp",
+      "title": "XH-A901 NE5532 Tone Control PreAmp"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777278034351,
+    "timestamp": "2026-04-27T08:20:34.351Z",
+    "action": "edit product",
+    "details": {
+      "id": "xh-a901-preamp",
+      "title": "XH-A901 NE5532 Tone Control PreAmp"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777278033763,
+    "timestamp": "2026-04-27T08:20:33.763Z",
+    "action": "edit product",
+    "details": {
+      "id": "xh-a901-preamp",
+      "title": "XH-A901 NE5532 Tone Control PreAmp"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777278032127,
+    "timestamp": "2026-04-27T08:20:32.127Z",
+    "action": "edit product",
+    "details": {
+      "id": "xh-a901-preamp",
+      "title": "XH-A901 NE5532 Tone Control PreAmp"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777278026316,
+    "timestamp": "2026-04-27T08:20:26.316Z",
+    "action": "edit product",
+    "details": {
+      "id": "xh-a901-preamp",
+      "title": "XH-A901 NE5532 Tone Control PreAmp"
+    },
+    "admin": "admin"
+  }
+]

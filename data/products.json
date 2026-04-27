@@ -1,4 +1,4 @@
-const productsData = [
+[
   {
     "id": "xh-a901-preamp",
     "title": "XH-A901 NE5532 Tone Control PreAmp",
@@ -6,10 +6,14 @@ const productsData = [
     "condition": "Brand new",
     "meta": "2ch Stereo · 12–24V",
     "description": "Dual NE5532 preamp board. Bass, mid, treble, volume controls. DIY amplifier and home audio.",
-    "price": "Contact for price",
+    "price": "200",
     "link": "products/xh-a901-preamp.html",
     "image": null,
-    "svg": "<rect x=\"70\" y=\"108\" width=\"280\" height=\"100\" rx=\"8\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><circle cx=\"140\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><circle cx=\"210\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><circle cx=\"280\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><text x=\"140\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">BASS</text><text x=\"210\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">MID</text><text x=\"280\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">TRB</text>"
+    "svg": "<rect x=\"70\" y=\"108\" width=\"280\" height=\"100\" rx=\"8\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><circle cx=\"140\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><circle cx=\"210\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><circle cx=\"280\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><text x=\"140\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">BASS</text><text x=\"210\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">MID</text><text x=\"280\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">TRB</text>",
+    "stock": "0",
+    "features": [],
+    "buyingDelivery": [],
+    "updatedAt": "2026-04-27T08:20:34.706Z"
   },
   {
     "id": "vhm-314-bluetooth",
@@ -162,4 +166,4 @@ const productsData = [
     "link": "product.html?id=irs2092-class-d-amplifier",
     "stock": 10
   }
-];
+]

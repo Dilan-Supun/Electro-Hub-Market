@@ -3,167 +3,322 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Electro Hub - Admin Panel</title>
+    <title>Electro Hub - Professional Admin</title>
     <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/admin.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <!-- Login View -->
-    <div id="login-view" class="view active">
-        <div class="login-card">
-            <h2>Admin Login</h2>
-            <form id="login-form">
-                <input type="password" id="password" placeholder="Enter Admin Password" required>
-                <button type="submit">Login</button>
-                <p id="login-error" class="error-msg"></p>
-            </form>
-        </div>
-    </div>
+    <!-- Admin Panel (Auth Bypass Enabled) -->
 
-    <!-- Dashboard View -->
-    <div id="dashboard-view" class="view">
-        <header class="admin-header">
-            <div class="header-content">
-                <h1>Electro Hub Admin</h1>
-                <div class="header-actions">
-                    <a href="https://dilan-supun.github.io/Electro-Hub-Market/" target="_blank" class="btn-secondary" style="text-decoration: none;">🌐 View Live Site</a>
-                    <button id="btn-publish" class="btn-publish">🚀 Publish to Live Site</button>
-                    <button id="btn-logout" class="btn-secondary">Logout</button>
+    <!-- Main Dashboard View -->
+    <div id="admin-layout" class="view active">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Electro Hub</h3>
+                <p>Live Dashboard</p>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-target="section-dashboard">📊 Dashboard</button>
+                <button class="nav-item" data-target="section-products">📦 Products</button>
+                <button class="nav-item" data-target="section-inventory">🏷️ Inventory</button>
+                <button class="nav-item" data-target="section-imports">📁 Imports</button>
+                <button class="nav-item" data-target="section-media">🖼️ Media Library</button>
+                <button class="nav-item" data-target="section-ai-studio">✨ AI Image Studio</button>
+                <button class="nav-item" data-target="section-logs">📜 Activity Logs</button>
+                <button class="nav-item" data-target="section-settings">⚙️ Settings</button>
+            </nav>
+            <div class="sidebar-footer">
+                <p style="font-size: 0.75rem; color: #64748b; padding: 0.5rem 1rem;">
+                    🌐 <a href="https://dilan-supun.github.io/Electro-Hub-Market/index.html" target="_blank" style="color: inherit; text-decoration: none;">Live Site</a>
+                </p>
+                <p style="font-size: 0.75rem; color: #64748b; padding: 0 1rem 1rem 1rem;">
+                    📦 <a href="https://github.com/Dilan-Supun/Electro-Hub-Market" target="_blank" style="color: inherit; text-decoration: none;">GitHub Main</a>
+                </p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <h2 id="section-title">Dashboard</h2>
+                    <p id="section-subtitle" class="text-muted">Business Overview & Insights</p>
                 </div>
-            </div>
-        </header>
-
-        <main class="admin-main">
-            <div class="main-top">
-                <h2>Dashboard Overview</h2>
-                <button id="btn-add-product" class="btn-primary">+ Add New Product</button>
-            </div>
-
-            <!-- Stats Grid -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-label">Total Products</span>
-                    <span class="stat-value" id="stat-total-products">0</span>
+                <div class="top-bar-actions">
+                    <a href="https://dilan-supun.github.io/Electro-Hub-Market/index.html" target="_blank" class="btn-outline">🌐 View Shop</a>
+                    <button id="btn-publish" class="btn-publish">🚀 Push Live</button>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-label">Total Stock Items</span>
-                    <span class="stat-value" id="stat-total-stock">0</span>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="section-dashboard" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon info">📦</div>
+                        <div class="stat-info">
+                            <span class="stat-label">Total Products</span>
+                            <span class="stat-value" id="dash-total-products">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon success">💰</div>
+                        <div class="stat-info">
+                            <span class="stat-label">Inventory Value</span>
+                            <span class="stat-value" id="dash-total-value">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card alert">
+                        <div class="stat-icon danger">⚠️</div>
+                        <div class="stat-info">
+                            <span class="stat-label">Low Stock</span>
+                            <span class="stat-value" id="dash-low-stock">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="stat-icon warning">🐢</div>
+                        <div class="stat-info">
+                            <span class="stat-label">Dead Stock</span>
+                            <span class="stat-value" id="dash-dead-stock">0</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-label">Low Stock Alerts</span>
-                    <span class="stat-value" id="stat-low-stock">0</span>
+
+                <div class="dashboard-charts">
+                    <div class="chart-container main-chart">
+                        <h3>Stock Distribution by Category</h3>
+                        <canvas id="stockChart"></canvas>
+                    </div>
+                    <div class="alert-lists">
+                        <div class="alert-box low-stock-list">
+                            <h3>🚨 Low Stock Alerts</h3>
+                            <ul id="low-stock-items"></ul>
+                        </div>
+                        <div class="alert-box dead-stock-list">
+                            <h3>💤 Slow Moving Items</h3>
+                            <ul id="dead-stock-items"></ul>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Graph Section -->
-            <div class="graph-container">
-                <h3>Sales & Inventory Trends (Mock)</h3>
-                <canvas id="statsChart"></canvas>
-            </div>
+            <!-- Products Section -->
+            <section id="section-products" class="content-section">
+                <div class="section-header">
+                    <div class="search-filter-row">
+                        <div class="search-box">
+                            <input type="text" id="search-products" placeholder="Search by name or ID...">
+                        </div>
+                        <select id="filter-category" class="filter-select">
+                            <option value="all">All Categories</option>
+                        </select>
+                        <select id="filter-stock" class="filter-select">
+                            <option value="all">Stock Status</option>
+                            <option value="in">In Stock</option>
+                            <option value="low">Low Stock</option>
+                            <option value="out">Out of Stock</option>
+                        </select>
+                        <select id="sort-by" class="filter-select">
+                            <option value="latest">Latest Updates</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="stock-low">Stock: Low to High</option>
+                        </select>
+                    </div>
+                    <button id="btn-add-product" class="btn-primary">+ Add New Product</button>
+                </div>
+                <div class="table-container card">
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Product Details</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
 
-            <div class="main-top" style="margin-top: 2rem;">
-                <h2>Product Inventory</h2>
-            </div>
+            <!-- AI Image Studio -->
+            <section id="section-ai-studio" class="content-section">
+                <div class="studio-layout">
+                    <div class="studio-sidebar card">
+                        <h3>1. Image Source</h3>
+                        <div class="upload-zone" id="drop-zone">
+                            <input type="file" id="ai-image-input" hidden>
+                            <div class="upload-prompt">
+                                <span>📁</span>
+                                <p>Click or Drag to Upload</p>
+                            </div>
+                        </div>
+                        <div class="prompt-config">
+                            <h3>2. AI Instructions</h3>
+                            <textarea id="ai-custom-prompt" placeholder="Optional: Add specific instructions..."></textarea>
+                            <p class="hint">Default: Professional studio background removal & lighting.</p>
+                        </div>
+                        <button id="btn-ai-process" class="btn-primary btn-block">✨ Process with Gemini</button>
+                    </div>
+                    <div class="studio-main card">
+                        <div class="comparison-header">
+                            <h3>3. Review & Finalize</h3>
+                            <div class="studio-actions">
+                                <button id="btn-ai-save" class="btn-success" disabled>💾 Save Final Version</button>
+                            </div>
+                        </div>
+                        <div class="comparison-view">
+                            <div class="preview-panel">
+                                <span class="badge">Original</span>
+                                <div class="img-wrapper">
+                                    <img id="ai-preview-original" src="images/products/placeholder.jpg">
+                                </div>
+                            </div>
+                            <div class="preview-panel">
+                                <span class="badge ai">AI Generated</span>
+                                <div class="img-wrapper" id="generated-wrapper">
+                                    <div id="ai-loader" class="loader-overlay" style="display:none;">
+                                        <div class="spinner"></div>
+                                        <p>Gemini is working...</p>
+                                    </div>
+                                    <img id="ai-preview-generated" src="images/products/placeholder.jpg">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            <div class="table-container">
-                <table class="products-table">
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>ID</th>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Price (LKR)</th>
-                            <th>Stock</th>
-                            <th>Condition</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="products-tbody">
-                        <!-- Products will be loaded here -->
-                    </tbody>
-                </table>
-            </div>
+            <!-- Imports Section -->
+            <section id="section-imports" class="content-section">
+                <div class="import-card card">
+                    <div class="import-header">
+                        <h2>Bulk Product Import</h2>
+                        <p>Upload a CSV file to update your inventory in bulk.</p>
+                    </div>
+                    <div class="import-upload-zone" id="csv-drop-zone">
+                        <input type="file" id="csv-file-input" accept=".csv" hidden>
+                        <div class="upload-content">
+                            <span>📊</span>
+                            <h3>Select CSV File</h3>
+                            <p>Required columns: id, title, price, stock, category</p>
+                            <button class="btn-secondary">Browse Files</button>
+                        </div>
+                    </div>
+                    <div id="import-preview-area" style="display:none;">
+                        <h3>Validation Result</h3>
+                        <div id="import-stats" class="import-stats-row"></div>
+                        <div class="table-container mini">
+                            <table id="import-preview-table"></table>
+                        </div>
+                        <div class="import-actions">
+                            <button id="btn-import-cancel" class="btn-outline">Cancel</button>
+                            <button id="btn-import-commit" class="btn-success">Confirm & Import</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity Logs -->
+            <section id="section-logs" class="content-section">
+                <div class="card">
+                    <div class="log-filters">
+                        <input type="text" id="log-search" placeholder="Filter by action or product...">
+                        <select id="log-type-filter">
+                            <option value="all">All Actions</option>
+                            <option value="add product">Add Product</option>
+                            <option value="edit product">Edit Product</option>
+                            <option value="delete product">Delete Product</option>
+                            <option value="generate ai image">AI Image</option>
+                        </select>
+                    </div>
+                    <div class="table-container">
+                        <table class="logs-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Admin</th>
+                                    <th>Action</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logs-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings -->
+            <section id="section-settings" class="content-section">
+                <div class="settings-grid">
+                    <form id="settings-form" class="settings-card card">
+                        <h3>🎨 Brand Watermarking</h3>
+                        <div class="form-group">
+                            <label>Brand Name</label>
+                            <input type="text" id="set-watermark-text" placeholder="e.g. Electro Hub">
+                        </div>
+                        <div class="settings-row">
+                            <div class="form-group">
+                                <label>Position</label>
+                                <select id="set-watermark-pos">
+                                    <option value="bottom-right">Bottom Right</option>
+                                    <option value="bottom-center">Bottom Center</option>
+                                    <option value="center">Center Faint</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Opacity</label>
+                                <input type="number" id="set-watermark-opacity" step="0.1" min="0.1" max="1">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">Save Configuration</button>
+                    </form>
+
+                    <div class="settings-card card">
+                        <h3>🔑 API Status</h3>
+                        <div class="api-status-item">
+                            <span>Gemini AI Access</span>
+                            <span class="status-badge ok">Connected</span>
+                        </div>
+                        <div class="api-status-item">
+                            <span>Storage Mode</span>
+                            <span class="status-badge">Local File System</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
-    <!-- Add/Edit Product Modal -->
+    <!-- Product Modal -->
     <div id="product-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" id="modal-close">&times;</span>
-            <h2 id="modal-title">Add Product</h2>
-            <form id="product-form">
-                <div class="form-group">
-                    <label>Product ID (e.g. drone-01)</label>
-                    <input type="text" id="p-id" required>
+        <div class="modal-content card">
+            <div class="modal-header">
+                <h2 id="modal-title">Edit Product</h2>
+                <span class="close-btn">&times;</span>
+            </div>
+            <form id="product-form" class="product-form-grid">
+                <div class="form-main">
+                    <div class="form-group"><label>Product ID</label><input type="text" id="p-id" required></div>
+                    <div class="form-group"><label>Title</label><input type="text" id="p-title" required></div>
+                    <div class="form-group"><label>Description</label><textarea id="p-description" rows="4"></textarea></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Category</label><select id="p-category"></select></div>
+                        <div class="form-group"><label>Condition</label><input type="text" id="p-condition"></div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Title</label>
-                    <input type="text" id="p-title" required>
+                <div class="form-side">
+                    <div class="form-group"><label>Price (LKR)</label><input type="text" id="p-price" required></div>
+                    <div class="form-group"><label>Stock Level</label><input type="number" id="p-stock" required></div>
+                    <div class="form-group"><label>Features (Semicolon separated)</label><textarea id="p-features" rows="3"></textarea></div>
+                    <div class="form-group"><label>Buying Info (Semicolon separated)</label><textarea id="p-buying" rows="3"></textarea></div>
                 </div>
-                <div class="form-group">
-                    <label>Category</label>
-                    <select id="p-category" required>
-                        <option value="drone">Drone</option>
-                        <option value="audio">Audio</option>
-                        <option value="modules">Modules</option>
-                        <option value="accessories">Accessories</option>
-                    </select>
+                <div class="form-footer">
+                    <button type="button" class="btn-outline close-modal">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Product</button>
                 </div>
-                <div class="form-group">
-                    <label>Price (LKR)</label>
-                    <input type="number" id="p-price" placeholder="e.g. 6950" required>
-                    <p class="help-text">Enter numbers only. "Rs." will be added automatically.</p>
-                </div>
-                <div class="form-group">
-                    <label>Stock Quantity on Hand</label>
-                    <input type="number" id="p-stock" value="0" required>
-                </div>
-                <div class="form-group">
-                    <label>Meta Info (e.g. "40A · DIN Rail")</label>
-                    <input type="text" id="p-meta">
-                </div>
-                <div class="form-group">
-                    <label>Condition</label>
-                    <select id="p-condition" required>
-                        <option value="New">New</option>
-                        <option value="Used">Used</option>
-                        <option value="Brand New">Brand New</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Badge (Optional, e.g. "Sale")</label>
-                    <input type="text" id="p-badge">
-                </div>
-                <div class="form-group">
-                    <label>Main Cover Image</label>
-                    <input type="file" id="p-image" accept="image/*">
-                    <p class="help-text">Leave blank to keep existing image</p>
-                    <input type="hidden" id="p-image-url">
-                </div>
-                <div class="form-group">
-                    <label>Gallery Images</label>
-                    <input type="file" id="p-gallery" accept="image/*" multiple>
-                    <p class="help-text">Select multiple images for the product gallery</p>
-                </div>
-                <div class="form-group">
-                    <label>Features / Specs (semicolon ; separated)</label>
-                    <textarea id="p-specs" rows="2" placeholder="Feature 1; Feature 2; Feature 3"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Buying & Delivery Info (semicolon ; separated)</label>
-                    <textarea id="p-delivery" rows="2" placeholder="Free delivery; 1 year warranty"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>SVG Illustration Fallback (Optional SVG code)</label>
-                    <textarea id="p-svg" rows="2" placeholder="<circle ... />"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="p-description" rows="3" required></textarea>
-                </div>
-                <button type="submit" class="btn-primary w-100">Save Product</button>
             </form>
         </div>
     </div>

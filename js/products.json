@@ -1,22 +1,5 @@
 [
   {
-    "id": "dji-neo-propellers",
-    "title": "DJI Neo Propellers",
-    "price": "1500",
-    "category": "drone",
-    "condition": "Brand New",
-    "description": "Genuine spare replacement propellers for DJI Neo. Unused, original packaging.",
-    "image": "images/products/dji-neo-propellers/cover.jpg",
-    "specs": [],
-    "features": [],
-    "meta": "",
-    "images": [],
-    "buyingDelivery": [],
-    "svg": "",
-    "link": "product.html?id=dji-neo-propellers",
-    "stock": 10
-  },
-  {
     "id": "xh-a901-preamp",
     "title": "XH-A901 NE5532 Tone Control PreAmp",
     "category": "audio",
@@ -63,30 +46,6 @@
     "link": "products/mp1584-buck-converter.html",
     "image": null,
     "svg": "<rect x=\"130\" y=\"113\" width=\"160\" height=\"90\" rx=\"6\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><rect x=\"165\" y=\"138\" width=\"90\" height=\"40\" rx=\"4\" fill=\"currentColor\" opacity=\"0.10\"/><text x=\"210\" y=\"161\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.68\" font-family=\"sans-serif\" font-weight=\"bold\">MP1584</text><circle cx=\"312\" cy=\"158\" r=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.42\"/><text x=\"312\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"8\" fill=\"currentColor\" opacity=\"0.55\" font-family=\"sans-serif\">ADJ</text><text x=\"210\" y=\"252\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.42\" font-family=\"sans-serif\">4.75–23V → 1–17V · 96% eff.</text>"
-  },
-  {
-    "id": "test1",
-    "title": "testTitle",
-    "price": "699",
-    "category": "drone",
-    "condition": "Brand New",
-    "meta": "meta info",
-    "description": "this is disceptation ",
-    "image": "images/products/dji_neo_drone_with_remote_camera_fly_more_combo_5_1777048699435.jpg",
-    "images": [
-      "images/products/hq720_1777048699437.jpg"
-    ],
-    "features": [
-      "Feature 1"
-    ],
-    "buyingDelivery": [
-      "free",
-      "one month cehcking"
-    ],
-    "svg": "",
-    "link": "product.html?id=test1",
-    "badge": "sele badge ",
-    "stock": 0
   },
   {
     "id": "dji-neo-6-in-1-filter-pack",
