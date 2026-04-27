@@ -1,5 +1,190 @@
 [
   {
+    "id": 1777284212188,
+    "timestamp": "2026-04-27T10:03:32.188Z",
+    "action": "generate ai image",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777284195699.jpeg",
+      "custom": true
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777284209028,
+    "timestamp": "2026-04-27T10:03:29.028Z",
+    "action": "generate ai image",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777284195699.jpeg",
+      "custom": true
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777284207318,
+    "timestamp": "2026-04-27T10:03:27.318Z",
+    "action": "generate ai image",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777284195699.jpeg",
+      "custom": true
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777284205423,
+    "timestamp": "2026-04-27T10:03:25.423Z",
+    "action": "generate ai image",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777284195699.jpeg",
+      "custom": true
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777284198545,
+    "timestamp": "2026-04-27T10:03:18.545Z",
+    "action": "generate ai image",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777284195699.jpeg",
+      "custom": false
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777283835076,
+    "timestamp": "2026-04-27T09:57:15.076Z",
+    "action": "generate ai image",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777283822911.jpeg",
+      "custom": true
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777283827182,
+    "timestamp": "2026-04-27T09:57:07.182Z",
+    "action": "generate ai image",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777283822911.jpeg",
+      "custom": false
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777283810889,
+    "timestamp": "2026-04-27T09:56:50.889Z",
+    "action": "generate ai image",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777283806966.jpg",
+      "custom": false
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777283795007,
+    "timestamp": "2026-04-27T09:56:35.007Z",
+    "action": "generate ai image",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777283790546.jpeg",
+      "custom": true
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777283361152,
+    "timestamp": "2026-04-27T09:49:21.152Z",
+    "action": "save final AI image",
+    "details": {
+      "productId": "studio",
+      "watermarked": true
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777283357287,
+    "timestamp": "2026-04-27T09:49:17.287Z",
+    "action": "generate ai image",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777283353190.jpg",
+      "custom": true
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777283340548,
+    "timestamp": "2026-04-27T09:49:00.548Z",
+    "action": "generate ai image",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777283336529.jpg",
+      "custom": true
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777283327114,
+    "timestamp": "2026-04-27T09:48:47.114Z",
+    "action": "generate ai image",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777283158071.jpeg",
+      "custom": true
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777283317745,
+    "timestamp": "2026-04-27T09:48:37.745Z",
+    "action": "generate ai image",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777283158071.jpeg",
+      "custom": true
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777283167607,
+    "timestamp": "2026-04-27T09:46:07.607Z",
+    "action": "save final AI image",
+    "details": {
+      "productId": "studio",
+      "watermarked": true
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777283162560,
+    "timestamp": "2026-04-27T09:46:02.560Z",
+    "action": "generate ai image",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777283158071.jpeg",
+      "custom": false
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777283149374,
+    "timestamp": "2026-04-27T09:45:49.374Z",
+    "action": "generate ai image",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777282709985.jpg",
+      "custom": false
+    },
+    "admin": "admin"
+  },
+  {
     "id": 1777278034706,
     "timestamp": "2026-04-27T08:20:34.706Z",
     "action": "edit product",
