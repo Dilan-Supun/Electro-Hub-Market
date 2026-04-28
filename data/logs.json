@@ -1,5 +1,55 @@
 [
   {
+    "id": 1777395449789,
+    "timestamp": "2026-04-28T16:57:29.789Z",
+    "action": "edit product",
+    "details": {
+      "id": "pam8610-amplifier",
+      "title": "PAM8610 Stereo Amplifier 2×10W/2×15W"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777395418114,
+    "timestamp": "2026-04-28T16:56:58.114Z",
+    "action": "edit product",
+    "details": {
+      "id": "mp1584-buck-converter",
+      "title": "DC Step Down Mini Buck Converter MP1584"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777395394122,
+    "timestamp": "2026-04-28T16:56:34.122Z",
+    "action": "edit product",
+    "details": {
+      "id": "irs2092-class-d-amplifier",
+      "title": "IRS2092 High Power Class D Amplifier Board with Speaker Protection"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777395388221,
+    "timestamp": "2026-04-28T16:56:28.221Z",
+    "action": "edit product",
+    "details": {
+      "id": "irs2092-class-d-amplifier",
+      "title": "IRS2092 High Power Class D Amplifier Board with Speaker Protection"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777391306437,
+    "timestamp": "2026-04-28T15:48:26.437Z",
+    "action": "add product",
+    "details": {
+      "id": "4",
+      "title": "psu"
+    },
+    "admin": "admin"
+  },
+  {
     "id": 1777390116653,
     "timestamp": "2026-04-28T15:28:36.653Z",
     "action": "edit product",

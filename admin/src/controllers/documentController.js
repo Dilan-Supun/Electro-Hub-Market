@@ -167,9 +167,13 @@ const documentController = {
 
             const isFragile = order.items.some(i => i.fragile === true);
             const totalQty = order.items.reduce((s, i) => s + i.qty, 0);
-            const itemSummary = order.items.map(i => `${i.title} × ${i.qty}`).join(', ');
-            const trackingNumber = order.trackingNumber || '';
-            const carrier = order.shippingCarrier || '';
+            
+            // Simplified item summary: Category + Title
+            const itemSummary = order.items.map(i => `${i.category || 'Item'} - ${i.title} × ${i.qty}`).join(', ');
+            
+            const trackingNumber = order.trackingNumber || 'PENDING';
+            const carrier = order.shippingCarrier || 'N/A';
+            const codValue = order.status === 'pending' || order.status === 'processing' ? order.total : 0;
 
             const html = `<!DOCTYPE html>
 <html lang="en">
@@ -194,11 +198,12 @@ const documentController = {
   .label-small { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
   .text-bold { font-weight: 700; color: #000; }
   .text-large { font-size: 18px; }
+  .text-xlarge { font-size: 24px; font-weight: 900; }
   .text-medium { font-size: 14px; }
   .text-small { font-size: 11px; line-height: 1.4; }
 
   .logo-img { max-height: 50px; max-width: 150px; object-fit: contain; }
-  .fragile-box { border: 4px solid #ef4444; color: #ef4444; padding: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
+  .fragile-box { border: 4px solid #000; color: #000; padding: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
   .fragile-icon { font-size: 32px; margin-bottom: 4px; }
   .fragile-text { font-weight: 900; font-size: 20px; }
 
@@ -206,13 +211,14 @@ const documentController = {
   .qr-container { width: 100px; height: 100px; background: #eee; }
   
   .instruction-box { background: #f8fafc; padding: 10px; font-style: italic; border: 1px dashed #000; }
+  .highlight-box { border: 3px solid #000; padding: 10px; text-align: center; }
   .btn-print { margin-top: 20px; padding: 12px 30px; background: #000; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 700; }
 </style>
 </head>
 <body>
 
 <div class="label-container" id="printable-label">
-  <!-- Section 1: FROM -->
+  <!-- Section 1: Header -->
   <div class="section">
     <div class="cell border-right" style="flex: 0 0 50%; display: flex; align-items: center; justify-content: center;">
       ${shop.logoPath ? `<img src="/${shop.logoPath}" class="logo-img">` : `<div class="text-bold text-large">${shop.name}</div>`}
@@ -225,7 +231,7 @@ const documentController = {
     </div>
   </div>
 
-  <!-- Section 2: TO -->
+  <!-- Section 2: TO & Fragile -->
   <div class="section">
     <div class="cell border-right" style="flex: 0 0 35%;">
       ${isFragile ? `
@@ -233,82 +239,75 @@ const documentController = {
           <div class="fragile-icon">🥃</div>
           <div class="fragile-text">FRAGILE</div>
         </div>
-      ` : ''}
+      ` : `
+        <div class="label-small">Order Details:</div>
+        <div class="text-bold">Qty: ${totalQty}</div>
+        <div class="text-small">${fmtDate(order.createdAt)}</div>
+      `}
     </div>
     <div class="cell">
-      <div class="label-small">To:</div>
+      <div class="label-small">Ship To:</div>
       <div class="text-bold text-large">${order.customerName}</div>
       <div class="text-small">${order.customerAddress}</div>
-      <div class="text-small">Phone: ${order.customerPhone}</div>
+      <div class="text-bold text-medium">Phone: ${order.customerPhone}</div>
     </div>
   </div>
 
-  <!-- Section 3: Order Barcode -->
-  <div class="section">
-    <div class="cell" style="display: flex; justify-content: space-between; align-items: center;">
-      <div>
-        <div class="label-small">Order nr:</div>
-        <div class="text-bold text-medium">${order.id}</div>
-      </div>
-      <div style="width: 60%;">
-        <svg id="barcode-order"></svg>
-      </div>
-    </div>
-  </div>
-
-  <!-- Section 4: Ref & Lot -->
+  <!-- Section 3: COD & Delivery Fee -->
   <div class="section">
     <div class="cell border-right">
-      <div class="label-small">Ref number:</div>
-      <div class="text-bold">${order.id}</div>
+      <div class="label-small">COD / Package Value:</div>
+      <div class="text-xlarge text-bold">${fmt(codValue)}</div>
+      <div class="text-small">Please collect this amount</div>
     </div>
     <div class="cell">
-      <div class="label-small">Lot number:</div>
+      <div class="label-small">Delivery Charge:</div>
+      <div class="text-large text-bold">${fmt(order.shippingFee)}</div>
+    </div>
+  </div>
+
+  <!-- Section 4: Tracking Info -->
+  <div class="section">
+    <div class="cell" style="display: flex; justify-content: space-between; align-items: center;">
+      <div style="flex: 1;">
+        <div class="label-small">Tracking Number (${carrier}):</div>
+        <div class="text-bold text-large" style="letter-spacing: 2px;">${trackingNumber}</div>
+        <svg id="barcode-tracking"></svg>
+      </div>
+      <div style="flex: 0 0 100px; text-align: center;">
+        <div id="qr-tracking"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 5: Order Ref -->
+  <div class="section">
+    <div class="cell border-right">
+      <div class="label-small">Order ID:</div>
+      <div class="text-bold">${order.id}</div>
+      <svg id="barcode-order"></svg>
+    </div>
+    <div class="cell">
+      <div class="label-small">Customer ID:</div>
       <div class="text-bold">${order.customerId}</div>
     </div>
   </div>
 
-  <!-- Section 5: Item nr + Barcode -->
+  <!-- Section 6: Item Summary -->
   <div class="section">
-    <div class="cell" style="display: flex; flex-direction: column;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <div>
-          <div class="label-small">Item nr:</div>
-          <div class="text-bold">${order.id}</div>
-        </div>
-        <div style="width: 60%;">
-          <svg id="barcode-item"></svg>
-        </div>
-      </div>
-      <div class="text-small text-bold">${itemSummary} — ${totalQty} items</div>
+    <div class="cell">
+      <div class="label-small">Package Contents (Simplified):</div>
+      <div class="text-bold text-medium" style="margin-bottom: 5px;">${itemSummary}</div>
+      <div class="text-small" style="color: #64748b;">Total Items: ${totalQty}</div>
     </div>
   </div>
-
-  <!-- Section 6: Tracking (Conditional) -->
-  ${trackingNumber ? `
-  <div class="section">
-    <div class="cell" style="display: flex; flex-direction: column;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <div style="flex: 1;">
-          <div class="label-small">Tracking Number: <span class="text-bold" style="color:#000;">${carrier}</span></div>
-          <div class="text-bold text-large" style="margin-bottom: 10px;">${trackingNumber}</div>
-          <svg id="barcode-tracking"></svg>
-        </div>
-        <div style="flex: 0 0 100px; margin-left: 20px; text-align: center;">
-          <div id="qr-tracking" style="margin-bottom: 5px;"></div>
-          <div class="label-small" style="font-size: 8px;">Scan to track</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  ` : ''}
 
   <!-- Section 7: Delivery Instruction -->
   <div class="section">
     <div class="cell">
       <div class="label-small">Delivery instruction:</div>
       <div class="instruction-box">
-        <div class="text-small">${order.notes || 'No special instructions.'}</div>
+        <div class="text-small">${order.notes || 'Handle with care. Contact customer if not reached.'}</div>
       </div>
     </div>
   </div>

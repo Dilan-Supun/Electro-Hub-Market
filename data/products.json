@@ -171,5 +171,21 @@
     "stock": "9",
     "updatedAt": "2026-04-28T15:20:14.704Z",
     "tags": []
+  },
+  {
+    "id": "4",
+    "title": "psu",
+    "price": "250",
+    "stock": "1",
+    "category": "audio",
+    "description": "this is psu",
+    "tags": [],
+    "condition": "",
+    "features": [],
+    "buyingDelivery": [],
+    "image": "",
+    "createdAt": "2026-04-28T15:48:26.432Z",
+    "updatedAt": "2026-04-28T15:48:26.432Z",
+    "isDeleted": false
   }
 ]

@@ -58,7 +58,7 @@ geminiService.generateText = async function(prompt, apiKey) {
     const key = apiKey || API_KEY;
     try {
         const response = await axios.post(
-            `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent?key=${key}`,
+            `https://generativelanguage.googleapis.com/v1/models/${TEXT_MODEL}:generateContent?key=${key}`,
             { contents: [{ parts: [{ text: prompt }] }] },
             { headers: { 'Content-Type': 'application/json' } }
         );

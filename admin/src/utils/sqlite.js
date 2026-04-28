@@ -16,76 +16,82 @@ async function getDb() {
         dbInstance = new SQL.Database(fileBuffer);
     } else {
         dbInstance = new SQL.Database();
-        // Initialize tables
-        dbInstance.run(`
-            CREATE TABLE IF NOT EXISTS customers (
-                id TEXT PRIMARY KEY,
-                name TEXT NOT NULL,
-                email TEXT,
-                phone TEXT,
-                address TEXT,
-                city TEXT,
-                postalCode TEXT,
-                notes TEXT,
-                createdAt TEXT,
-                updatedAt TEXT
-            );
-
-            CREATE TABLE IF NOT EXISTS orders (
-                id TEXT PRIMARY KEY,
-                customerId TEXT NOT NULL,
-                customerName TEXT,
-                customerAddress TEXT,
-                customerPhone TEXT,
-                customerEmail TEXT,
-                items TEXT NOT NULL,
-                subtotal REAL DEFAULT 0,
-                shippingFee REAL DEFAULT 0,
-                total REAL DEFAULT 0,
-                status TEXT DEFAULT 'pending',
-                notes TEXT,
-                trackingNumber TEXT,
-                shippingCarrier TEXT,
-                shippedAt TEXT,
-                deliveredAt TEXT,
-                createdAt TEXT,
-                updatedAt TEXT,
-                FOREIGN KEY (customerId) REFERENCES customers(id)
-            );
-
-            CREATE TABLE IF NOT EXISTS shipping (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                orderId TEXT NOT NULL UNIQUE,
-                carrier TEXT,
-                trackingNumber TEXT,
-                estimatedDelivery TEXT,
-                actualDelivery TEXT,
-                status TEXT DEFAULT 'pending',
-                notes TEXT,
-                createdAt TEXT,
-                updatedAt TEXT,
-                FOREIGN KEY (orderId) REFERENCES orders(id)
-            );
-
-            CREATE TABLE IF NOT EXISTS products (
-                id TEXT PRIMARY KEY,
-                title TEXT NOT NULL,
-                price REAL DEFAULT 0,
-                stock INTEGER DEFAULT 0,
-                category TEXT,
-                description TEXT,
-                condition TEXT,
-                features TEXT,
-                buyingDelivery TEXT,
-                tags TEXT,
-                image TEXT,
-                isDeleted INTEGER DEFAULT 0,
-                createdAt TEXT,
-                updatedAt TEXT
-            );
-        `);
-        saveDb();
     }
+
+    // Initialize tables
+    dbInstance.run(`
+        CREATE TABLE IF NOT EXISTS customers (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            email TEXT,
+            phone TEXT,
+            address TEXT,
+            city TEXT,
+            postalCode TEXT,
+            notes TEXT,
+            createdAt TEXT,
+            updatedAt TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS orders (
+            id TEXT PRIMARY KEY,
+            customerId TEXT NOT NULL,
+            customerName TEXT,
+            customerAddress TEXT,
+            customerPhone TEXT,
+            customerEmail TEXT,
+            items TEXT NOT NULL,
+            subtotal REAL DEFAULT 0,
+            shippingFee REAL DEFAULT 0,
+            total REAL DEFAULT 0,
+            status TEXT DEFAULT 'pending',
+            notes TEXT,
+            trackingNumber TEXT,
+            shippingCarrier TEXT,
+            shippedAt TEXT,
+            deliveredAt TEXT,
+            createdAt TEXT,
+            updatedAt TEXT,
+            FOREIGN KEY (customerId) REFERENCES customers(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS shipping (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            orderId TEXT NOT NULL UNIQUE,
+            carrier TEXT,
+            trackingNumber TEXT,
+            estimatedDelivery TEXT,
+            actualDelivery TEXT,
+            status TEXT DEFAULT 'pending',
+            notes TEXT,
+            createdAt TEXT,
+            updatedAt TEXT,
+            FOREIGN KEY (orderId) REFERENCES orders(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS products (
+            id TEXT PRIMARY KEY,
+            title TEXT NOT NULL,
+            price REAL DEFAULT 0,
+            stock INTEGER DEFAULT 0,
+            category TEXT,
+            description TEXT,
+            condition TEXT,
+            meta TEXT,
+            link TEXT,
+            svg TEXT,
+            images TEXT,
+            badge TEXT,
+            features TEXT,
+            buyingDelivery TEXT,
+            tags TEXT,
+            image TEXT,
+            isDeleted INTEGER DEFAULT 0,
+            createdAt TEXT,
+            updatedAt TEXT
+        );
+    `);
+    saveDb();
     return dbInstance;
 }
 
@@ -227,6 +233,18 @@ module.exports = {
         return true;
     },
 
+    // Helper for safe JSON parsing
+    parseJson(str, fallback = []) {
+        try {
+            if (!str) return fallback;
+            if (typeof str !== 'string') return str;
+            return JSON.parse(str);
+        } catch (e) {
+            console.error('[SQLite] JSON Parse Error:', e.message, 'for string:', str);
+            return fallback;
+        }
+    },
+
     // Products
     async getAllProducts() {
         const db = await getDb();
@@ -236,9 +254,9 @@ module.exports = {
             ...p,
             price: parseFloat(p.price || 0),
             stock: parseInt(p.stock || 0),
-            features: JSON.parse(p.features || '[]'),
-            buyingDelivery: JSON.parse(p.buyingDelivery || '[]'),
-            tags: JSON.parse(p.tags || '[]'),
+            features: this.parseJson(p.features),
+            buyingDelivery: this.parseJson(p.buyingDelivery),
+            tags: this.parseJson(p.tags),
             isDeleted: !!p.isDeleted
         }));
     },
@@ -252,9 +270,9 @@ module.exports = {
             ...p,
             price: parseFloat(p.price || 0),
             stock: parseInt(p.stock || 0),
-            features: JSON.parse(p.features || '[]'),
-            buyingDelivery: JSON.parse(p.buyingDelivery || '[]'),
-            tags: JSON.parse(p.tags || '[]'),
+            features: this.parseJson(p.features),
+            buyingDelivery: this.parseJson(p.buyingDelivery),
+            tags: this.parseJson(p.tags),
             isDeleted: !!p.isDeleted
         };
     },
@@ -262,11 +280,12 @@ module.exports = {
         const db = await getDb();
         const existing = await this.getProductById(data.id);
         
+        // Ensure arrays are strings for SQLite
         const payload = {
             ...data,
-            features: JSON.stringify(data.features || []),
-            buyingDelivery: JSON.stringify(data.buyingDelivery || []),
-            tags: JSON.stringify(data.tags || []),
+            features: Array.isArray(data.features) ? JSON.stringify(data.features) : (data.features || '[]'),
+            buyingDelivery: Array.isArray(data.buyingDelivery) ? JSON.stringify(data.buyingDelivery) : (data.buyingDelivery || '[]'),
+            tags: Array.isArray(data.tags) ? JSON.stringify(data.tags) : (data.tags || '[]'),
             isDeleted: data.isDeleted ? 1 : 0,
             updatedAt: new Date().toISOString()
         };
@@ -290,15 +309,32 @@ module.exports = {
         return true;
     },
     async migrateFromJson(jsonProducts) {
-        const db = await getDb();
-        const res = db.exec('SELECT COUNT(*) as count FROM products');
-        const count = res[0].values[0][0];
-        if (count === 0 && jsonProducts && jsonProducts.length > 0) {
-            console.log(`[SQLite] Migrating ${jsonProducts.length} products from JSON...`);
-            for (const p of jsonProducts) {
-                await this.upsertProduct(p);
+        if (!jsonProducts || jsonProducts.length === 0) return;
+        
+        console.log(`[SQLite] Checking migration for ${jsonProducts.length} products...`);
+        let migrated = 0;
+        let skipped = 0;
+        let errors = 0;
+
+        for (const p of jsonProducts) {
+            try {
+                const existing = await this.getProductById(p.id);
+                if (!existing) {
+                    await this.upsertProduct(p);
+                    migrated++;
+                } else {
+                    skipped++;
+                }
+            } catch (err) {
+                console.error(`[SQLite] Error migrating product ${p.id}:`, err.message);
+                errors++;
             }
-            console.log('[SQLite] Migration complete.');
         }
+        
+        if (migrated > 0) console.log(`[SQLite] Migration: ${migrated} new products added.`);
+        if (skipped > 0) console.log(`[SQLite] Migration: ${skipped} products already existed.`);
+        if (errors > 0) console.log(`[SQLite] Migration: ${errors} errors encountered.`);
+        
+        return { migrated, skipped, errors };
     }
 };

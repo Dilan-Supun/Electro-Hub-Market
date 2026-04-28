@@ -10,9 +10,11 @@ const productController = {
             // Check for migration from JSON on first hit
             const jsonProducts = await db.read('products');
             if (jsonProducts && jsonProducts.length > 0) {
-                await sqlite.migrateFromJson(jsonProducts);
-                // Clear the JSON file once migrated to avoid redundant migrations
-                await db.write('products', []); 
+                const result = await sqlite.migrateFromJson(jsonProducts);
+                // Only clear if we successfully migrated something and had no errors
+                if (result && result.migrated > 0 && result.errors === 0) {
+                    await db.write('products', []); 
+                }
             }
 
             const products = await sqlite.getAllProducts();
@@ -142,9 +144,7 @@ const productController = {
             const filePath = path.join(__dirname, '../../../js/stats-data.js');
             const content = `const statsData = ${JSON.stringify(stats, null, 2)};\n`;
             await fs.writeFile(filePath, content);
-            console.log('[Stats] Public statistics updated');
         } catch (error) {
-            console.error('[Stats] Failed to generate public stats:', error);
         }
     }
 };

@@ -212,9 +212,8 @@ router.post('/settings/upload-shop-image', authenticate, shopImageUpload.single(
 // Post a single product to Facebook Page feed
 router.post('/facebook/post-product/:id', authenticate, async (req, res) => {
     try {
-        const products = await db.read('products');
-        const product = products.find(p => p.id === req.params.id && !p.isDeleted);
-        if (!product) return res.status(404).json({ error: 'Product not found' });
+        const product = await sqlite.getProductById(req.params.id);
+        if (!product || product.isDeleted) return res.status(404).json({ error: 'Product not found' });
 
         const settings = await db.getSettings();
         const baseUrl = settings.shopUrl || process.env.SHOP_URL || '';
@@ -235,8 +234,7 @@ router.post('/facebook/post-product/:id', authenticate, async (req, res) => {
 // Sync a single product to FB Catalog
 router.post('/facebook/sync-catalog/:id', authenticate, async (req, res) => {
     try {
-        const products = await db.read('products');
-        const product = products.find(p => p.id === req.params.id);
+        const product = await sqlite.getProductById(req.params.id);
         if (!product) return res.status(404).json({ error: 'Product not found' });
 
         const settings = await db.getSettings();
@@ -254,7 +252,7 @@ router.post('/facebook/sync-catalog/:id', authenticate, async (req, res) => {
 // Bulk sync all products to FB Catalog
 router.post('/facebook/bulk-sync', authenticate, async (req, res) => {
     try {
-        const products = await db.read('products');
+        const products = await sqlite.getAllProducts();
         const settings = await db.getSettings();
         const baseUrl = settings.shopUrl || process.env.SHOP_URL || '';
         const results = await facebookService.bulkSyncToCatalog(
@@ -274,12 +272,10 @@ router.post('/facebook/bulk-sync', authenticate, async (req, res) => {
 // Send an order status notification to the customer via WhatsApp
 router.post('/whatsapp/notify/:orderId', authenticate, async (req, res) => {
     try {
-        const orders = await db.read('orders');
-        const order = orders.find(o => o.id === req.params.orderId);
+        const order = await sqlite.getOrderById(req.params.orderId);
         if (!order) return res.status(404).json({ error: 'Order not found' });
 
-        const customers = await db.read('customers');
-        const customer = customers.find(c => c.id === order.customerId);
+        const customer = await sqlite.getCustomerById(order.customerId);
         if (!customer) return res.status(404).json({ error: 'Customer not found' });
         if (!customer.phone) return res.status(400).json({ error: 'Customer has no phone number' });
 
