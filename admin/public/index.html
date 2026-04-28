@@ -161,6 +161,7 @@
                             <p class="hint">Default: Remove the background, keep the product shape and branding accurate, improve lighting, reduce shadows, center the product, and place it on a clean white studio background for e-commerce use.</p>
                         </div>
                         <button id="btn-ai-process" class="btn-primary btn-block">✨ Process with Gemini</button>
+                        <button id="btn-watermark-only" class="btn-outline btn-block" disabled style="margin-top:0.5rem;">🏷️ Watermark Only (Skip AI)</button>
                     </div>
                     <div class="studio-main card">
                         <div class="comparison-header">
@@ -255,10 +256,46 @@
                 <div class="settings-grid">
                     <form id="settings-form" class="settings-card card">
                         <h3>🎨 Brand Watermarking</h3>
+
+                        <!-- Watermark type toggle -->
                         <div class="form-group">
-                            <label>Brand Name</label>
-                            <input type="text" id="set-watermark-text" placeholder="e.g. Electro Hub">
+                            <label>Watermark Type</label>
+                            <div class="wm-type-toggle">
+                                <label class="wm-type-opt">
+                                    <input type="radio" name="wm-type" id="wm-type-text" value="text" checked>
+                                    <span>✏️ Text</span>
+                                </label>
+                                <label class="wm-type-opt">
+                                    <input type="radio" name="wm-type" id="wm-type-logo" value="logo">
+                                    <span>🖼️ Logo / Image</span>
+                                </label>
+                            </div>
                         </div>
+
+                        <!-- Text watermark fields -->
+                        <div id="wm-text-fields">
+                            <div class="form-group">
+                                <label>Brand Name / Text</label>
+                                <input type="text" id="set-watermark-text" placeholder="e.g. Electro Hub">
+                            </div>
+                        </div>
+
+                        <!-- Logo watermark fields -->
+                        <div id="wm-logo-fields" style="display:none;">
+                            <div class="form-group">
+                                <label>Logo / Brand Image <span style="font-size:0.75rem; color:var(--text-muted);">(PNG with transparent background recommended)</span></label>
+                                <div class="logo-upload-zone" id="logo-upload-zone">
+                                    <input type="file" id="logo-file-input" accept="image/*" hidden>
+                                    <img id="logo-preview" style="display:none; max-height:60px; border-radius:6px;">
+                                    <div id="logo-upload-prompt">
+                                        <span style="font-size:1.5rem;">🖼️</span>
+                                        <p style="margin:0.25rem 0 0; font-size:0.8rem; color:var(--text-muted);">Click to upload logo</p>
+                                    </div>
+                                </div>
+                                <p id="logo-status" class="hint" style="display:none;"></p>
+                            </div>
+                        </div>
+
                         <div class="settings-row">
                             <div class="form-group">
                                 <label>Position</label>

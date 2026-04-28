@@ -23,6 +23,26 @@ const studioUpload = multer({
         }
     })
 });
+const logoUpload = multer({
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            const dir = path.join(__dirname, '../../../data/logo');
+            fs.ensureDirSync(dir);
+            cb(null, dir);
+        },
+        filename: (req, file, cb) => {
+            // Always overwrite as "logo.<ext>" so there is only one active logo
+            const ext = path.extname(file.originalname).toLowerCase();
+            const allowed = ['.png', '.jpg', '.jpeg', '.webp', '.svg'];
+            if (!allowed.includes(ext)) return cb(new Error('Unsupported image format'));
+            cb(null, `logo${ext}`);
+        }
+    }),
+    fileFilter: (req, file, cb) => {
+        if (!file.mimetype.startsWith('image/')) return cb(new Error('Only image files are allowed'));
+        cb(null, true);
+    }
+});
 
 // Auth Middleware (Disabled as requested)
 const authenticate = (req, res, next) => {
@@ -50,6 +70,17 @@ router.post('/media/upload-studio', authenticate, studioUpload.single('image'), 
 });
 router.post('/media/enhance', authenticate, mediaController.enhanceImage);
 router.post('/media/finalize', authenticate, mediaController.finalizeImage);
+router.post('/media/watermark', authenticate, mediaController.watermarkDirect);
+router.post('/media/upload-logo', authenticate, logoUpload.single('logo'), async (req, res) => {
+    if (!req.file) return res.status(400).json({ error: 'No logo image uploaded' });
+    const logoRelPath = `data/logo/${req.file.filename}`;
+    // Persist the logo path in settings
+    const settings = await db.getSettings();
+    settings.watermarkLogoPath = logoRelPath;
+    await db.write('settings', settings);
+    await logger.log('upload watermark logo', { path: logoRelPath });
+    res.json({ success: true, logoPath: logoRelPath });
+});
 
 // Import
 router.post('/import/preview', authenticate, upload.single('file'), importController.validateAndPreview);

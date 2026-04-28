@@ -5,6 +5,22 @@ const logger = require('../utils/logger');
 const path = require('path');
 const fs = require('fs-extra');
 
+// Root of the repository (three levels up from this file)
+const REPO_ROOT = path.resolve(path.join(__dirname, '../../..'));
+// Only logos stored inside data/logo/ are allowed
+const LOGO_DIR = path.join(REPO_ROOT, 'data', 'logo');
+
+/**
+ * Resolve and validate a stored logo path so it cannot escape the logo directory.
+ * Returns the absolute path when valid, or null otherwise.
+ */
+async function resolveLogoPath(relPath) {
+    if (!relPath) return null;
+    const resolved = path.resolve(path.join(REPO_ROOT, relPath));
+    if (!resolved.startsWith(LOGO_DIR + path.sep) && resolved !== LOGO_DIR) return null;
+    return (await fs.pathExists(resolved)) ? resolved : null;
+}
+
 const mediaController = {
     async enhanceImage(req, res) {
         try {
@@ -37,18 +53,56 @@ const mediaController = {
             
             const fullPath = path.join(__dirname, '../../../', imagePath);
             const buffer = await fs.readFile(fullPath);
-            
+
+            // Resolve logo path if configured
+            const logoPath = await resolveLogoPath(settings.watermarkLogoPath);
+
             const finalBuffer = await imageService.applyWatermark(buffer, {
                 text: settings.watermarkText,
                 position: settings.watermarkPosition,
                 opacity: settings.watermarkOpacity,
-                size: settings.watermarkSize
+                size: settings.watermarkSize,
+                logoPath
             });
 
             const filename = `final_${Date.now()}.jpg`;
             const savedUrl = await imageService.saveImage(productId, 'final', finalBuffer, filename);
             
             await logger.log('save final AI image', { productId, watermarked: true });
+            res.json({ success: true, imageUrl: savedUrl });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    async watermarkDirect(req, res) {
+        try {
+            const { productId, imagePath } = req.body;
+            if (!imagePath) return res.status(400).json({ error: 'imagePath is required' });
+
+            const settings = await db.getSettings();
+            const fullPath = path.join(__dirname, '../../../', imagePath);
+            if (!(await fs.pathExists(fullPath))) {
+                return res.status(404).json({ error: 'Source image not found' });
+            }
+
+            const buffer = await fs.readFile(fullPath);
+
+            // Resolve logo path if configured
+            const logoPath = await resolveLogoPath(settings.watermarkLogoPath);
+
+            const finalBuffer = await imageService.applyWatermark(buffer, {
+                text: settings.watermarkText || 'Electro Hub',
+                position: settings.watermarkPosition || 'bottom-right',
+                opacity: settings.watermarkOpacity !== undefined ? settings.watermarkOpacity : 0.5,
+                size: settings.watermarkSize,
+                logoPath
+            });
+
+            const filename = `watermarked_${Date.now()}.jpg`;
+            const savedUrl = await imageService.saveImage(productId || 'studio', 'final', finalBuffer, filename);
+
+            await logger.log('apply watermark', { productId, source: imagePath });
             res.json({ success: true, imageUrl: savedUrl });
         } catch (error) {
             res.status(500).json({ error: error.message });

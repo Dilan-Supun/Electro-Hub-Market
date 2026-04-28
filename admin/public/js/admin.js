@@ -142,6 +142,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 const el = document.getElementById(id);
                 if (el) el.value = data[key] || '';
             }
+
+            // Reflect active watermark type
+            if (data.watermarkLogoPath) {
+                const logoRadio = document.getElementById('wm-type-logo');
+                if (logoRadio) {
+                    logoRadio.checked = true;
+                    toggleWatermarkTypeUI('logo');
+                }
+                const logoStatus = document.getElementById('logo-status');
+                if (logoStatus) {
+                    logoStatus.textContent = `Active logo: ${data.watermarkLogoPath.split('/').pop()}`;
+                    logoStatus.style.display = 'block';
+                }
+            }
         }
     }
 
@@ -347,6 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
             studioOriginalPath = data.imagePath;
             aiProcessBtn.disabled = false;
             aiProcessBtn.textContent = '✨ Process with Gemini';
+            if (watermarkOnlyBtn) watermarkOnlyBtn.disabled = false;
         }
     };
 
@@ -559,6 +574,111 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('sort-by').onchange = renderProducts;
     document.getElementById('log-search').oninput = renderLogs;
     document.getElementById('log-type-filter').onchange = renderLogs;
+
+    // --- Settings Form ---
+    function toggleWatermarkTypeUI(type) {
+        const textFields = document.getElementById('wm-text-fields');
+        const logoFields = document.getElementById('wm-logo-fields');
+        if (textFields) textFields.style.display = type === 'text' ? '' : 'none';
+        if (logoFields) logoFields.style.display = type === 'logo' ? '' : 'none';
+    }
+
+    document.querySelectorAll('input[name="wm-type"]').forEach(radio => {
+        radio.addEventListener('change', () => toggleWatermarkTypeUI(radio.value));
+    });
+
+    const settingsForm = document.getElementById('settings-form');
+    if (settingsForm) {
+        settingsForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const payload = {
+                ...currentSettings,
+                watermarkText: document.getElementById('set-watermark-text').value,
+                watermarkPosition: document.getElementById('set-watermark-pos').value,
+                watermarkOpacity: parseFloat(document.getElementById('set-watermark-opacity').value) || 0.5
+            };
+            const res = await apiFetch('/api/settings', {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            });
+            if (res && res.success) {
+                alert('✅ Settings saved!');
+                currentSettings = payload;
+            } else {
+                alert('❌ Failed to save settings.');
+            }
+        };
+    }
+
+    // --- Logo Upload (Settings) ---
+    const logoFileInput = document.getElementById('logo-file-input');
+    const logoUploadZone = document.getElementById('logo-upload-zone');
+    const logoPreview = document.getElementById('logo-preview');
+    const logoUploadPrompt = document.getElementById('logo-upload-prompt');
+    const logoStatus = document.getElementById('logo-status');
+
+    if (logoUploadZone) {
+        logoUploadZone.addEventListener('click', () => logoFileInput && logoFileInput.click());
+    }
+
+    if (logoFileInput) {
+        logoFileInput.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Instant local preview
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                if (logoPreview) { logoPreview.src = ev.target.result; logoPreview.style.display = 'block'; }
+                if (logoUploadPrompt) logoUploadPrompt.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+
+            // Upload to server
+            if (logoStatus) { logoStatus.textContent = 'Uploading…'; logoStatus.style.display = 'block'; }
+            const formData = new FormData();
+            formData.append('logo', file);
+            try {
+                const res = await fetch('/api/media/upload-logo', { method: 'POST', body: formData });
+                const data = await res.json();
+                if (data.success) {
+                    currentSettings.watermarkLogoPath = data.logoPath;
+                    if (logoStatus) logoStatus.textContent = `✅ Logo saved: ${file.name}`;
+                } else {
+                    if (logoStatus) logoStatus.textContent = '❌ Upload failed: ' + (data.error || 'Unknown error');
+                }
+            } catch (err) {
+                if (logoStatus) logoStatus.textContent = '❌ Upload error';
+            }
+        };
+    }
+
+    // --- Watermark Only (AI Studio) ---
+    const watermarkOnlyBtn = document.getElementById('btn-watermark-only');
+    if (watermarkOnlyBtn) {
+        watermarkOnlyBtn.addEventListener('click', async () => {
+            if (!studioOriginalPath) return alert('Please upload an image first.');
+            watermarkOnlyBtn.disabled = true;
+            watermarkOnlyBtn.textContent = '⏳ Applying watermark…';
+
+            const res = await apiFetch('/api/media/watermark', {
+                method: 'POST',
+                body: JSON.stringify({ productId: 'studio', imagePath: studioOriginalPath })
+            });
+
+            watermarkOnlyBtn.disabled = false;
+            watermarkOnlyBtn.textContent = '🏷️ Watermark Only (Skip AI)';
+
+            if (res && res.success) {
+                studioGeneratedUrl = res.imageUrl;
+                document.getElementById('ai-preview-generated').src = '/' + res.imageUrl;
+                document.getElementById('btn-ai-save').disabled = false;
+                alert('✅ Watermark applied! Review the result and click "Save Final Version" to keep it.');
+            } else {
+                alert('❌ Watermarking failed: ' + (res && res.error ? res.error : 'Unknown error'));
+            }
+        });
+    }
 
     // --- Start ---
     initApp();

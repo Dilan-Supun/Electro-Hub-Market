@@ -24,6 +24,7 @@ const db = {
                 watermarkOpacity: 0.5,
                 watermarkSize: 24,
                 watermarkPosition: 'bottom-right',
+                watermarkLogoPath: null,
                 geminiPrompt: 'Remove the background, keep the product shape and branding accurate, improve lighting, reduce shadows, center the product, and place it on a clean white studio background for e-commerce use.'
             };
         }
