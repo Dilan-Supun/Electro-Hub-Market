@@ -1,5 +1,33 @@
 [
   {
+    "id": 1777374787835,
+    "timestamp": "2026-04-28T11:13:07.835Z",
+    "action": "update settings",
+    "details": {},
+    "admin": "admin"
+  },
+  {
+    "id": 1777372111521,
+    "timestamp": "2026-04-28T10:28:31.521Z",
+    "action": "create order",
+    "details": {
+      "id": "ORD-20260428-11517",
+      "customer": "Dilan Supun",
+      "total": 3350
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777370601148,
+    "timestamp": "2026-04-28T10:03:21.148Z",
+    "action": "add customer",
+    "details": {
+      "id": "cust1",
+      "name": "Dilan Supun"
+    },
+    "admin": "admin"
+  },
+  {
     "id": 1777368020940,
     "timestamp": "2026-04-28T09:20:20.940Z",
     "action": "update settings",
