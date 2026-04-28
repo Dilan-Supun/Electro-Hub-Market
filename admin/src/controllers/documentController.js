@@ -1,4 +1,5 @@
 const db = require('../utils/db');
+const sqlite = require('../utils/sqlite');
 
 function fmt(n) {
     return `Rs. ${parseFloat(n || 0).toLocaleString('en-LK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -20,8 +21,7 @@ const documentController = {
     async invoice(req, res) {
         try {
             const { id } = req.params;
-            const orders = await db.read('orders');
-            const order = orders.find(o => o.id === id);
+            const order = sqlite.getOrderById(id);
             if (!order) return res.status(404).json({ error: 'Order not found' });
 
             const settings = await db.getSettings();
@@ -29,7 +29,8 @@ const documentController = {
                 name: settings.shopName || 'Electro Hub',
                 address: settings.shopAddress || '',
                 phone: settings.shopPhone || '',
-                email: settings.shopEmail || ''
+                email: settings.shopEmail || '',
+                logoPath: settings.watermarkLogoPath || null
             };
 
             const statusColor = STATUS_COLORS[order.status] || '#64748b';
@@ -59,6 +60,7 @@ const documentController = {
     .no-print { display: none !important; }
   }
   .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; padding-bottom: 24px; border-bottom: 2px solid #e2e8f0; }
+  .shop-logo { max-height: 60px; max-width: 160px; object-fit: contain; margin-bottom: 6px; }
   .shop-name { font-size: 24px; font-weight: 800; color: #2563eb; letter-spacing: -0.5px; }
   .shop-meta { font-size: 12px; color: #64748b; margin-top: 4px; line-height: 1.7; }
   .invoice-meta { text-align: right; }
@@ -87,7 +89,7 @@ const documentController = {
 <div class="page">
   <div class="header">
     <div>
-      <div class="shop-name">${shop.name}</div>
+      ${shop.logoPath ? `<img src="/${shop.logoPath}" class="shop-logo" alt="logo">` : `<div class="shop-name">${shop.name}</div>`}
       <div class="shop-meta">${[shop.address, shop.phone, shop.email].filter(Boolean).join(' &nbsp;|&nbsp; ')}</div>
     </div>
     <div class="invoice-meta">
@@ -151,8 +153,7 @@ const documentController = {
     async packingLabel(req, res) {
         try {
             const { id } = req.params;
-            const orders = await db.read('orders');
-            const order = orders.find(o => o.id === id);
+            const order = sqlite.getOrderById(id);
             if (!order) return res.status(404).json({ error: 'Order not found' });
 
             const settings = await db.getSettings();
@@ -160,88 +161,204 @@ const documentController = {
                 name: settings.shopName || 'Electro Hub',
                 address: settings.shopAddress || '',
                 phone: settings.shopPhone || '',
-                email: settings.shopEmail || ''
+                email: settings.shopEmail || '',
+                logoPath: settings.watermarkLogoPath || null
             };
 
-            const itemSummary = order.items
-                .map(i => `${i.title} × ${i.qty}`)
-                .join(', ');
-
+            const isFragile = order.items.some(i => i.fragile === true);
             const totalQty = order.items.reduce((s, i) => s + i.qty, 0);
+            const itemSummary = order.items.map(i => `${i.title} × ${i.qty}`).join(', ');
+            const trackingNumber = order.trackingNumber || '';
+            const carrier = order.shippingCarrier || '';
 
             const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Packing Label – ${order.id}</title>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8fafc; display: flex; flex-direction: column; align-items: center; padding: 24px; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f1f5f9; display: flex; flex-direction: column; align-items: center; padding: 40px; }
   @media print {
     body { background: white; padding: 0; }
-    .label-wrap { page-break-after: always; }
     .no-print { display: none !important; }
   }
-  .label-wrap { width: 148mm; background: white; border: 2.5px solid #0f172a; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.10); margin-bottom: 20px; }
-  .label-top { background: #0f172a; color: white; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; }
-  .label-brand { font-size: 14px; font-weight: 800; letter-spacing: 0.5px; }
-  .label-order-id { font-size: 11px; font-family: monospace; background: rgba(255,255,255,0.12); padding: 3px 8px; border-radius: 4px; }
-  .addr-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 2px solid #0f172a; }
-  .addr-box { padding: 14px 16px; }
-  .addr-box:first-child { border-right: 2px solid #0f172a; }
-  .addr-tag { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #94a3b8; margin-bottom: 6px; }
-  .addr-name { font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
-  .addr-detail { font-size: 11px; color: #475569; line-height: 1.6; }
-  .arrow-band { background: #2563eb; color: white; text-align: center; font-size: 18px; letter-spacing: 6px; padding: 4px; }
-  .contents { padding: 12px 16px; border-bottom: 1.5px dashed #cbd5e1; }
-  .contents-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #94a3b8; margin-bottom: 4px; }
-  .contents-text { font-size: 11px; color: #334155; line-height: 1.5; }
-  .label-footer { display: flex; justify-content: space-between; padding: 10px 16px; font-size: 10px; color: #64748b; }
-  .barcode { font-family: 'Courier New', monospace; font-size: 9px; letter-spacing: 4px; display: block; margin-top: 2px; color: #0f172a; }
-  .btn-print { display: block; margin: 8px auto 24px; padding: 10px 32px; background: #2563eb; color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; }
-  .btn-print:hover { background: #1d4ed8; }
+  .label-container { width: 148mm; background: white; border: 2px solid #000; overflow: hidden; margin-bottom: 20px; }
+  .section { border-bottom: 2px solid #000; display: flex; }
+  .section:last-child { border-bottom: none; }
+  .cell { padding: 12px; flex: 1; }
+  .border-right { border-right: 2px solid #000; }
+  
+  .label-small { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
+  .text-bold { font-weight: 700; color: #000; }
+  .text-large { font-size: 18px; }
+  .text-medium { font-size: 14px; }
+  .text-small { font-size: 11px; line-height: 1.4; }
+
+  .logo-img { max-height: 50px; max-width: 150px; object-fit: contain; }
+  .fragile-box { border: 4px solid #ef4444; color: #ef4444; padding: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
+  .fragile-icon { font-size: 32px; margin-bottom: 4px; }
+  .fragile-text { font-weight: 900; font-size: 20px; }
+
+  .barcode-svg { width: 100%; height: 60px; }
+  .qr-container { width: 100px; height: 100px; background: #eee; }
+  
+  .instruction-box { background: #f8fafc; padding: 10px; font-style: italic; border: 1px dashed #000; }
+  .btn-print { margin-top: 20px; padding: 12px 30px; background: #000; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 700; }
 </style>
 </head>
 <body>
-<div class="label-wrap">
-  <div class="label-top">
-    <span class="label-brand">${shop.name}</span>
-    <span class="label-order-id">${order.id}</span>
-  </div>
 
-  <div class="addr-grid">
-    <div class="addr-box">
-      <div class="addr-tag">📤 From (Sender)</div>
-      <div class="addr-name">${shop.name}</div>
-      <div class="addr-detail">${shop.address || ''}</div>
-      ${shop.phone ? `<div class="addr-detail">📞 ${shop.phone}</div>` : ''}
+<div class="label-container" id="printable-label">
+  <!-- Section 1: FROM -->
+  <div class="section">
+    <div class="cell border-right" style="flex: 0 0 50%; display: flex; align-items: center; justify-content: center;">
+      ${shop.logoPath ? `<img src="/${shop.logoPath}" class="logo-img">` : `<div class="text-bold text-large">${shop.name}</div>`}
     </div>
-    <div class="addr-box">
-      <div class="addr-tag">📬 To (Recipient)</div>
-      <div class="addr-name">${order.customerName}</div>
-      <div class="addr-detail">${order.customerAddress || ''}</div>
-      ${order.customerPhone ? `<div class="addr-detail">📞 ${order.customerPhone}</div>` : ''}
+    <div class="cell">
+      <div class="label-small">From:</div>
+      <div class="text-bold text-medium">${shop.name}</div>
+      <div class="text-small">${shop.address}</div>
+      <div class="text-small">Phone: ${shop.phone}</div>
     </div>
   </div>
 
-  <div class="arrow-band">→ → →</div>
-
-  <div class="contents">
-    <div class="contents-label">Package Contents</div>
-    <div class="contents-text">${itemSummary}</div>
-    <div class="addr-detail" style="margin-top:4px;">Total ${totalQty} item${totalQty !== 1 ? 's' : ''} &nbsp;|&nbsp; Order Value: ${fmt(order.total)}</div>
+  <!-- Section 2: TO -->
+  <div class="section">
+    <div class="cell border-right" style="flex: 0 0 35%;">
+      ${isFragile ? `
+        <div class="fragile-box">
+          <div class="fragile-icon">🥃</div>
+          <div class="fragile-text">FRAGILE</div>
+        </div>
+      ` : ''}
+    </div>
+    <div class="cell">
+      <div class="label-small">To:</div>
+      <div class="text-bold text-large">${order.customerName}</div>
+      <div class="text-small">${order.customerAddress}</div>
+      <div class="text-small">Phone: ${order.customerPhone}</div>
+    </div>
   </div>
 
-  <div class="label-footer">
-    <div>
-      Date: ${fmtDate(order.createdAt)}
-      <span class="barcode">${order.id.replace(/-/g, ' ')}</span>
+  <!-- Section 3: Order Barcode -->
+  <div class="section">
+    <div class="cell" style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div class="label-small">Order nr:</div>
+        <div class="text-bold text-medium">${order.id}</div>
+      </div>
+      <div style="width: 60%;">
+        <svg id="barcode-order"></svg>
+      </div>
     </div>
-    <div style="text-align:right;">Status: <strong>${order.status.toUpperCase()}</strong></div>
+  </div>
+
+  <!-- Section 4: Ref & Lot -->
+  <div class="section">
+    <div class="cell border-right">
+      <div class="label-small">Ref number:</div>
+      <div class="text-bold">${order.id}</div>
+    </div>
+    <div class="cell">
+      <div class="label-small">Lot number:</div>
+      <div class="text-bold">${order.customerId}</div>
+    </div>
+  </div>
+
+  <!-- Section 5: Item nr + Barcode -->
+  <div class="section">
+    <div class="cell" style="display: flex; flex-direction: column;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <div>
+          <div class="label-small">Item nr:</div>
+          <div class="text-bold">${order.id}</div>
+        </div>
+        <div style="width: 60%;">
+          <svg id="barcode-item"></svg>
+        </div>
+      </div>
+      <div class="text-small text-bold">${itemSummary} — ${totalQty} items</div>
+    </div>
+  </div>
+
+  <!-- Section 6: Tracking (Conditional) -->
+  ${trackingNumber ? `
+  <div class="section">
+    <div class="cell" style="display: flex; flex-direction: column;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <div style="flex: 1;">
+          <div class="label-small">Tracking Number: <span class="text-bold" style="color:#000;">${carrier}</span></div>
+          <div class="text-bold text-large" style="margin-bottom: 10px;">${trackingNumber}</div>
+          <svg id="barcode-tracking"></svg>
+        </div>
+        <div style="flex: 0 0 100px; margin-left: 20px; text-align: center;">
+          <div id="qr-tracking" style="margin-bottom: 5px;"></div>
+          <div class="label-small" style="font-size: 8px;">Scan to track</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  ` : ''}
+
+  <!-- Section 7: Delivery Instruction -->
+  <div class="section">
+    <div class="cell">
+      <div class="label-small">Delivery instruction:</div>
+      <div class="instruction-box">
+        <div class="text-small">${order.notes || 'No special instructions.'}</div>
+      </div>
+    </div>
   </div>
 </div>
 
-<button class="btn-print no-print" onclick="window.print()">🏷️ Print Label</button>
+<button class="btn-print no-print" onclick="window.print()">🖨️ Print Shipping Label</button>
+
+<script>
+  window.onload = function() {
+    // Render Order Barcode
+    JsBarcode("#barcode-order", "${order.id}", {
+      format: "CODE128",
+      width: 2,
+      height: 40,
+      displayValue: false,
+      margin: 0
+    });
+
+    // Render Item Barcode (same as order id for now)
+    JsBarcode("#barcode-item", "${order.id}", {
+      format: "CODE128",
+      width: 2,
+      height: 30,
+      displayValue: false,
+      margin: 0
+    });
+
+    // Render Tracking Barcode if exists
+    if ("${trackingNumber}") {
+      JsBarcode("#barcode-tracking", "${trackingNumber}", {
+        format: "CODE128",
+        width: 1.5,
+        height: 50,
+        displayValue: false,
+        margin: 0
+      });
+
+      // Render QR Code
+      new QRCode(document.getElementById("qr-tracking"), {
+        text: "${trackingNumber}",
+        width: 100,
+        height: 100,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+      });
+    }
+  };
+</script>
+
 </body>
 </html>`;
 
