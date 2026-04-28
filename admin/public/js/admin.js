@@ -152,12 +152,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 'set-shop-name': 'shopName',
                 'set-shop-address': 'shopAddress',
                 'set-shop-phone': 'shopPhone',
-                'set-shop-email': 'shopEmail'
+                'set-shop-email': 'shopEmail',
+                'set-shop-url': 'shopUrl',
+                'set-fb-page-id': 'fbPageId',
+                'set-fb-catalog-id': 'fbCatalogId',
+                'set-wa-phone-id': 'waPhoneNumberId'
             };
             for (const [id, key] of Object.entries(fields)) {
                 const el = document.getElementById(id);
                 if (el) el.value = data[key] || '';
             }
+            // Don't pre-fill token fields for security — just show placeholder if set
+            const fbTokenEl = document.getElementById('set-fb-access-token');
+            if (fbTokenEl && data.fbAccessToken) fbTokenEl.placeholder = '(saved)';
+            const waTokenEl = document.getElementById('set-wa-access-token');
+            if (waTokenEl && data.waAccessToken) waTokenEl.placeholder = '(saved)';
 
             // Reflect active watermark type
             if (data.watermarkLogoPath) {
@@ -170,6 +179,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (logoStatus) {
                     logoStatus.textContent = `Active logo: ${data.watermarkLogoPath.split('/').pop()}`;
                     logoStatus.style.display = 'block';
+                }
+            }
+
+            // Show shop logo preview if set
+            if (data.shopLogoPath) {
+                const shopLogoPreview = document.getElementById('shop-logo-preview');
+                const shopLogoPrompt = document.getElementById('shop-logo-prompt');
+                const shopLogoStatus = document.getElementById('shop-logo-status');
+                if (shopLogoPreview) { shopLogoPreview.src = '/' + data.shopLogoPath; shopLogoPreview.style.display = 'block'; }
+                if (shopLogoPrompt) shopLogoPrompt.style.display = 'none';
+                if (shopLogoStatus) { shopLogoStatus.textContent = `Active: ${data.shopLogoPath.split('/').pop()}`; shopLogoStatus.style.display = 'block'; }
+            }
+
+            // Update API status badges
+            const fbBadge = document.getElementById('fb-status-badge');
+            const waBadge = document.getElementById('wa-status-badge');
+            if (fbBadge) {
+                if (data.fbPageId && data.fbAccessToken) {
+                    fbBadge.textContent = 'Configured';
+                    fbBadge.className = 'status-badge ok';
+                } else {
+                    fbBadge.textContent = 'Not Configured';
+                    fbBadge.className = 'status-badge';
+                }
+            }
+            if (waBadge) {
+                if (data.waPhoneNumberId && data.waAccessToken) {
+                    waBadge.textContent = 'Configured';
+                    waBadge.className = 'status-badge ok';
+                } else {
+                    waBadge.textContent = 'Not Configured';
+                    waBadge.className = 'status-badge';
                 }
             }
         }
@@ -698,7 +739,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 shopName: document.getElementById('set-shop-name').value,
                 shopAddress: document.getElementById('set-shop-address').value,
                 shopPhone: document.getElementById('set-shop-phone').value,
-                shopEmail: document.getElementById('set-shop-email').value
+                shopEmail: document.getElementById('set-shop-email').value,
+                shopUrl: document.getElementById('set-shop-url').value
             };
             const res = await apiFetch('/api/settings', { method: 'POST', body: JSON.stringify(payload) });
             if (res && res.success) {

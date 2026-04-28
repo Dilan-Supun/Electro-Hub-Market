@@ -449,6 +449,18 @@
                                 <input type="text" id="set-shop-name" placeholder="e.g. Electro Hub">
                             </div>
                             <div class="form-group">
+                                <label>Shop Logo / Image</label>
+                                <div class="logo-upload-zone" id="shop-logo-upload-zone">
+                                    <input type="file" id="shop-logo-input" accept="image/*" hidden>
+                                    <img id="shop-logo-preview" style="display:none; max-height:60px; border-radius:6px;">
+                                    <div id="shop-logo-prompt">
+                                        <span style="font-size:1.5rem;">🏪</span>
+                                        <p style="margin:0.25rem 0 0; font-size:0.8rem; color:var(--text-muted);">Click to upload shop logo</p>
+                                    </div>
+                                </div>
+                                <p id="shop-logo-status" class="hint" style="display:none;"></p>
+                            </div>
+                            <div class="form-group">
                                 <label>Address</label>
                                 <textarea id="set-shop-address" rows="2" placeholder="Street, City, Postal Code"></textarea>
                             </div>
@@ -462,14 +474,58 @@
                                     <input type="text" id="set-shop-email" placeholder="info@electrohub.lk">
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label>Shop URL <span style="font-size:0.75rem;color:var(--text-muted);">(used for Facebook links)</span></label>
+                                <input type="text" id="set-shop-url" placeholder="https://yourstore.com">
+                            </div>
                             <button type="submit" class="btn-primary">Save Shop Info</button>
                         </form>
+
+                        <div class="settings-card card" style="margin-top:1rem;">
+                            <h3>🔗 Facebook Integration</h3>
+                            <p class="text-muted" style="font-size:0.8rem; margin-bottom:0.75rem;">Credentials from .env or configured here. These are stored locally.</p>
+                            <div class="form-group">
+                                <label>Page ID</label>
+                                <input type="text" id="set-fb-page-id" placeholder="FB_PAGE_ID">
+                            </div>
+                            <div class="form-group">
+                                <label>Access Token</label>
+                                <input type="password" id="set-fb-access-token" placeholder="FB_ACCESS_TOKEN">
+                            </div>
+                            <div class="form-group">
+                                <label>Catalog ID <span style="font-size:0.75rem;color:var(--text-muted);">(optional)</span></label>
+                                <input type="text" id="set-fb-catalog-id" placeholder="FB_CATALOG_ID">
+                            </div>
+                            <button id="btn-save-fb" class="btn-primary">Save Facebook Config</button>
+                        </div>
+
+                        <div class="settings-card card" style="margin-top:1rem;">
+                            <h3>💬 WhatsApp Business</h3>
+                            <p class="text-muted" style="font-size:0.8rem; margin-bottom:0.75rem;">WhatsApp Business Cloud API credentials.</p>
+                            <div class="form-group">
+                                <label>Phone Number ID</label>
+                                <input type="text" id="set-wa-phone-id" placeholder="WA_PHONE_NUMBER_ID">
+                            </div>
+                            <div class="form-group">
+                                <label>Access Token</label>
+                                <input type="password" id="set-wa-access-token" placeholder="WA_ACCESS_TOKEN">
+                            </div>
+                            <button id="btn-save-wa" class="btn-primary">Save WhatsApp Config</button>
+                        </div>
 
                         <div class="settings-card card" style="margin-top:1rem;">
                             <h3>🔑 API Status</h3>
                             <div class="api-status-item">
                                 <span>Gemini AI Access</span>
                                 <span class="status-badge ok">Connected</span>
+                            </div>
+                            <div class="api-status-item">
+                                <span>Facebook Graph API</span>
+                                <span class="status-badge" id="fb-status-badge">Not Configured</span>
+                            </div>
+                            <div class="api-status-item">
+                                <span>WhatsApp Business API</span>
+                                <span class="status-badge" id="wa-status-badge">Not Configured</span>
                             </div>
                             <div class="api-status-item">
                                 <span>Storage Mode</span>
@@ -493,7 +549,12 @@
                 <div class="form-main">
                     <div class="form-group"><label>Product ID</label><input type="text" id="p-id" required></div>
                     <div class="form-group"><label>Title</label><input type="text" id="p-title" required></div>
-                    <div class="form-group"><label>Description</label><textarea id="p-description" rows="4"></textarea></div>
+                    <div class="form-group"><label>Description</label>
+                        <div style="display:flex; gap:0.5rem; align-items:flex-start;">
+                            <textarea id="p-description" rows="4" style="flex:1;"></textarea>
+                            <button type="button" id="btn-gen-description" class="btn-outline" style="white-space:nowrap; padding:0.4rem 0.7rem; font-size:0.75rem;">✨ AI</button>
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="form-group"><label>Category</label><select id="p-category"></select></div>
                         <div class="form-group"><label>Condition</label><input type="text" id="p-condition"></div>
@@ -502,6 +563,19 @@
                 <div class="form-side">
                     <div class="form-group"><label>Price (LKR)</label><input type="text" id="p-price" required></div>
                     <div class="form-group"><label>Stock Level</label><input type="number" id="p-stock" required></div>
+                    <div class="form-group">
+                        <label>Product Image</label>
+                        <div class="product-img-upload-zone" id="product-img-zone">
+                            <input type="file" id="p-image-input" accept="image/*" hidden>
+                            <img id="p-image-preview" style="display:none; max-height:100px; border-radius:6px; object-fit:cover;">
+                            <div id="p-image-prompt">
+                                <span style="font-size:1.5rem;">🖼️</span>
+                                <p style="margin:0.25rem 0 0; font-size:0.8rem; color:var(--text-muted);">Click to upload image</p>
+                            </div>
+                        </div>
+                        <p id="p-image-status" class="hint" style="display:none;"></p>
+                        <input type="hidden" id="p-image-path">
+                    </div>
                     <div class="form-group"><label>Features (Semicolon separated)</label><textarea id="p-features" rows="3"></textarea></div>
                     <div class="form-group"><label>Buying Info (Semicolon separated)</label><textarea id="p-buying" rows="3"></textarea></div>
                 </div>
