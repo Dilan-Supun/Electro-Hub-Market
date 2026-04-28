@@ -11,6 +11,9 @@ const customerController = require('../controllers/customerController');
 const orderController = require('../controllers/orderController');
 const shippingController = require('../controllers/shippingController');
 const documentController = require('../controllers/documentController');
+const facebookController = require('../controllers/facebookController');
+const whatsappController = require('../controllers/whatsappController');
+const aiController = require('../controllers/aiController');
 const db = require('../utils/db');
 const logger = require('../utils/logger');
 
@@ -126,4 +129,19 @@ router.post('/settings', authenticate, async (req, res) => {
     res.json({ success: true });
 });
 
+// Facebook
+router.post('/facebook/post/:productId', authenticate, facebookController.postProduct);
+router.post('/facebook/catalog/:productId', authenticate, facebookController.syncProduct);
+router.post('/facebook/catalog/bulk', authenticate, facebookController.bulkSync);
+
+// WhatsApp
+router.post('/whatsapp/test', authenticate, whatsappController.sendTest);
+router.post('/whatsapp/notify/:orderId', authenticate, whatsappController.notifyOrder);
+
+// AI Text Generation
+router.post('/ai/description', authenticate, aiController.generateDescription);
+router.post('/ai/caption', authenticate, aiController.generateCaption);
+router.post('/ai/tags', authenticate, aiController.generateTags);
+
 module.exports = router;
+

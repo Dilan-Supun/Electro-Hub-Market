@@ -1,6 +1,7 @@
 const db = require('../utils/db');
 const sqlite = require('../utils/sqlite');
 const logger = require('../utils/logger');
+const waService = require('../services/whatsappService');
 
 const STATUSES = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
 
@@ -72,6 +73,14 @@ const orderController = {
 
             await sqlite.createOrder(order);
             await logger.log('create order', { id: order.id, customer: customer.name, total });
+
+            // Send WhatsApp order confirmation (non-blocking)
+            try {
+                await waService.sendOrderConfirmation(order);
+            } catch (waErr) {
+                console.warn('[WA] Order confirmation failed:', waErr.message);
+            }
+
             res.json({ success: true, order });
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -108,6 +117,15 @@ const orderController = {
 
             await sqlite.updateOrderStatus(id, status, extraFields);
             await logger.log('update order status', { id, status });
+
+            // Send WhatsApp notification based on status
+            try {
+                if (status === 'shipped') await waService.sendShippingNotification(order);
+                if (status === 'delivered') await waService.sendDeliveryConfirmation(order);
+            } catch (waErr) {
+                console.warn('[WA] Status notification failed:', waErr.message);
+            }
+
             res.json({ success: true });
         } catch (error) {
             res.status(500).json({ error: error.message });
