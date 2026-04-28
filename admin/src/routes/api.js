@@ -7,6 +7,9 @@ const fs = require('fs-extra');
 const productController = require('../controllers/productController');
 const mediaController = require('../controllers/mediaController');
 const importController = require('../controllers/importController');
+const customerController = require('../controllers/customerController');
+const orderController = require('../controllers/orderController');
+const documentController = require('../controllers/documentController');
 const db = require('../utils/db');
 const logger = require('../utils/logger');
 
@@ -22,6 +25,26 @@ const studioUpload = multer({
             cb(null, `studio_${Date.now()}${path.extname(file.originalname)}`);
         }
     })
+});
+const logoUpload = multer({
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            const dir = path.join(__dirname, '../../../data/logo');
+            fs.ensureDirSync(dir);
+            cb(null, dir);
+        },
+        filename: (req, file, cb) => {
+            // Always overwrite as "logo.<ext>" so there is only one active logo
+            const ext = path.extname(file.originalname).toLowerCase();
+            const allowed = ['.png', '.jpg', '.jpeg', '.webp', '.svg'];
+            if (!allowed.includes(ext)) return cb(new Error('Unsupported image format'));
+            cb(null, `logo${ext}`);
+        }
+    }),
+    fileFilter: (req, file, cb) => {
+        if (!file.mimetype.startsWith('image/')) return cb(new Error('Only image files are allowed'));
+        cb(null, true);
+    }
 });
 
 // Auth Middleware (Disabled as requested)
@@ -50,10 +73,36 @@ router.post('/media/upload-studio', authenticate, studioUpload.single('image'), 
 });
 router.post('/media/enhance', authenticate, mediaController.enhanceImage);
 router.post('/media/finalize', authenticate, mediaController.finalizeImage);
+router.post('/media/watermark', authenticate, mediaController.watermarkDirect);
+router.post('/media/upload-logo', authenticate, logoUpload.single('logo'), async (req, res) => {
+    if (!req.file) return res.status(400).json({ error: 'No logo image uploaded' });
+    const logoRelPath = `data/logo/${req.file.filename}`;
+    // Persist the logo path in settings
+    const settings = await db.getSettings();
+    settings.watermarkLogoPath = logoRelPath;
+    await db.write('settings', settings);
+    await logger.log('upload watermark logo', { path: logoRelPath });
+    res.json({ success: true, logoPath: logoRelPath });
+});
 
 // Import
 router.post('/import/preview', authenticate, upload.single('file'), importController.validateAndPreview);
 router.post('/import/commit', authenticate, importController.commitImport);
+
+// Customers
+router.get('/customers', authenticate, customerController.getAll);
+router.post('/customers', authenticate, customerController.save);
+router.delete('/customers/:id', authenticate, customerController.remove);
+
+// Orders
+router.get('/orders', authenticate, orderController.getAll);
+router.post('/orders', authenticate, orderController.create);
+router.patch('/orders/:id/status', authenticate, orderController.updateStatus);
+router.delete('/orders/:id', authenticate, orderController.remove);
+
+// Documents (printable HTML — no auth header required so they open directly in browser tabs)
+router.get('/documents/invoice/:id', documentController.invoice);
+router.get('/documents/label/:id', documentController.packingLabel);
 
 // Logs
 router.get('/logs', authenticate, async (req, res) => {

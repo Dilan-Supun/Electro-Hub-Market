@@ -37,35 +37,77 @@ const imageService = {
     },
 
     async applyWatermark(inputBuffer, config) {
-        const { text, position, opacity, size } = config;
-        
+        const { text, position, opacity, logoPath } = config;
+
         const image = await Jimp.read(inputBuffer);
-        const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE); // Built-in white font
+        const imgW = image.getWidth();
+        const imgH = image.getHeight();
+        const margin = Math.round(Math.min(imgW, imgH) * 0.03); // 3% margin
 
-        const watermark = new Jimp(image.getWidth(), image.getHeight());
-        watermark.print(font, 0, 0, {
-            text: text,
-            alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-            alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
-        }, image.getWidth(), image.getHeight());
+        // --- Image / logo overlay ---
+        if (logoPath && (await fs.pathExists(logoPath))) {
+            const logo = await Jimp.read(logoPath);
+            const logoW = Math.round(imgW * 0.22); // 22% of image width
+            logo.resize(logoW, Jimp.AUTO);
+            logo.opacity(Math.min(Math.max(opacity, 0.1), 1));
 
-        watermark.opacity(opacity);
+            let x = margin;
+            let y = imgH - logo.getHeight() - margin;
 
-        // Position logic
-        let x = 0, y = 0;
-        if (position === 'bottom-right') {
-            x = image.getWidth() * 0.35;
-            y = image.getHeight() * 0.4;
-        } else if (position === 'bottom-center') {
-            x = 0;
-            y = image.getHeight() * 0.4;
-        } else if (position === 'center') {
-            x = 0;
-            y = 0;
+            if (position === 'bottom-right') {
+                x = imgW - logo.getWidth() - margin;
+                y = imgH - logo.getHeight() - margin;
+            } else if (position === 'bottom-center') {
+                x = Math.round((imgW - logo.getWidth()) / 2);
+                y = imgH - logo.getHeight() - margin;
+            } else if (position === 'center') {
+                x = Math.round((imgW - logo.getWidth()) / 2);
+                y = Math.round((imgH - logo.getHeight()) / 2);
+            }
+
+            return image
+                .composite(logo, x, y, {
+                    mode: Jimp.BLEND_SOURCE_OVER,
+                    opacitySource: Math.min(Math.max(opacity, 0.1), 1),
+                    opacityDest: 1
+                })
+                .getBufferAsync(Jimp.MIME_JPEG);
         }
 
+        // --- Text watermark ---
+        const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
+
+        // Create a transparent overlay the same size as the source image so we
+        // can use Jimp's alignment helpers, then shift it into place.
+        const overlay = new Jimp(imgW, imgH, 0x00000000);
+
+        let alignX = Jimp.HORIZONTAL_ALIGN_CENTER;
+        let alignY = Jimp.VERTICAL_ALIGN_BOTTOM;
+        let printX = 0;
+        let printY = 0;
+        let printW = imgW;
+        let printH = imgH - margin;
+
+        if (position === 'bottom-right') {
+            alignX = Jimp.HORIZONTAL_ALIGN_RIGHT;
+            printX = -margin;
+        } else if (position === 'bottom-center') {
+            alignX = Jimp.HORIZONTAL_ALIGN_CENTER;
+        } else if (position === 'center') {
+            alignY = Jimp.VERTICAL_ALIGN_MIDDLE;
+            printH = imgH;
+        }
+
+        overlay.print(font, printX, printY, {
+            text: text || 'Electro Hub',
+            alignmentX: alignX,
+            alignmentY: alignY
+        }, printW, printH);
+
+        overlay.opacity(Math.min(Math.max(opacity, 0.1), 1));
+
         return image
-            .composite(watermark, x, y)
+            .composite(overlay, 0, 0)
             .getBufferAsync(Jimp.MIME_JPEG);
     }
 };

@@ -25,6 +25,9 @@
                 <button class="nav-item" data-target="section-imports">📁 Imports</button>
                 <button class="nav-item" data-target="section-media">🖼️ Media Library</button>
                 <button class="nav-item" data-target="section-ai-studio">✨ AI Image Studio</button>
+                <button class="nav-item" data-target="section-customers">👥 Customers</button>
+                <button class="nav-item" data-target="section-orders">🛒 Orders</button>
+                <button class="nav-item" data-target="section-documents">📄 Documents</button>
                 <button class="nav-item" data-target="section-logs">📜 Activity Logs</button>
                 <button class="nav-item" data-target="section-settings">⚙️ Settings</button>
             </nav>
@@ -161,6 +164,7 @@
                             <p class="hint">Default: Remove the background, keep the product shape and branding accurate, improve lighting, reduce shadows, center the product, and place it on a clean white studio background for e-commerce use.</p>
                         </div>
                         <button id="btn-ai-process" class="btn-primary btn-block">✨ Process with Gemini</button>
+                        <button id="btn-watermark-only" class="btn-outline btn-block" disabled style="margin-top:0.5rem;">🏷️ Watermark Only (Skip AI)</button>
                     </div>
                     <div class="studio-main card">
                         <div class="comparison-header">
@@ -221,8 +225,132 @@
                 </div>
             </section>
 
+            <!-- Customers Section -->
+            <section id="section-customers" class="content-section">
+                <div class="section-header">
+                    <div class="search-filter-row">
+                        <div class="search-box">
+                            <input type="text" id="search-customers" placeholder="Search by name, email or phone...">
+                        </div>
+                    </div>
+                    <button id="btn-add-customer" class="btn-primary">+ Add Customer</button>
+                </div>
+                <div class="stats-grid" style="margin-bottom:1.5rem;">
+                    <div class="stat-card">
+                        <div class="stat-icon info">👥</div>
+                        <div class="stat-info">
+                            <span class="stat-label">Total Customers</span>
+                            <span class="stat-value" id="cust-total">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container card">
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>Customer ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>City</th>
+                                <th>Registered</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customers-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Orders Section -->
+            <section id="section-orders" class="content-section">
+                <div class="section-header">
+                    <div class="search-filter-row">
+                        <div class="search-box">
+                            <input type="text" id="search-orders" placeholder="Search by order ID or customer...">
+                        </div>
+                        <select id="filter-order-status" class="filter-select">
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <button id="btn-add-order" class="btn-primary">+ New Order</button>
+                </div>
+                <div class="stats-grid" style="margin-bottom:1.5rem;">
+                    <div class="stat-card">
+                        <div class="stat-icon info">🛒</div>
+                        <div class="stat-info">
+                            <span class="stat-label">Total Orders</span>
+                            <span class="stat-value" id="ord-total">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon success">💰</div>
+                        <div class="stat-info">
+                            <span class="stat-label">Revenue</span>
+                            <span class="stat-value" id="ord-revenue">Rs. 0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="stat-icon warning">⏳</div>
+                        <div class="stat-info">
+                            <span class="stat-label">Pending</span>
+                            <span class="stat-value" id="ord-pending">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container card">
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Documents Section -->
+            <section id="section-documents" class="content-section">
+                <div class="doc-tools-grid">
+                    <div class="doc-tool-card card">
+                        <h3>🧾 Invoice Generator</h3>
+                        <p class="text-muted" style="margin:0.5rem 0 1.25rem; font-size:0.85rem;">Select an order to generate a print-ready invoice with seller &amp; customer details, line items and totals.</p>
+                        <div class="form-group">
+                            <label>Select Order</label>
+                            <select id="doc-order-inv"></select>
+                        </div>
+                        <button id="btn-gen-invoice" class="btn-primary btn-block">🖨️ Open &amp; Print Invoice</button>
+                    </div>
+                    <div class="doc-tool-card card">
+                        <h3>📦 Packing Label Generator</h3>
+                        <p class="text-muted" style="margin:0.5rem 0 1.25rem; font-size:0.85rem;">Generate a shipping label showing FROM (your shop) and TO (customer) addresses with package contents.</p>
+                        <div class="form-group">
+                            <label>Select Order</label>
+                            <select id="doc-order-lbl"></select>
+                        </div>
+                        <button id="btn-gen-label" class="btn-success btn-block">🏷️ Open &amp; Print Label</button>
+                    </div>
+                </div>
+                <div class="card" style="margin-top:1.5rem; padding:1rem 1.5rem;">
+                    <p style="font-size:0.8rem; color:var(--text-muted);">💡 <strong>Tip:</strong> You can also print invoices and labels directly from the <strong>Orders</strong> section using the action buttons in each row.</p>
+                </div>
+            </section>
+
             <!-- Activity Logs -->
             <section id="section-logs" class="content-section">
+
                 <div class="card">
                     <div class="log-filters">
                         <input type="text" id="log-search" placeholder="Filter by action or product...">
@@ -255,10 +383,46 @@
                 <div class="settings-grid">
                     <form id="settings-form" class="settings-card card">
                         <h3>🎨 Brand Watermarking</h3>
+
+                        <!-- Watermark type toggle -->
                         <div class="form-group">
-                            <label>Brand Name</label>
-                            <input type="text" id="set-watermark-text" placeholder="e.g. Electro Hub">
+                            <label>Watermark Type</label>
+                            <div class="wm-type-toggle">
+                                <label class="wm-type-opt">
+                                    <input type="radio" name="wm-type" id="wm-type-text" value="text" checked>
+                                    <span>✏️ Text</span>
+                                </label>
+                                <label class="wm-type-opt">
+                                    <input type="radio" name="wm-type" id="wm-type-logo" value="logo">
+                                    <span>🖼️ Logo / Image</span>
+                                </label>
+                            </div>
                         </div>
+
+                        <!-- Text watermark fields -->
+                        <div id="wm-text-fields">
+                            <div class="form-group">
+                                <label>Brand Name / Text</label>
+                                <input type="text" id="set-watermark-text" placeholder="e.g. Electro Hub">
+                            </div>
+                        </div>
+
+                        <!-- Logo watermark fields -->
+                        <div id="wm-logo-fields" style="display:none;">
+                            <div class="form-group">
+                                <label>Logo / Brand Image <span style="font-size:0.75rem; color:var(--text-muted);">(PNG with transparent background recommended)</span></label>
+                                <div class="logo-upload-zone" id="logo-upload-zone">
+                                    <input type="file" id="logo-file-input" accept="image/*" hidden>
+                                    <img id="logo-preview" style="display:none; max-height:60px; border-radius:6px;">
+                                    <div id="logo-upload-prompt">
+                                        <span style="font-size:1.5rem;">🖼️</span>
+                                        <p style="margin:0.25rem 0 0; font-size:0.8rem; color:var(--text-muted);">Click to upload logo</p>
+                                    </div>
+                                </div>
+                                <p id="logo-status" class="hint" style="display:none;"></p>
+                            </div>
+                        </div>
+
                         <div class="settings-row">
                             <div class="form-group">
                                 <label>Position</label>
@@ -273,18 +437,44 @@
                                 <input type="number" id="set-watermark-opacity" step="0.1" min="0.1" max="1">
                             </div>
                         </div>
-                        <button type="submit" class="btn-primary">Save Configuration</button>
+                        <button type="submit" class="btn-primary">Save Watermark Config</button>
                     </form>
 
-                    <div class="settings-card card">
-                        <h3>🔑 API Status</h3>
-                        <div class="api-status-item">
-                            <span>Gemini AI Access</span>
-                            <span class="status-badge ok">Connected</span>
-                        </div>
-                        <div class="api-status-item">
-                            <span>Storage Mode</span>
-                            <span class="status-badge">Local File System</span>
+                    <div class="settings-right-col">
+                        <form id="shop-form" class="settings-card card">
+                            <h3>🏪 Shop Information</h3>
+                            <p class="text-muted" style="font-size:0.8rem; margin-bottom:1rem;">Used on invoices and packing labels.</p>
+                            <div class="form-group">
+                                <label>Shop Name</label>
+                                <input type="text" id="set-shop-name" placeholder="e.g. Electro Hub">
+                            </div>
+                            <div class="form-group">
+                                <label>Address</label>
+                                <textarea id="set-shop-address" rows="2" placeholder="Street, City, Postal Code"></textarea>
+                            </div>
+                            <div class="settings-row">
+                                <div class="form-group">
+                                    <label>Phone</label>
+                                    <input type="text" id="set-shop-phone" placeholder="+94 77 000 0000">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="text" id="set-shop-email" placeholder="info@electrohub.lk">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary">Save Shop Info</button>
+                        </form>
+
+                        <div class="settings-card card" style="margin-top:1rem;">
+                            <h3>🔑 API Status</h3>
+                            <div class="api-status-item">
+                                <span>Gemini AI Access</span>
+                                <span class="status-badge ok">Connected</span>
+                            </div>
+                            <div class="api-status-item">
+                                <span>Storage Mode</span>
+                                <span class="status-badge">Local File System</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -324,5 +514,114 @@
     </div>
 
     <script src="js/admin.js"></script>
+
+    <!-- Customer Modal -->
+    <div id="customer-modal" class="modal">
+        <div class="modal-content card">
+            <div class="modal-header">
+                <h2 id="customer-modal-title">Add Customer</h2>
+                <span class="close-btn" data-modal="customer-modal">&times;</span>
+            </div>
+            <form id="customer-form">
+                <div class="form-row">
+                    <div class="form-group"><label>Customer ID *</label><input type="text" id="c-id" placeholder="e.g. CUST-001" required></div>
+                    <div class="form-group"><label>Full Name *</label><input type="text" id="c-name" required></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Email</label><input type="email" id="c-email" placeholder="customer@email.com"></div>
+                    <div class="form-group"><label>Phone</label><input type="tel" id="c-phone" placeholder="+94 77 123 4567"></div>
+                </div>
+                <div class="form-group"><label>Street Address *</label><input type="text" id="c-address" placeholder="No. 123, Main Street" required></div>
+                <div class="form-row">
+                    <div class="form-group"><label>City *</label><input type="text" id="c-city" required></div>
+                    <div class="form-group"><label>Postal Code</label><input type="text" id="c-postal" placeholder="00100"></div>
+                </div>
+                <div class="form-group"><label>Notes</label><textarea id="c-notes" rows="2" placeholder="Optional notes..."></textarea></div>
+                <div class="form-footer">
+                    <button type="button" class="btn-outline" data-modal="customer-modal">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Customer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div id="order-modal" class="modal">
+        <div class="modal-content card" style="max-width:860px;">
+            <div class="modal-header">
+                <h2>New Order</h2>
+                <span class="close-btn" data-modal="order-modal">&times;</span>
+            </div>
+            <form id="order-form">
+                <div class="form-row" style="margin-bottom:1.25rem;">
+                    <div class="form-group">
+                        <label>Customer *</label>
+                        <select id="o-customer" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="o-status">
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h4 style="margin-bottom:0.75rem;">Line Items</h4>
+                <div id="order-items-list"></div>
+                <button type="button" id="btn-add-line-item" class="btn-outline" style="margin-bottom:1.25rem;">+ Add Item</button>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Shipping Fee (LKR)</label>
+                        <input type="number" id="o-shipping" value="0" min="0" step="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Order Total</label>
+                        <div id="o-total-display" style="font-size:1.25rem; font-weight:700; color:var(--primary); padding-top:0.4rem;">Rs. 0.00</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="o-notes" rows="2" placeholder="Delivery instructions, special requests..."></textarea>
+                </div>
+                <div class="form-footer">
+                    <button type="button" class="btn-outline" data-modal="order-modal">Cancel</button>
+                    <button type="submit" class="btn-primary">Create Order</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Order Status Update Modal -->
+    <div id="order-status-modal" class="modal">
+        <div class="modal-content card" style="max-width:400px;">
+            <div class="modal-header">
+                <h2>Update Order Status</h2>
+                <span class="close-btn" data-modal="order-status-modal">&times;</span>
+            </div>
+            <div class="form-group" style="margin:1rem 0;">
+                <label>Order</label>
+                <div id="osm-order-id" style="font-weight:700; font-family:monospace;"></div>
+            </div>
+            <div class="form-group">
+                <label>New Status</label>
+                <select id="osm-status">
+                    <option value="pending">Pending</option>
+                    <option value="processing">Processing</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div class="form-footer">
+                <button type="button" class="btn-outline" data-modal="order-status-modal">Cancel</button>
+                <button id="btn-osm-save" class="btn-primary">Update Status</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
