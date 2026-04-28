@@ -1,5 +1,19 @@
 [
   {
+    "id": 1777368020940,
+    "timestamp": "2026-04-28T09:20:20.940Z",
+    "action": "update settings",
+    "details": {},
+    "admin": "admin"
+  },
+  {
+    "id": 1777368001999,
+    "timestamp": "2026-04-28T09:20:01.999Z",
+    "action": "update settings",
+    "details": {},
+    "admin": "admin"
+  },
+  {
     "id": 1777284212188,
     "timestamp": "2026-04-27T10:03:32.188Z",
     "action": "generate ai image",
