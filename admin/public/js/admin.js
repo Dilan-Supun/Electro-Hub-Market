@@ -3,7 +3,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentProducts = [];
     let currentLogs = [];
     let currentSettings = {};
+    let currentCustomers = [];
+    let currentOrders = [];
     let editingId = null;
+    let editingCustomerId = null;
+    let editingOrderStatusId = null;
     let studioOriginalPath = null;
     let studioGeneratedUrl = null;
     let stockChart = null;
@@ -29,7 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
         await Promise.all([
             loadSettings(),
             loadProducts(),
-            loadStats()
+            loadStats(),
+            loadCustomers(),
+            loadOrders()
         ]);
         populateCategoryFilters();
     }
@@ -80,7 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'section-ai-studio': 'AI-Powered Image Enhancement',
             'section-imports': 'Bulk Inventory Updates',
             'section-logs': 'System Activity Audit',
-            'section-settings': 'Global Configuration'
+            'section-settings': 'Global Configuration',
+            'section-customers': 'Customer Accounts & Contacts',
+            'section-orders': 'Orders & Fulfillment',
+            'section-documents': 'Invoices & Packing Labels'
         };
         sectionSubtitle.textContent = subtitles[target] || '';
     }
@@ -90,6 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (target === 'section-logs') loadLogs();
         if (target === 'section-dashboard') loadStats();
         if (target === 'section-settings') loadSettings();
+        if (target === 'section-customers') loadCustomers();
+        if (target === 'section-orders') loadOrders();
+        if (target === 'section-documents') { loadOrders(); }
     }
 
     // --- Data Loaders ---
@@ -136,7 +148,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const fields = {
                 'set-watermark-text': 'watermarkText',
                 'set-watermark-pos': 'watermarkPosition',
-                'set-watermark-opacity': 'watermarkOpacity'
+                'set-watermark-opacity': 'watermarkOpacity',
+                'set-shop-name': 'shopName',
+                'set-shop-address': 'shopAddress',
+                'set-shop-phone': 'shopPhone',
+                'set-shop-email': 'shopEmail'
             };
             for (const [id, key] of Object.entries(fields)) {
                 const el = document.getElementById(id);
@@ -156,6 +172,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     logoStatus.style.display = 'block';
                 }
             }
+        }
+    }
+
+    async function loadCustomers() {
+        const data = await apiFetch('/api/customers');
+        if (data) {
+            currentCustomers = data;
+            renderCustomers();
+            populateCustomerSelects();
+        }
+    }
+
+    async function loadOrders() {
+        const data = await apiFetch('/api/orders');
+        if (data) {
+            currentOrders = data;
+            renderOrders();
+            populateOrderSelects();
         }
     }
 
@@ -332,6 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const aiProcessBtn = document.getElementById('btn-ai-process');
     const aiSaveBtn = document.getElementById('btn-ai-save');
     const aiLoader = document.getElementById('ai-loader');
+    const watermarkOnlyBtn = document.getElementById('btn-watermark-only');
 
     aiDropZone.onclick = () => aiInput.click();
     
@@ -653,22 +688,40 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    // --- Shop Info Form ---
+    const shopForm = document.getElementById('shop-form');
+    if (shopForm) {
+        shopForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const payload = {
+                ...currentSettings,
+                shopName: document.getElementById('set-shop-name').value,
+                shopAddress: document.getElementById('set-shop-address').value,
+                shopPhone: document.getElementById('set-shop-phone').value,
+                shopEmail: document.getElementById('set-shop-email').value
+            };
+            const res = await apiFetch('/api/settings', { method: 'POST', body: JSON.stringify(payload) });
+            if (res && res.success) {
+                alert('✅ Shop info saved!');
+                currentSettings = payload;
+            } else {
+                alert('❌ Failed to save shop info.');
+            }
+        };
+    }
+
     // --- Watermark Only (AI Studio) ---
-    const watermarkOnlyBtn = document.getElementById('btn-watermark-only');
     if (watermarkOnlyBtn) {
         watermarkOnlyBtn.addEventListener('click', async () => {
             if (!studioOriginalPath) return alert('Please upload an image first.');
             watermarkOnlyBtn.disabled = true;
             watermarkOnlyBtn.textContent = '⏳ Applying watermark…';
-
             const res = await apiFetch('/api/media/watermark', {
                 method: 'POST',
                 body: JSON.stringify({ productId: 'studio', imagePath: studioOriginalPath })
             });
-
             watermarkOnlyBtn.disabled = false;
             watermarkOnlyBtn.textContent = '🏷️ Watermark Only (Skip AI)';
-
             if (res && res.success) {
                 studioGeneratedUrl = res.imageUrl;
                 document.getElementById('ai-preview-generated').src = '/' + res.imageUrl;
@@ -679,6 +732,385 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // ══════════════════════════════════════════════════════════════
+    //  CUSTOMERS
+    // ══════════════════════════════════════════════════════════════
+
+    function renderCustomers() {
+        const tbody = document.getElementById('customers-tbody');
+        if (!tbody) return;
+        const search = (document.getElementById('search-customers').value || '').toLowerCase();
+        let list = currentCustomers.filter(c =>
+            c.name.toLowerCase().includes(search) ||
+            (c.email || '').toLowerCase().includes(search) ||
+            (c.phone || '').includes(search)
+        );
+        const total = document.getElementById('cust-total');
+        if (total) total.textContent = currentCustomers.length;
+        tbody.innerHTML = '';
+        if (list.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-muted);">No customers found.</td></tr>`;
+            return;
+        }
+        list.forEach(c => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="font-family:monospace;font-size:0.8rem;">${c.id}</td>
+                <td style="font-weight:600;">${c.name}</td>
+                <td>${c.email || '<span style="color:var(--text-muted)">—</span>'}</td>
+                <td>${c.phone || '<span style="color:var(--text-muted)">—</span>'}</td>
+                <td>${c.city || '<span style="color:var(--text-muted)">—</span>'}</td>
+                <td style="font-size:0.8rem;color:var(--text-muted);">${c.createdAt ? new Date(c.createdAt).toLocaleDateString() : '—'}</td>
+                <td>
+                    <div style="display:flex;gap:0.4rem;">
+                        <button class="btn-edit-action" data-cid="${c.id}">Edit</button>
+                        <button class="btn-delete-action" data-cid="${c.id}">Delete</button>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+        tbody.querySelectorAll('.btn-edit-action').forEach(btn =>
+            btn.onclick = () => openCustomerModal(btn.dataset.cid)
+        );
+        tbody.querySelectorAll('.btn-delete-action').forEach(btn =>
+            btn.onclick = () => deleteCustomer(btn.dataset.cid)
+        );
+    }
+
+    function openCustomerModal(id) {
+        editingCustomerId = id || null;
+        const form = document.getElementById('customer-form');
+        form.reset();
+        if (id) {
+            const c = currentCustomers.find(x => x.id === id);
+            if (!c) return;
+            document.getElementById('customer-modal-title').textContent = 'Edit Customer';
+            document.getElementById('c-id').value = c.id;
+            document.getElementById('c-id').readOnly = true;
+            document.getElementById('c-name').value = c.name;
+            document.getElementById('c-email').value = c.email || '';
+            document.getElementById('c-phone').value = c.phone || '';
+            document.getElementById('c-address').value = c.address || '';
+            document.getElementById('c-city').value = c.city || '';
+            document.getElementById('c-postal').value = c.postalCode || '';
+            document.getElementById('c-notes').value = c.notes || '';
+        } else {
+            document.getElementById('customer-modal-title').textContent = 'Add Customer';
+            document.getElementById('c-id').readOnly = false;
+        }
+        document.getElementById('customer-modal').style.display = 'flex';
+    }
+
+    async function deleteCustomer(id) {
+        if (!confirm(`Delete customer ${id}? This cannot be undone.`)) return;
+        const res = await apiFetch(`/api/customers/${id}`, { method: 'DELETE' });
+        if (res && res.success) loadCustomers();
+    }
+
+    document.getElementById('btn-add-customer') && document.getElementById('btn-add-customer').addEventListener('click', () => openCustomerModal(null));
+    document.getElementById('search-customers') && document.getElementById('search-customers').addEventListener('input', renderCustomers);
+
+    const customerForm = document.getElementById('customer-form');
+    if (customerForm) {
+        customerForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const payload = {
+                id: document.getElementById('c-id').value.trim(),
+                name: document.getElementById('c-name').value.trim(),
+                email: document.getElementById('c-email').value.trim(),
+                phone: document.getElementById('c-phone').value.trim(),
+                address: document.getElementById('c-address').value.trim(),
+                city: document.getElementById('c-city').value.trim(),
+                postalCode: document.getElementById('c-postal').value.trim(),
+                notes: document.getElementById('c-notes').value.trim()
+            };
+            const res = await apiFetch('/api/customers', { method: 'POST', body: JSON.stringify(payload) });
+            if (res && res.success) {
+                closeModal('customer-modal');
+                loadCustomers();
+            } else {
+                alert('❌ ' + (res && res.error ? res.error : 'Failed to save customer'));
+            }
+        };
+    }
+
+    function populateCustomerSelects() {
+        const sel = document.getElementById('o-customer');
+        if (!sel) return;
+        const cur = sel.value;
+        sel.innerHTML = '<option value="">-- Select Customer --</option>';
+        currentCustomers.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.id;
+            opt.textContent = `${c.name} (${c.id})`;
+            sel.appendChild(opt);
+        });
+        if (cur) sel.value = cur;
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  ORDERS
+    // ══════════════════════════════════════════════════════════════
+
+    const STATUS_CSS = {
+        pending: 'status-pending',
+        processing: 'status-processing',
+        shipped: 'status-shipped',
+        delivered: 'status-delivered',
+        cancelled: 'status-cancelled'
+    };
+
+    function fmtMoney(n) {
+        return `Rs. ${parseFloat(n || 0).toLocaleString('en-LK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
+
+    function renderOrders() {
+        const tbody = document.getElementById('orders-tbody');
+        if (!tbody) return;
+        const search = (document.getElementById('search-orders') ? document.getElementById('search-orders').value : '').toLowerCase();
+        const statusFilter = document.getElementById('filter-order-status') ? document.getElementById('filter-order-status').value : 'all';
+
+        let list = currentOrders.filter(o => {
+            const matchSearch = o.id.toLowerCase().includes(search) || o.customerName.toLowerCase().includes(search);
+            const matchStatus = statusFilter === 'all' || o.status === statusFilter;
+            return matchSearch && matchStatus;
+        });
+
+        // Stats
+        const totalEl = document.getElementById('ord-total');
+        const revEl = document.getElementById('ord-revenue');
+        const pendEl = document.getElementById('ord-pending');
+        if (totalEl) totalEl.textContent = currentOrders.length;
+        if (revEl) revEl.textContent = fmtMoney(currentOrders.reduce((s, o) => s + (o.total || 0), 0));
+        if (pendEl) pendEl.textContent = currentOrders.filter(o => o.status === 'pending').length;
+
+        tbody.innerHTML = '';
+        if (list.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-muted);">No orders found.</td></tr>`;
+            return;
+        }
+
+        list.forEach(o => {
+            const itemCount = o.items ? o.items.reduce((s, i) => s + i.qty, 0) : 0;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="font-family:monospace;font-size:0.8rem;font-weight:600;">${o.id}</td>
+                <td>
+                    <div style="font-weight:600;">${o.customerName}</div>
+                    <div style="font-size:0.75rem;color:var(--text-muted);">${o.customerId}</div>
+                </td>
+                <td>${itemCount} item${itemCount !== 1 ? 's' : ''}</td>
+                <td><strong>${fmtMoney(o.total)}</strong></td>
+                <td><span class="order-status ${STATUS_CSS[o.status] || ''}">${o.status}</span></td>
+                <td style="font-size:0.8rem;color:var(--text-muted);">${new Date(o.createdAt).toLocaleDateString()}</td>
+                <td>
+                    <div style="display:flex;gap:0.4rem;flex-wrap:wrap;">
+                        <button class="btn-sm info" data-oid="${o.id}" data-action="status">Status</button>
+                        <button class="btn-sm success" data-oid="${o.id}" data-action="invoice">🧾</button>
+                        <button class="btn-sm warn" data-oid="${o.id}" data-action="label">📦</button>
+                        <button class="btn-sm danger" data-oid="${o.id}" data-action="del">✕</button>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        tbody.querySelectorAll('[data-action]').forEach(btn => {
+            btn.onclick = () => {
+                const oid = btn.dataset.oid;
+                const action = btn.dataset.action;
+                if (action === 'invoice') window.open(`/api/documents/invoice/${oid}`, '_blank');
+                else if (action === 'label') window.open(`/api/documents/label/${oid}`, '_blank');
+                else if (action === 'status') openOrderStatusModal(oid);
+                else if (action === 'del') deleteOrder(oid);
+            };
+        });
+    }
+
+    async function deleteOrder(id) {
+        if (!confirm(`Delete order ${id}? This cannot be undone.`)) return;
+        const res = await apiFetch(`/api/orders/${id}`, { method: 'DELETE' });
+        if (res && res.success) loadOrders();
+    }
+
+    function openOrderStatusModal(orderId) {
+        editingOrderStatusId = orderId;
+        const order = currentOrders.find(o => o.id === orderId);
+        if (!order) return;
+        document.getElementById('osm-order-id').textContent = orderId;
+        document.getElementById('osm-status').value = order.status;
+        document.getElementById('order-status-modal').style.display = 'flex';
+    }
+
+    document.getElementById('btn-osm-save') && document.getElementById('btn-osm-save').addEventListener('click', async () => {
+        if (!editingOrderStatusId) return;
+        const status = document.getElementById('osm-status').value;
+        const res = await apiFetch(`/api/orders/${editingOrderStatusId}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status })
+        });
+        if (res && res.success) {
+            closeModal('order-status-modal');
+            loadOrders();
+        } else {
+            alert('❌ ' + (res && res.error ? res.error : 'Failed to update status'));
+        }
+    });
+
+    document.getElementById('search-orders') && document.getElementById('search-orders').addEventListener('input', renderOrders);
+    document.getElementById('filter-order-status') && document.getElementById('filter-order-status').addEventListener('change', renderOrders);
+
+    // ── Order creation form ──────────────────────────────────────
+
+    document.getElementById('btn-add-order') && document.getElementById('btn-add-order').addEventListener('click', () => {
+        document.getElementById('order-form').reset();
+        document.getElementById('order-items-list').innerHTML = '';
+        document.getElementById('o-total-display').textContent = 'Rs. 0.00';
+        populateCustomerSelects();
+        addOrderLineItem(); // start with one empty row
+        document.getElementById('order-modal').style.display = 'flex';
+    });
+
+    document.getElementById('btn-add-line-item') && document.getElementById('btn-add-line-item').addEventListener('click', addOrderLineItem);
+
+    function addOrderLineItem() {
+        const list = document.getElementById('order-items-list');
+        if (!list) return;
+        const row = document.createElement('div');
+        row.className = 'order-item-row';
+
+        const productOpts = currentProducts.map(p =>
+            `<option value="${p.id}" data-price="${parseFloat(p.price) || 0}">${p.title}</option>`
+        ).join('');
+
+        row.innerHTML = `
+            <select class="li-product"><option value="">-- Select Product --</option>${productOpts}</select>
+            <input type="number" class="li-qty" value="1" min="1" placeholder="Qty">
+            <input type="number" class="li-price" placeholder="Unit Price" min="0" step="0.01">
+            <button type="button" class="btn-remove-item" title="Remove">✕</button>
+        `;
+
+        row.querySelector('.li-product').addEventListener('change', function () {
+            const opt = this.options[this.selectedIndex];
+            const price = parseFloat(opt.dataset.price) || 0;
+            row.querySelector('.li-price').value = price.toFixed(2);
+            recalcOrderTotal();
+        });
+        row.querySelector('.li-qty').addEventListener('input', recalcOrderTotal);
+        row.querySelector('.li-price').addEventListener('input', recalcOrderTotal);
+        row.querySelector('.btn-remove-item').addEventListener('click', () => { row.remove(); recalcOrderTotal(); });
+
+        list.appendChild(row);
+    }
+
+    function recalcOrderTotal() {
+        const rows = document.querySelectorAll('.order-item-row');
+        let sub = 0;
+        rows.forEach(r => {
+            const qty = parseFloat(r.querySelector('.li-qty').value) || 0;
+            const price = parseFloat(r.querySelector('.li-price').value) || 0;
+            sub += qty * price;
+        });
+        const shipping = parseFloat(document.getElementById('o-shipping').value) || 0;
+        const total = sub + shipping;
+        const disp = document.getElementById('o-total-display');
+        if (disp) disp.textContent = fmtMoney(total);
+    }
+
+    document.getElementById('o-shipping') && document.getElementById('o-shipping').addEventListener('input', recalcOrderTotal);
+
+    const orderForm = document.getElementById('order-form');
+    if (orderForm) {
+        orderForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const customerId = document.getElementById('o-customer').value;
+            if (!customerId) return alert('Please select a customer.');
+
+            const rows = document.querySelectorAll('.order-item-row');
+            const items = [];
+            for (const r of rows) {
+                const productId = r.querySelector('.li-product').value;
+                const qty = parseInt(r.querySelector('.li-qty').value);
+                const unitPrice = parseFloat(r.querySelector('.li-price').value);
+                if (!productId || !qty || qty < 1) { alert('Each line item needs a product and quantity ≥ 1.'); return; }
+                items.push({ productId, qty, unitPrice: isNaN(unitPrice) ? 0 : unitPrice });
+            }
+            if (items.length === 0) return alert('Add at least one item.');
+
+            const payload = {
+                customerId,
+                items,
+                shippingFee: parseFloat(document.getElementById('o-shipping').value) || 0,
+                notes: document.getElementById('o-notes').value,
+                status: document.getElementById('o-status').value
+            };
+
+            const res = await apiFetch('/api/orders', { method: 'POST', body: JSON.stringify(payload) });
+            if (res && res.success) {
+                closeModal('order-modal');
+                loadOrders();
+            } else {
+                alert('❌ ' + (res && res.error ? res.error : 'Failed to create order'));
+            }
+        };
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  DOCUMENTS
+    // ══════════════════════════════════════════════════════════════
+
+    function populateOrderSelects() {
+        ['doc-order-inv', 'doc-order-lbl'].forEach(id => {
+            const sel = document.getElementById(id);
+            if (!sel) return;
+            const cur = sel.value;
+            sel.innerHTML = '<option value="">-- Select Order --</option>';
+            currentOrders.forEach(o => {
+                const opt = document.createElement('option');
+                opt.value = o.id;
+                opt.textContent = `${o.id} — ${o.customerName} (${fmtMoney(o.total)})`;
+                sel.appendChild(opt);
+            });
+            if (cur) sel.value = cur;
+        });
+    }
+
+    document.getElementById('btn-gen-invoice') && document.getElementById('btn-gen-invoice').addEventListener('click', () => {
+        const id = document.getElementById('doc-order-inv').value;
+        if (!id) return alert('Please select an order.');
+        window.open(`/api/documents/invoice/${id}`, '_blank');
+    });
+
+    document.getElementById('btn-gen-label') && document.getElementById('btn-gen-label').addEventListener('click', () => {
+        const id = document.getElementById('doc-order-lbl').value;
+        if (!id) return alert('Please select an order.');
+        window.open(`/api/documents/label/${id}`, '_blank');
+    });
+
+    // ══════════════════════════════════════════════════════════════
+    //  SHARED MODAL CLOSE HELPERS
+    // ══════════════════════════════════════════════════════════════
+
+    function closeModal(id) {
+        const m = document.getElementById(id);
+        if (m) m.style.display = 'none';
+    }
+
+    document.querySelectorAll('.close-btn[data-modal], [data-modal]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const mid = btn.dataset.modal;
+            if (mid) closeModal(mid);
+        });
+    });
+
+    window.addEventListener('click', (e) => {
+        ['customer-modal', 'order-modal', 'order-status-modal'].forEach(id => {
+            const m = document.getElementById(id);
+            if (m && e.target === m) closeModal(id);
+        });
+    });
 
     // --- Start ---
     initApp();

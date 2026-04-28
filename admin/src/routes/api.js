@@ -7,6 +7,9 @@ const fs = require('fs-extra');
 const productController = require('../controllers/productController');
 const mediaController = require('../controllers/mediaController');
 const importController = require('../controllers/importController');
+const customerController = require('../controllers/customerController');
+const orderController = require('../controllers/orderController');
+const documentController = require('../controllers/documentController');
 const db = require('../utils/db');
 const logger = require('../utils/logger');
 
@@ -85,6 +88,21 @@ router.post('/media/upload-logo', authenticate, logoUpload.single('logo'), async
 // Import
 router.post('/import/preview', authenticate, upload.single('file'), importController.validateAndPreview);
 router.post('/import/commit', authenticate, importController.commitImport);
+
+// Customers
+router.get('/customers', authenticate, customerController.getAll);
+router.post('/customers', authenticate, customerController.save);
+router.delete('/customers/:id', authenticate, customerController.remove);
+
+// Orders
+router.get('/orders', authenticate, orderController.getAll);
+router.post('/orders', authenticate, orderController.create);
+router.patch('/orders/:id/status', authenticate, orderController.updateStatus);
+router.delete('/orders/:id', authenticate, orderController.remove);
+
+// Documents (printable HTML — no auth header required so they open directly in browser tabs)
+router.get('/documents/invoice/:id', documentController.invoice);
+router.get('/documents/label/:id', documentController.packingLabel);
 
 // Logs
 router.get('/logs', authenticate, async (req, res) => {

@@ -330,3 +330,73 @@ body { font-family: 'General Sans', sans-serif; background: var(--bg-main); colo
 .logo-upload-zone { border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 1rem; text-align: center; cursor: pointer; min-height: 72px; display: flex; align-items: center; justify-content: center; transition: border-color 0.15s; }
 .logo-upload-zone:hover { border-color: var(--primary); }
 .hint { font-size: 0.75rem; color: var(--text-muted); margin: 0.25rem 0 0; }
+
+/* ── Customers / Orders ─────────────────────────────────── */
+.btn-edit-action, .btn-delete-action, .btn-sm {
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--text-main);
+    transition: background 0.15s;
+}
+.btn-edit-action:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
+.btn-delete-action:hover { background: #fef2f2; color: var(--error); border-color: var(--error); }
+.btn-sm.success { background: #ecfdf5; color: #065f46; border-color: #6ee7b7; }
+.btn-sm.info    { background: #eff6ff; color: var(--primary); border-color: #93c5fd; }
+.btn-sm.warn    { background: #fffbeb; color: #92400e; border-color: #fcd34d; }
+.btn-sm.danger  { background: #fef2f2; color: var(--error); border-color: #fca5a5; }
+
+.order-status {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.status-pending    { background: #fffbeb; color: #92400e; }
+.status-processing { background: #eff6ff; color: #1e40af; }
+.status-shipped    { background: #f3e8ff; color: #6b21a8; }
+.status-delivered  { background: #dcfce7; color: #14532d; }
+.status-cancelled  { background: #fef2f2; color: #b91c1c; }
+
+/* ── Order form – line items ─────────────────────────────── */
+.order-item-row {
+    display: grid;
+    grid-template-columns: 2fr 80px 120px 32px;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 0.6rem;
+}
+.order-item-row select, .order-item-row input {
+    padding: 0.5rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    width: 100%;
+}
+.btn-remove-item {
+    background: none;
+    border: none;
+    color: var(--error);
+    font-size: 1.1rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+}
+
+/* ── Documents section ───────────────────────────────────── */
+.doc-tools-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+.doc-tool-card h3 { margin-bottom: 0.25rem; }
+
+/* ── Settings – right column ─────────────────────────────── */
+.settings-right-col { display: flex; flex-direction: column; }
+.settings-grid { grid-template-columns: 1fr 340px; }

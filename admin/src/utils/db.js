@@ -9,7 +9,8 @@ const db = {
         if (!(await fs.pathExists(filePath))) {
             return [];
         }
-        return fs.readJson(filePath);
+        const data = await fs.readJson(filePath);
+        return data;
     },
     async write(file, data) {
         const filePath = path.join(DATA_DIR, `${file}.json`);
@@ -25,6 +26,10 @@ const db = {
                 watermarkSize: 24,
                 watermarkPosition: 'bottom-right',
                 watermarkLogoPath: null,
+                shopName: 'Electro Hub',
+                shopAddress: '',
+                shopPhone: '',
+                shopEmail: '',
                 geminiPrompt: 'Remove the background, keep the product shape and branding accurate, improve lighting, reduce shadows, center the product, and place it on a clean white studio background for e-commerce use.'
             };
         }
