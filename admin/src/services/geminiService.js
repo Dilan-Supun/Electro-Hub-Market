@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const API_KEY = process.env.GEMINI_API_KEY;
 const MODEL = 'nano-banana-pro-preview';
-const TEXT_MODEL = 'gemini-1.5-flash'; 
+const TEXT_MODEL = 'gemini-2.5-flash'; 
 
 const geminiService = {
     async enhanceImage(imagePath, prompt) {
@@ -58,7 +58,7 @@ geminiService.generateText = async function(prompt, apiKey) {
     const key = apiKey || API_KEY;
     try {
         const response = await axios.post(
-            `https://generativelanguage.googleapis.com/v1/models/${TEXT_MODEL}:generateContent?key=${key}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent?key=${key}`,
             { contents: [{ parts: [{ text: prompt }] }] },
             { headers: { 'Content-Type': 'application/json' } }
         );
