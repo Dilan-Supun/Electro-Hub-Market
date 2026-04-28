@@ -9,6 +9,8 @@ const fs = require('fs-extra');
 const REPO_ROOT = path.resolve(path.join(__dirname, '../../..'));
 // Only logos stored inside data/logo/ are allowed
 const LOGO_DIR = path.join(REPO_ROOT, 'data', 'logo');
+// Images must stay within the images/ subtree
+const IMAGES_DIR = path.join(REPO_ROOT, 'images');
 
 /**
  * Resolve and validate a stored logo path so it cannot escape the logo directory.
@@ -17,8 +19,21 @@ const LOGO_DIR = path.join(REPO_ROOT, 'data', 'logo');
 async function resolveLogoPath(relPath) {
     if (!relPath) return null;
     const resolved = path.resolve(path.join(REPO_ROOT, relPath));
-    if (!resolved.startsWith(LOGO_DIR + path.sep) && resolved !== LOGO_DIR) return null;
+    const logoDir = LOGO_DIR + path.sep;
+    if (!resolved.startsWith(logoDir) && resolved !== LOGO_DIR) return null;
     return (await fs.pathExists(resolved)) ? resolved : null;
+}
+
+/**
+ * Resolve a user-supplied image path and validate it stays within images/.
+ * Returns the absolute path when valid, or null otherwise.
+ */
+function resolveImagePath(relPath) {
+    if (!relPath || typeof relPath !== 'string') return null;
+    const resolved = path.resolve(path.join(REPO_ROOT, relPath));
+    const imagesDir = IMAGES_DIR + path.sep;
+    if (!resolved.startsWith(imagesDir) && resolved !== IMAGES_DIR) return null;
+    return resolved;
 }
 
 const mediaController = {
@@ -26,9 +41,9 @@ const mediaController = {
         try {
             const { productId, imagePath, customPrompt } = req.body;
             const settings = await db.getSettings();
-            
-            const fullPath = path.join(__dirname, '../../../', imagePath);
-            if (!(await fs.pathExists(fullPath))) {
+
+            const fullPath = resolveImagePath(imagePath);
+            if (!fullPath || !(await fs.pathExists(fullPath))) {
                 return res.status(404).json({ error: 'Source image not found' });
             }
 
@@ -50,8 +65,11 @@ const mediaController = {
         try {
             const { productId, imagePath } = req.body;
             const settings = await db.getSettings();
-            
-            const fullPath = path.join(__dirname, '../../../', imagePath);
+
+            const fullPath = resolveImagePath(imagePath);
+            if (!fullPath || !(await fs.pathExists(fullPath))) {
+                return res.status(404).json({ error: 'Source image not found' });
+            }
             const buffer = await fs.readFile(fullPath);
 
             // Resolve logo path if configured
@@ -81,8 +99,8 @@ const mediaController = {
             if (!imagePath) return res.status(400).json({ error: 'imagePath is required' });
 
             const settings = await db.getSettings();
-            const fullPath = path.join(__dirname, '../../../', imagePath);
-            if (!(await fs.pathExists(fullPath))) {
+            const fullPath = resolveImagePath(imagePath);
+            if (!fullPath || !(await fs.pathExists(fullPath))) {
                 return res.status(404).json({ error: 'Source image not found' });
             }
 
