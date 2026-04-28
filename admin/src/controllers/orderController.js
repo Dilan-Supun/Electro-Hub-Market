@@ -1,4 +1,4 @@
-const db = require('../utils/db');
+const sqlite = require('../utils/sqlite');
 const logger = require('../utils/logger');
 
 const STATUSES = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
@@ -12,8 +12,8 @@ function generateOrderId() {
 const orderController = {
     async getAll(req, res) {
         try {
-            const orders = await db.read('orders');
-            res.json(Array.isArray(orders) ? orders : []);
+            const orders = await sqlite.getAllOrders();
+            res.json(orders);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -22,34 +22,24 @@ const orderController = {
     async create(req, res) {
         try {
             const { customerId, items, shippingFee, notes, status } = req.body;
-
             if (!customerId || !Array.isArray(items) || items.length === 0) {
                 return res.status(400).json({ error: 'Customer and at least one item are required' });
             }
-
-            // Validate customer exists
-            const customers = await db.read('customers');
-            const customer = customers.find(c => c.id === customerId);
+            const customer = await sqlite.getCustomerById(customerId);
             if (!customer) return res.status(404).json({ error: 'Customer not found' });
 
-            // Validate items and calculate totals
-            const products = await db.read('products');
-            const lineItems = [];
             for (const item of items) {
                 if (!item.productId || !item.qty || item.qty < 1) {
                     return res.status(400).json({ error: 'Each item needs a productId and qty >= 1' });
                 }
-                const product = products.find(p => p.id === item.productId);
-                const unitPrice = item.unitPrice !== undefined
-                    ? parseFloat(item.unitPrice)
-                    : parseFloat(product ? product.price : 0) || 0;
-                lineItems.push({
-                    productId: item.productId,
-                    title: product ? product.title : item.productId,
-                    qty: parseInt(item.qty),
-                    unitPrice
-                });
             }
+            const lineItems = items.map(item => ({
+                productId: item.productId,
+                title: item.title || item.productId,
+                qty: parseInt(item.qty),
+                unitPrice: parseFloat(item.unitPrice) || 0,
+                fragile: item.fragile || false
+            }));
 
             const subtotal = lineItems.reduce((s, i) => s + i.qty * i.unitPrice, 0);
             const shipping = parseFloat(shippingFee) || 0;
@@ -71,9 +61,7 @@ const orderController = {
                 createdAt: new Date().toISOString()
             };
 
-            const orders = await db.read('orders');
-            orders.unshift(order);
-            await db.write('orders', orders);
+            await sqlite.createOrder(order);
             await logger.log('create order', { id: order.id, customer: customer.name, total });
             res.json({ success: true, order });
         } catch (error) {
@@ -84,16 +72,29 @@ const orderController = {
     async updateStatus(req, res) {
         try {
             const { id } = req.params;
-            const { status } = req.body;
+            const { status, trackingNumber, shippingCarrier } = req.body;
             if (!STATUSES.includes(status)) {
                 return res.status(400).json({ error: 'Invalid status' });
             }
-            const orders = await db.read('orders');
-            const order = orders.find(o => o.id === id);
+            const order = await sqlite.getOrderById(id);
             if (!order) return res.status(404).json({ error: 'Order not found' });
-            order.status = status;
-            order.updatedAt = new Date().toISOString();
-            await db.write('orders', orders);
+
+            const extra = {};
+            if (trackingNumber) extra.trackingNumber = trackingNumber;
+            if (shippingCarrier) extra.shippingCarrier = shippingCarrier;
+            if (status === 'shipped') extra.shippedAt = new Date().toISOString();
+            if (status === 'delivered') extra.deliveredAt = new Date().toISOString();
+
+            await sqlite.updateOrderStatus(id, status, extra);
+
+            if (status === 'shipped' && (trackingNumber || shippingCarrier)) {
+                await sqlite.upsertShipping(id, {
+                    carrier: shippingCarrier || '',
+                    trackingNumber: trackingNumber || '',
+                    status: 'shipped'
+                });
+            }
+
             await logger.log('update order status', { id, status });
             res.json({ success: true });
         } catch (error) {
@@ -104,12 +105,9 @@ const orderController = {
     async remove(req, res) {
         try {
             const { id } = req.params;
-            const orders = await db.read('orders');
-            const filtered = orders.filter(o => o.id !== id);
-            if (filtered.length === orders.length) {
-                return res.status(404).json({ error: 'Order not found' });
-            }
-            await db.write('orders', filtered);
+            const order = await sqlite.getOrderById(id);
+            if (!order) return res.status(404).json({ error: 'Order not found' });
+            await sqlite.deleteOrder(id);
             await logger.log('delete order', { id });
             res.json({ success: true });
         } catch (error) {

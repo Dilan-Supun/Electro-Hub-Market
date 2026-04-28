@@ -10,6 +10,7 @@ const importController = require('../controllers/importController');
 const customerController = require('../controllers/customerController');
 const orderController = require('../controllers/orderController');
 const documentController = require('../controllers/documentController');
+const shippingController = require('../controllers/shippingController');
 const db = require('../utils/db');
 const logger = require('../utils/logger');
 
@@ -99,6 +100,12 @@ router.get('/orders', authenticate, orderController.getAll);
 router.post('/orders', authenticate, orderController.create);
 router.patch('/orders/:id/status', authenticate, orderController.updateStatus);
 router.delete('/orders/:id', authenticate, orderController.remove);
+
+// Shipping
+router.get('/shipping', authenticate, shippingController.getAll);
+router.get('/shipping/:orderId', authenticate, shippingController.getByOrder);
+router.post('/shipping/:orderId', authenticate, shippingController.upsert);
+router.delete('/shipping/:orderId', authenticate, shippingController.remove);
 
 // Documents (printable HTML — no auth header required so they open directly in browser tabs)
 router.get('/documents/invoice/:id', documentController.invoice);
