@@ -151,5 +151,23 @@
     "stored_filename": "enhanced_1777284212181.jpg",
     "image_url": "images/products/studio/generated/enhanced_1777284212181.jpg",
     "created_at": "2026-04-27T10:03:32.186Z"
+  },
+  {
+    "product_id": "studio",
+    "file_type": "jpg",
+    "source_type": "final",
+    "original_filename": "watermarked_1777383364721.jpg",
+    "stored_filename": "watermarked_1777383364721.jpg",
+    "image_url": "images/products/studio/final/watermarked_1777383364721.jpg",
+    "created_at": "2026-04-28T13:36:04.735Z"
+  },
+  {
+    "product_id": "studio",
+    "file_type": "jpg",
+    "source_type": "final",
+    "original_filename": "final_1777383379737.jpg",
+    "stored_filename": "final_1777383379737.jpg",
+    "image_url": "images/products/studio/final/final_1777383379737.jpg",
+    "created_at": "2026-04-28T13:36:19.748Z"
   }
 ]

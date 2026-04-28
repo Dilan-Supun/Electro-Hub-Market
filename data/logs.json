@@ -1,5 +1,46 @@
 [
   {
+    "id": 1777383379751,
+    "timestamp": "2026-04-28T13:36:19.751Z",
+    "action": "save final AI image",
+    "details": {
+      "productId": "studio",
+      "watermarked": true
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777383364738,
+    "timestamp": "2026-04-28T13:36:04.738Z",
+    "action": "apply watermark",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777383362862.png"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777383277249,
+    "timestamp": "2026-04-28T13:34:37.249Z",
+    "action": "create order",
+    "details": {
+      "id": "ORD-20260428-77246",
+      "customer": "Saman Kumara",
+      "total": 3350
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777383259297,
+    "timestamp": "2026-04-28T13:34:19.297Z",
+    "action": "add customer",
+    "details": {
+      "id": "1",
+      "name": "Saman Kumara"
+    },
+    "admin": "admin"
+  },
+  {
     "id": 1777374787835,
     "timestamp": "2026-04-28T11:13:07.835Z",
     "action": "update settings",

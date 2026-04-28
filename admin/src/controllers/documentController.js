@@ -21,7 +21,7 @@ const documentController = {
     async invoice(req, res) {
         try {
             const { id } = req.params;
-            const order = sqlite.getOrderById(id);
+            const order = await sqlite.getOrderById(id);
             if (!order) return res.status(404).json({ error: 'Order not found' });
 
             const settings = await db.getSettings();
@@ -153,7 +153,7 @@ const documentController = {
     async packingLabel(req, res) {
         try {
             const { id } = req.params;
-            const order = sqlite.getOrderById(id);
+            const order = await sqlite.getOrderById(id);
             if (!order) return res.status(404).json({ error: 'Order not found' });
 
             const settings = await db.getSettings();

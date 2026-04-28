@@ -4,7 +4,7 @@ const logger = require('../utils/logger');
 const customerController = {
     async getAll(req, res) {
         try {
-            const customers = sqlite.getAllCustomers();
+            const customers = await sqlite.getAllCustomers();
             res.json(customers);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -19,12 +19,12 @@ const customerController = {
                 return res.status(400).json({ error: 'Customer ID and Name are required' });
             }
 
-            const existing = sqlite.getCustomerById(data.id);
+            const existing = await sqlite.getCustomerById(data.id);
             if (existing) {
-                sqlite.upsertCustomer({ ...data, updatedAt: new Date().toISOString() });
+                await sqlite.upsertCustomer({ ...data, updatedAt: new Date().toISOString() });
                 await logger.log('edit customer', { id: data.id, name: data.name });
             } else {
-                sqlite.upsertCustomer({ ...data, createdAt: new Date().toISOString() });
+                await sqlite.upsertCustomer({ ...data, createdAt: new Date().toISOString() });
                 await logger.log('add customer', { id: data.id, name: data.name });
             }
 
@@ -37,7 +37,7 @@ const customerController = {
     async remove(req, res) {
         try {
             const { id } = req.params;
-            const deleted = sqlite.deleteCustomer(id);
+            const deleted = await sqlite.deleteCustomer(id);
             if (!deleted) {
                 return res.status(404).json({ error: 'Customer not found' });
             }
