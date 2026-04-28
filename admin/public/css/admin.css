@@ -400,3 +400,19 @@ body { font-family: 'General Sans', sans-serif; background: var(--bg-main); colo
 /* ── Settings – right column ─────────────────────────────── */
 .settings-right-col { display: flex; flex-direction: column; }
 .settings-grid { grid-template-columns: 1fr 340px; }
+
+/* ── Product Image Upload Zone ───────────────────────────── */
+.product-img-upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem;
+    text-align: center;
+    cursor: pointer;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: border-color 0.15s;
+}
+.product-img-upload-zone:hover { border-color: var(--primary); }

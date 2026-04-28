@@ -13,6 +13,11 @@ const shippingController = require('../controllers/shippingController');
 const documentController = require('../controllers/documentController');
 const db = require('../utils/db');
 const logger = require('../utils/logger');
+const facebookService = require('../services/facebookService');
+const whatsappService = require('../services/whatsappService');
+const geminiService = require('../services/geminiService');
+
+const REPO_ROOT = path.resolve(path.join(__dirname, '../../..'));
 
 const upload = multer({ dest: 'uploads/' });
 const studioUpload = multer({
@@ -35,11 +40,50 @@ const logoUpload = multer({
             cb(null, dir);
         },
         filename: (req, file, cb) => {
-            // Always overwrite as "logo.<ext>" so there is only one active logo
             const ext = path.extname(file.originalname).toLowerCase();
             const allowed = ['.png', '.jpg', '.jpeg', '.webp', '.svg'];
             if (!allowed.includes(ext)) return cb(new Error('Unsupported image format'));
             cb(null, `logo${ext}`);
+        }
+    }),
+    fileFilter: (req, file, cb) => {
+        if (!file.mimetype.startsWith('image/')) return cb(new Error('Only image files are allowed'));
+        cb(null, true);
+    }
+});
+
+// Multer for product images (saved to temp, then moved by the route)
+const productImageUpload = multer({
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            const dir = path.join(__dirname, '../../../uploads/product-images');
+            fs.ensureDirSync(dir);
+            cb(null, dir);
+        },
+        filename: (req, file, cb) => {
+            const ext = path.extname(file.originalname).toLowerCase();
+            cb(null, `product_${Date.now()}${ext}`);
+        }
+    }),
+    fileFilter: (req, file, cb) => {
+        if (!file.mimetype.startsWith('image/')) return cb(new Error('Only image files are allowed'));
+        cb(null, true);
+    }
+});
+
+// Multer for shop logo
+const shopImageUpload = multer({
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            const dir = path.join(__dirname, '../../../data/shop');
+            fs.ensureDirSync(dir);
+            cb(null, dir);
+        },
+        filename: (req, file, cb) => {
+            const ext = path.extname(file.originalname).toLowerCase();
+            const allowed = ['.png', '.jpg', '.jpeg', '.webp', '.svg'];
+            if (!allowed.includes(ext)) return cb(new Error('Unsupported image format'));
+            cb(null, `shop-logo${ext}`);
         }
     }),
     fileFilter: (req, file, cb) => {
@@ -124,6 +168,168 @@ router.post('/settings', authenticate, async (req, res) => {
     await db.write('settings', req.body);
     await logger.log('update settings');
     res.json({ success: true });
+});
+
+// Product Image Upload
+router.post('/products/:id/upload-image', authenticate, productImageUpload.single('image'), async (req, res) => {
+    if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
+    const productId = req.params.id;
+    try {
+        const ext = path.extname(req.file.filename);
+        const destDir = path.join(REPO_ROOT, 'images', 'products', productId, 'original');
+        await fs.ensureDir(destDir);
+        const destFilename = `product_${Date.now()}${ext}`;
+        const destPath = path.join(destDir, destFilename);
+        await fs.move(req.file.path, destPath, { overwrite: true });
+        const relPath = `images/products/${productId}/original/${destFilename}`;
+        await logger.log('upload product image', { productId, path: relPath });
+        res.json({ success: true, imagePath: relPath });
+    } catch (err) {
+        // Clean up temp file on error
+        await fs.remove(req.file.path).catch(() => {});
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Shop Logo Upload
+router.post('/settings/upload-shop-image', authenticate, shopImageUpload.single('shopImage'), async (req, res) => {
+    if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
+    const relPath = `data/shop/${req.file.filename}`;
+    const settings = await db.getSettings();
+    settings.shopLogoPath = relPath;
+    await db.write('settings', settings);
+    await logger.log('upload shop logo', { path: relPath });
+    res.json({ success: true, shopLogoPath: relPath });
+});
+
+// ── Facebook Integration ──────────────────────────────────────────
+
+// Post a single product to Facebook Page feed
+router.post('/facebook/post-product/:id', authenticate, async (req, res) => {
+    try {
+        const products = await db.read('products');
+        const product = products.find(p => p.id === req.params.id && !p.isDeleted);
+        if (!product) return res.status(404).json({ error: 'Product not found' });
+
+        const settings = await db.getSettings();
+        const baseUrl = settings.shopUrl || process.env.SHOP_URL || '';
+        const imageUrl = product.image ? `${baseUrl}/${product.image}` : '';
+        const usePhoto = req.body.usePhoto && imageUrl;
+
+        const result = usePhoto
+            ? await facebookService.postProductWithPhoto(product, imageUrl, settings)
+            : await facebookService.postProductToPage(product, imageUrl, settings);
+
+        await logger.log('facebook post product', { productId: product.id, postId: result.postId });
+        res.json(result);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Sync a single product to FB Catalog
+router.post('/facebook/sync-catalog/:id', authenticate, async (req, res) => {
+    try {
+        const products = await db.read('products');
+        const product = products.find(p => p.id === req.params.id);
+        if (!product) return res.status(404).json({ error: 'Product not found' });
+
+        const settings = await db.getSettings();
+        const baseUrl = settings.shopUrl || process.env.SHOP_URL || '';
+        const imageUrl = product.image ? `${baseUrl}/${product.image}` : '';
+
+        const result = await facebookService.syncProductToCatalog(product, imageUrl, settings);
+        await logger.log('facebook sync catalog', { productId: product.id });
+        res.json(result);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Bulk sync all products to FB Catalog
+router.post('/facebook/bulk-sync', authenticate, async (req, res) => {
+    try {
+        const products = await db.read('products');
+        const settings = await db.getSettings();
+        const baseUrl = settings.shopUrl || process.env.SHOP_URL || '';
+        const results = await facebookService.bulkSyncToCatalog(
+            products,
+            p => p.image ? `${baseUrl}/${p.image}` : '',
+            settings
+        );
+        await logger.log('facebook bulk sync', { count: products.length });
+        res.json({ success: true, results });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ── WhatsApp Integration ──────────────────────────────────────────
+
+// Send an order status notification to the customer via WhatsApp
+router.post('/whatsapp/notify/:orderId', authenticate, async (req, res) => {
+    try {
+        const orders = await db.read('orders');
+        const order = orders.find(o => o.id === req.params.orderId);
+        if (!order) return res.status(404).json({ error: 'Order not found' });
+
+        const customers = await db.read('customers');
+        const customer = customers.find(c => c.id === order.customerId);
+        if (!customer) return res.status(404).json({ error: 'Customer not found' });
+        if (!customer.phone) return res.status(400).json({ error: 'Customer has no phone number' });
+
+        const settings = await db.getSettings();
+        const { type, trackingInfo } = req.body;
+        let result;
+
+        if (type === 'shipped') {
+            result = await whatsappService.sendShippingNotification(order, customer, trackingInfo || {}, settings);
+        } else if (type === 'delivered') {
+            result = await whatsappService.sendDeliveryConfirmation(order, customer, settings);
+        } else {
+            result = await whatsappService.sendOrderConfirmation(order, customer, settings);
+        }
+
+        await logger.log('whatsapp notify', { orderId: order.id, customerId: customer.id, type: type || 'confirmation' });
+        res.json({ success: true, result });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ── Gemini AI Text Generation ─────────────────────────────────────
+
+router.post('/ai/generate-text', authenticate, async (req, res) => {
+    try {
+        const { type, productId, customPrompt } = req.body;
+        const settings = await db.getSettings();
+        const apiKey = settings.geminiApiKey || process.env.GEMINI_API_KEY;
+
+        let result;
+        if (type === 'description' || type === 'fb-caption' || type === 'hashtags') {
+            if (!productId) return res.status(400).json({ error: 'productId is required for product text generation' });
+            const products = await db.read('products');
+            const product = products.find(p => p.id === productId);
+            if (!product) return res.status(404).json({ error: 'Product not found' });
+
+            if (type === 'description') {
+                result = await geminiService.generateProductDescription(product, apiKey);
+            } else if (type === 'fb-caption') {
+                result = await geminiService.generateFBCaption(product, apiKey);
+            } else {
+                result = await geminiService.generateHashtags(product, apiKey);
+            }
+        } else if (customPrompt) {
+            result = await geminiService.generateText(customPrompt, apiKey);
+        } else {
+            return res.status(400).json({ error: 'Provide type or customPrompt' });
+        }
+
+        await logger.log('ai generate text', { type, productId });
+        res.json({ success: true, result });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 module.exports = router;
