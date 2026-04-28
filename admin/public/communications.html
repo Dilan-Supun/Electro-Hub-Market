@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communications Management - Electro Hub</title>
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        .comm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
+        .comm-card { display: flex; flex-direction: column; gap: 1.5rem; }
+        .status-header { display: flex; justify-content: space-between; align-items: center; }
+        .status-indicator { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; font-size: 0.9rem; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .status-dot.online { background: var(--success); box-shadow: 0 0 8px var(--success); }
+        .status-dot.offline { background: var(--error); box-shadow: 0 0 8px var(--error); }
+        .tool-box { background: var(--bg-main); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border); }
+        .tool-box h4 { margin-bottom: 1rem; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; }
+        .log-box { margin-top: 1rem; padding: 0.75rem; background: #0f172a; color: #38bdf8; font-family: monospace; font-size: 0.8rem; border-radius: var(--radius-sm); max-height: 150px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <div id="admin-layout" class="view active">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Electro Hub</h3>
+                <p>Communications</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item" style="text-decoration:none;">📊 Back to Dashboard</a>
+                <button class="nav-item active">📡 Comm Manager</button>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <h2>Communications Management</h2>
+                    <p class="text-muted">Manual Actions for Facebook & WhatsApp</p>
+                </div>
+            </header>
+
+            <div class="content-section active">
+                <div class="comm-grid">
+                    <!-- Facebook Panel -->
+                    <div class="comm-card card">
+                        <div class="status-header">
+                            <h3>🔵 Facebook Page & Catalog</h3>
+                            <div id="fb-status" class="status-indicator">
+                                <div class="status-dot offline"></div>
+                                <span>Checking...</span>
+                            </div>
+                        </div>
+
+                        <div class="tool-box">
+                            <h4>📝 Manual Post Tool</h4>
+                            <div class="form-group">
+                                <label>Select Product</label>
+                                <select id="fb-product-select"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Post Caption</label>
+                                <div style="display:flex; gap:0.5rem; flex-direction:column;">
+                                    <textarea id="fb-caption" rows="4" placeholder="Write your caption here..."></textarea>
+                                    <button id="btn-gen-caption" class="btn-outline btn-sm" style="align-self: flex-start;">✨ Generate AI Caption</button>
+                                </div>
+                            </div>
+                            <button id="btn-fb-post" class="btn-primary btn-block">Post to Facebook Page</button>
+                        </div>
+
+                        <div class="tool-box">
+                            <h4>🛒 Catalog Sync Tool</h4>
+                            <p class="text-muted" style="font-size:0.8rem; margin-bottom:1rem;">Sync your entire inventory to Facebook Shop in one click.</p>
+                            <button id="btn-fb-sync" class="btn-success btn-block">Bulk Sync All Products to FB Shop</button>
+                            <div id="fb-sync-log" class="log-box" style="display:none;"></div>
+                        </div>
+                    </div>
+
+                    <!-- WhatsApp Panel -->
+                    <div class="comm-card card">
+                        <div class="status-header">
+                            <h3>🟢 WhatsApp Business</h3>
+                            <div id="wa-status" class="status-indicator">
+                                <div class="status-dot offline"></div>
+                                <span>Checking...</span>
+                            </div>
+                        </div>
+
+                        <div class="tool-box">
+                            <h4>🧪 Test Connection Tool</h4>
+                            <div class="form-group">
+                                <label>Test Phone Number</label>
+                                <input type="text" id="wa-test-phone" placeholder="e.g. 94771234567">
+                            </div>
+                            <button id="btn-wa-test" class="btn-primary btn-block">Send Test Message</button>
+                        </div>
+
+                        <div class="tool-box">
+                            <h4>📦 Manual Order Notification</h4>
+                            <div class="form-group">
+                                <label>Select Recent Order</label>
+                                <select id="wa-order-select"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Message Type</label>
+                                <select id="wa-msg-type">
+                                    <option value="confirmation">Order Confirmation</option>
+                                    <option value="shipped">Order Shipped</option>
+                                    <option value="delivered">Order Delivered</option>
+                                </select>
+                            </div>
+                            <button id="btn-wa-notify" class="btn-success btn-block">Send Notification</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/communications.js"></script>
+</body>
+</html>

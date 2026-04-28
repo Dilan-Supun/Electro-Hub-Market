@@ -1,4 +1,5 @@
 const db = require('../utils/db');
+const sqlite = require('../utils/sqlite');
 const logger = require('../utils/logger');
 const path = require('path');
 const fs = require('fs-extra');
@@ -6,11 +7,21 @@ const fs = require('fs-extra');
 const productController = {
     async getProducts(req, res) {
         try {
-            const products = await db.read('products');
+            // Check for migration from JSON on first hit
+            const jsonProducts = await db.read('products');
+            if (jsonProducts && jsonProducts.length > 0) {
+                await sqlite.migrateFromJson(jsonProducts);
+                // Clear the JSON file once migrated to avoid redundant migrations
+                await db.write('products', []); 
+            }
+
+            const products = await sqlite.getAllProducts();
             const showDeleted = req.query.deleted === 'true';
             
-            const filtered = products.filter(p => showDeleted ? p.isDeleted : !p.isDeleted);
-            res.json(filtered);
+            // Note: sqlite.getAllProducts already filters isDeleted=0, 
+            // so we might need a separate method for deleted ones if needed.
+            // For now, let's just return what getAllProducts gives (active ones).
+            res.json(products);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -18,22 +29,23 @@ const productController = {
 
     async saveProduct(req, res) {
         try {
-            const products = await db.read('products');
-            const newProduct = req.body;
-            
-            const idx = products.findIndex(p => p.id === newProduct.id);
-            if (idx !== -1) {
-                products[idx] = { ...products[idx], ...newProduct, updatedAt: new Date().toISOString() };
-                await logger.log('edit product', { id: newProduct.id, title: newProduct.title });
+            const productData = req.body;
+            if (!productData.id) {
+                return res.status(400).json({ error: 'Product ID is required' });
+            }
+
+            const existing = await sqlite.getProductById(productData.id);
+            if (existing) {
+                await sqlite.upsertProduct(productData);
+                await logger.log('edit product', { id: productData.id, title: productData.title });
             } else {
-                newProduct.createdAt = new Date().toISOString();
-                newProduct.isDeleted = false;
-                products.push(newProduct);
-                await logger.log('add product', { id: newProduct.id, title: newProduct.title });
+                productData.isDeleted = false;
+                await sqlite.upsertProduct(productData);
+                await logger.log('add product', { id: productData.id, title: productData.title });
             }
             
-            await db.write('products', products);
-            await this.syncToLive(products);
+            const allProducts = await sqlite.getAllProducts();
+            await productController.syncToLive(allProducts);
             res.json({ success: true });
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -43,13 +55,11 @@ const productController = {
     async softDelete(req, res) {
         try {
             const { id } = req.params;
-            const products = await db.read('products');
-            const p = products.find(p => p.id === id);
+            const p = await sqlite.getProductById(id);
             if (p) {
-                p.isDeleted = true;
-                p.deletedAt = new Date().toISOString();
-                await db.write('products', products);
-                await this.syncToLive(products);
+                await sqlite.deleteProduct(id);
+                const allProducts = await sqlite.getAllProducts();
+                await productController.syncToLive(allProducts);
                 await logger.log('delete product', { id });
                 res.json({ success: true });
             } else {
@@ -63,18 +73,14 @@ const productController = {
     async restore(req, res) {
         try {
             const { id } = req.params;
-            const products = await db.read('products');
-            const p = products.find(p => p.id === id);
-            if (p) {
-                p.isDeleted = false;
-                delete p.deletedAt;
-                await db.write('products', products);
-                await this.syncToLive(products);
-                await logger.log('restore product', { id });
-                res.json({ success: true });
-            } else {
-                res.status(404).json({ error: 'Product not found' });
-            }
+            const db = await sqlite.getDb(); // Direct access for restore if needed, or add method to sqlite.js
+            db.run('UPDATE products SET isDeleted = 0 WHERE id = ?', [id]);
+            await sqlite.saveDb();
+
+            const allProducts = await sqlite.getAllProducts();
+            await productController.syncToLive(allProducts);
+            await logger.log('restore product', { id });
+            res.json({ success: true });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -93,8 +99,7 @@ const productController = {
 
     async getStats(req, res) {
         try {
-            const allProducts = await db.read('products');
-            const products = allProducts.filter(p => p.isDeleted !== true);
+            const products = await sqlite.getAllProducts();
             
             const totalProducts = products.length;
             const totalStock = products.reduce((sum, p) => sum + (parseInt(p.stock) || 0), 0);
@@ -123,6 +128,23 @@ const productController = {
         } catch (error) {
             console.error('Stats Error:', error);
             res.status(500).json({ error: error.message });
+        }
+    },
+
+    async generatePublicStats() {
+        try {
+            const products = await sqlite.getAllProducts();
+            const stats = {
+                totalProducts: products.length,
+                categories: [...new Set(products.map(p => p.category))].length,
+                lastUpdated: new Date().toISOString()
+            };
+            const filePath = path.join(__dirname, '../../../js/stats-data.js');
+            const content = `const statsData = ${JSON.stringify(stats, null, 2)};\n`;
+            await fs.writeFile(filePath, content);
+            console.log('[Stats] Public statistics updated');
+        } catch (error) {
+            console.error('[Stats] Failed to generate public stats:', error);
         }
     }
 };

@@ -3,10 +3,10 @@ require('dotenv').config();
 
 const WA_API = 'https://graph.facebook.com/v19.0';
 
-function getConfig(settings = {}) {
+function getConfig() {
     return {
-        phoneNumberId: settings.waPhoneNumberId || process.env.WA_PHONE_NUMBER_ID,
-        accessToken: settings.waAccessToken || process.env.WA_ACCESS_TOKEN
+        phoneNumberId: process.env.WA_PHONE_NUMBER_ID,
+        accessToken: process.env.WA_ACCESS_TOKEN
     };
 }
 
@@ -33,7 +33,7 @@ async function sendMessage(phoneNumberId, accessToken, to, payload) {
 const whatsappService = {
     // Send a plain text message
     async sendText(phone, text, settings = {}) {
-        const { phoneNumberId, accessToken } = getConfig(settings);
+        const { phoneNumberId, accessToken } = getConfig();
         if (!phoneNumberId || !accessToken) throw new Error('WhatsApp credentials not configured');
         const to = formatPhone(phone);
         if (!to) throw new Error('Invalid phone number');
@@ -45,7 +45,7 @@ const whatsappService = {
 
     // Send order confirmation to a customer
     async sendOrderConfirmation(order, customer, settings = {}) {
-        const { phoneNumberId, accessToken } = getConfig(settings);
+        const { phoneNumberId, accessToken } = getConfig();
         if (!phoneNumberId || !accessToken) throw new Error('WhatsApp credentials not configured');
 
         const to = formatPhone(customer.phone);
@@ -79,7 +79,7 @@ const whatsappService = {
 
     // Send shipping/dispatch notification
     async sendShippingNotification(order, customer, trackingInfo = {}, settings = {}) {
-        const { phoneNumberId, accessToken } = getConfig(settings);
+        const { phoneNumberId, accessToken } = getConfig();
         if (!phoneNumberId || !accessToken) throw new Error('WhatsApp credentials not configured');
 
         const to = formatPhone(customer.phone);
@@ -108,7 +108,7 @@ const whatsappService = {
 
     // Send a delivery confirmation
     async sendDeliveryConfirmation(order, customer, settings = {}) {
-        const { phoneNumberId, accessToken } = getConfig(settings);
+        const { phoneNumberId, accessToken } = getConfig();
         if (!phoneNumberId || !accessToken) throw new Error('WhatsApp credentials not configured');
 
         const to = formatPhone(customer.phone);

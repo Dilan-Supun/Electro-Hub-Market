@@ -66,6 +66,23 @@ async function getDb() {
                 updatedAt TEXT,
                 FOREIGN KEY (orderId) REFERENCES orders(id)
             );
+
+            CREATE TABLE IF NOT EXISTS products (
+                id TEXT PRIMARY KEY,
+                title TEXT NOT NULL,
+                price REAL DEFAULT 0,
+                stock INTEGER DEFAULT 0,
+                category TEXT,
+                description TEXT,
+                condition TEXT,
+                features TEXT,
+                buyingDelivery TEXT,
+                tags TEXT,
+                image TEXT,
+                isDeleted INTEGER DEFAULT 0,
+                createdAt TEXT,
+                updatedAt TEXT
+            );
         `);
         saveDb();
     }
@@ -208,5 +225,80 @@ module.exports = {
         db.run('DELETE FROM shipping WHERE orderId = ?', [orderId]);
         saveDb();
         return true;
+    },
+
+    // Products
+    async getAllProducts() {
+        const db = await getDb();
+        const res = db.exec('SELECT * FROM products WHERE isDeleted = 0 ORDER BY createdAt DESC');
+        const rows = getRows(res);
+        return rows.map(p => ({
+            ...p,
+            price: parseFloat(p.price || 0),
+            stock: parseInt(p.stock || 0),
+            features: JSON.parse(p.features || '[]'),
+            buyingDelivery: JSON.parse(p.buyingDelivery || '[]'),
+            tags: JSON.parse(p.tags || '[]'),
+            isDeleted: !!p.isDeleted
+        }));
+    },
+    async getProductById(id) {
+        const db = await getDb();
+        const res = db.exec('SELECT * FROM products WHERE id = ?', [id]);
+        const rows = getRows(res);
+        if (rows.length === 0) return null;
+        const p = rows[0];
+        return {
+            ...p,
+            price: parseFloat(p.price || 0),
+            stock: parseInt(p.stock || 0),
+            features: JSON.parse(p.features || '[]'),
+            buyingDelivery: JSON.parse(p.buyingDelivery || '[]'),
+            tags: JSON.parse(p.tags || '[]'),
+            isDeleted: !!p.isDeleted
+        };
+    },
+    async upsertProduct(data) {
+        const db = await getDb();
+        const existing = await this.getProductById(data.id);
+        
+        const payload = {
+            ...data,
+            features: JSON.stringify(data.features || []),
+            buyingDelivery: JSON.stringify(data.buyingDelivery || []),
+            tags: JSON.stringify(data.tags || []),
+            isDeleted: data.isDeleted ? 1 : 0,
+            updatedAt: new Date().toISOString()
+        };
+
+        if (existing) {
+            const columns = Object.keys(payload).filter(k => k !== 'id');
+            const sets = columns.map(c => `${c} = ?`).join(', ');
+            db.run(`UPDATE products SET ${sets} WHERE id = ?`, [...columns.map(k => payload[k]), data.id]);
+        } else {
+            if (!payload.createdAt) payload.createdAt = payload.updatedAt;
+            const columns = Object.keys(payload);
+            const placeholders = columns.map(() => '?').join(', ');
+            db.run(`INSERT INTO products (${columns.join(', ')}) VALUES (${placeholders})`, Object.values(payload));
+        }
+        saveDb();
+    },
+    async deleteProduct(id) {
+        const db = await getDb();
+        db.run('UPDATE products SET isDeleted = 1, updatedAt = ? WHERE id = ?', [new Date().toISOString(), id]);
+        saveDb();
+        return true;
+    },
+    async migrateFromJson(jsonProducts) {
+        const db = await getDb();
+        const res = db.exec('SELECT COUNT(*) as count FROM products');
+        const count = res[0].values[0][0];
+        if (count === 0 && jsonProducts && jsonProducts.length > 0) {
+            console.log(`[SQLite] Migrating ${jsonProducts.length} products from JSON...`);
+            for (const p of jsonProducts) {
+                await this.upsertProduct(p);
+            }
+            console.log('[SQLite] Migration complete.');
+        }
     }
 };

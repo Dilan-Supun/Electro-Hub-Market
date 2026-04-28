@@ -2,7 +2,7 @@ const axios = require('axios');
 const fs = require('fs-extra');
 require('dotenv').config();
 
-const API_KEY = process.env.GEMINI_API_KEY || 'AIzaSyBakn6N88UpfOEne2Il5OwN9uHsr9PQuts';
+const API_KEY = process.env.GEMINI_API_KEY;
 const MODEL = 'nano-banana-pro-preview';
 const TEXT_MODEL = 'gemini-1.5-flash'; 
 

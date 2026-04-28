@@ -3,18 +3,18 @@ require('dotenv').config();
 
 const FB_GRAPH = 'https://graph.facebook.com/v19.0';
 
-function getConfig(settings = {}) {
+function getConfig() {
     return {
-        pageId: settings.fbPageId || process.env.FB_PAGE_ID,
-        accessToken: settings.fbAccessToken || process.env.FB_ACCESS_TOKEN,
-        catalogId: settings.fbCatalogId || process.env.FB_CATALOG_ID || null
+        pageId: process.env.FB_PAGE_ID,
+        accessToken: process.env.FB_ACCESS_TOKEN,
+        catalogId: process.env.FB_CATALOG_ID || null
     };
 }
 
 const facebookService = {
     // Post a product to the Facebook Page feed
     async postProductToPage(product, imageUrl, settings = {}) {
-        const { pageId, accessToken } = getConfig(settings);
+        const { pageId, accessToken } = getConfig();
         if (!pageId || !accessToken) throw new Error('Facebook credentials not configured');
 
         const message = [
@@ -34,7 +34,7 @@ const facebookService = {
 
     // Post with photo (uses /photos endpoint for image post)
     async postProductWithPhoto(product, imageUrl, settings = {}) {
-        const { pageId, accessToken } = getConfig(settings);
+        const { pageId, accessToken } = getConfig();
         if (!pageId || !accessToken) throw new Error('Facebook credentials not configured');
 
         const caption = [
@@ -55,7 +55,7 @@ const facebookService = {
 
     // Sync product to FB Catalog (Product Catalog API)
     async syncProductToCatalog(product, imageUrl, settings = {}) {
-        const { catalogId, accessToken } = getConfig(settings);
+        const { catalogId, accessToken } = getConfig();
         if (!catalogId || !accessToken) throw new Error('FB_CATALOG_ID not configured');
 
         const payload = {

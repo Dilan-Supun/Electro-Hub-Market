@@ -567,14 +567,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!p) return;
 
         document.getElementById('p-id').value = p.id;
+        document.getElementById('p-id').readOnly = true;
         document.getElementById('p-title').value = p.title;
         document.getElementById('p-price').value = p.price;
         document.getElementById('p-stock').value = p.stock || 0;
         document.getElementById('p-category').value = p.category;
         document.getElementById('p-description').value = p.description || '';
+        document.getElementById('p-tags').value = (p.tags || []).join('; ');
         document.getElementById('p-condition').value = p.condition || '';
         document.getElementById('p-features').value = (p.features || []).join('; ');
         document.getElementById('p-buying').value = (p.buyingDelivery || []).join('; ');
+        document.getElementById('p-image-path').value = p.image || '';
+        
+        const preview = document.getElementById('p-image-preview');
+        const prompt = document.getElementById('p-image-prompt');
+        if (p.image) {
+            preview.src = '/' + p.image;
+            preview.style.display = 'block';
+            prompt.style.display = 'none';
+        } else {
+            preview.style.display = 'none';
+            prompt.style.display = 'block';
+        }
         
         modal.classList.add('active');
         modal.style.display = 'flex';
@@ -583,6 +597,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-add-product').onclick = () => {
         editingId = null;
         productForm.reset();
+        document.getElementById('p-id').readOnly = false;
+        document.getElementById('p-image-preview').style.display = 'none';
+        document.getElementById('p-image-prompt').style.display = 'block';
+        document.getElementById('p-image-path').value = '';
         modal.style.display = 'flex';
     };
 
@@ -599,9 +617,11 @@ document.addEventListener('DOMContentLoaded', () => {
             stock: document.getElementById('p-stock').value,
             category: document.getElementById('p-category').value,
             description: document.getElementById('p-description').value,
+            tags: document.getElementById('p-tags').value.split(';').map(s => s.trim()).filter(s => s),
             condition: document.getElementById('p-condition').value,
             features: document.getElementById('p-features').value.split(';').map(s => s.trim()).filter(s => s),
-            buyingDelivery: document.getElementById('p-buying').value.split(';').map(s => s.trim()).filter(s => s)
+            buyingDelivery: document.getElementById('p-buying').value.split(';').map(s => s.trim()).filter(s => s),
+            image: document.getElementById('p-image-path').value
         };
 
         const res = await apiFetch('/api/products', {
@@ -613,8 +633,68 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.style.display = 'none';
             loadProducts();
             loadStats();
+        } else {
+            alert('Error saving product: ' + (res ? res.error : 'Unknown error'));
         }
     };
+
+    // --- AI Product Generation Buttons ---
+    const btnGenDesc = document.getElementById('btn-gen-description');
+    if (btnGenDesc) {
+        btnGenDesc.onclick = async () => {
+            const title = document.getElementById('p-title').value;
+            const category = document.getElementById('p-category').value;
+            if (!title) return alert('Please enter a title first');
+
+            btnGenDesc.disabled = true;
+            btnGenDesc.textContent = '⏳...';
+
+            const res = await apiFetch('/api/ai/generate-text', {
+                method: 'POST',
+                body: JSON.stringify({ 
+                    type: 'description', 
+                    productId: editingId, // May be null for new products
+                    customPrompt: `Write a 2-3 sentence engaging description for ${title} in category ${category}.`
+                })
+            });
+
+            btnGenDesc.disabled = false;
+            btnGenDesc.textContent = '✨ AI';
+
+            if (res && res.success) {
+                document.getElementById('p-description').value = res.result;
+            }
+        };
+    }
+
+    const btnGenTags = document.getElementById('btn-gen-tags');
+    if (btnGenTags) {
+        btnGenTags.onclick = async () => {
+            const title = document.getElementById('p-title').value;
+            if (!title) return alert('Please enter a title first');
+
+            btnGenTags.disabled = true;
+            btnGenTags.textContent = '⏳...';
+
+            const res = await apiFetch('/api/ai/generate-text', {
+                method: 'POST',
+                body: JSON.stringify({ 
+                    type: 'hashtags', 
+                    productId: editingId,
+                    customPrompt: `Generate 5-8 comma-separated tags for an electronics product: ${title}`
+                })
+            });
+
+            btnGenTags.disabled = false;
+            btnGenTags.textContent = '✨ AI Tags';
+
+            if (res && res.success) {
+                // If it returns an array of strings, join them with semicolon
+                const tags = Array.isArray(res.result) ? res.result.join('; ') : res.result.replace(/,/g, ';');
+                document.getElementById('p-tags').value = tags;
+            }
+        };
+    }
 
     async function deleteProduct(id) {
         if (confirm(`Move product ${id} to trash?`)) {

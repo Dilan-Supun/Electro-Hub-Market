@@ -23,6 +23,7 @@
                 <button class="nav-item" data-target="section-products">📦 Products</button>
                 <button class="nav-item" data-target="section-inventory">🏷️ Inventory</button>
                 <button class="nav-item" data-target="section-imports">📁 Imports</button>
+                <a href="communications.html" class="nav-item" style="text-decoration:none;">📡 Communications</a>
                 <button class="nav-item" data-target="section-media">🖼️ Media Library</button>
                 <button class="nav-item" data-target="section-ai-studio">✨ AI Image Studio</button>
                 <button class="nav-item" data-target="section-customers">👥 Customers</button>
@@ -558,6 +559,13 @@
                     <div class="form-row">
                         <div class="form-group"><label>Category</label><select id="p-category"></select></div>
                         <div class="form-group"><label>Condition</label><input type="text" id="p-condition"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Tags (Semicolon separated)</label>
+                        <div style="display:flex; gap:0.5rem; align-items:flex-start;">
+                            <textarea id="p-tags" rows="2" style="flex:1;" placeholder="electronics; drone; 4k"></textarea>
+                            <button type="button" id="btn-gen-tags" class="btn-outline" style="white-space:nowrap; padding:0.4rem 0.7rem; font-size:0.75rem;">✨ AI Tags</button>
+                        </div>
                     </div>
                 </div>
                 <div class="form-side">

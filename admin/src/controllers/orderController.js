@@ -31,13 +31,13 @@ const orderController = {
             const customer = await sqlite.getCustomerById(customerId);
             if (!customer) return res.status(404).json({ error: 'Customer not found' });
 
-            const products = await db.read('products');
+            const products = await sqlite.getAllProducts();
             const lineItems = [];
             for (const item of items) {
                 if (!item.productId || !item.qty || item.qty < 1) {
                     return res.status(400).json({ error: 'Each item needs a productId and qty >= 1' });
                 }
-                const product = products.find(p => p.id === item.productId);
+                const product = await sqlite.getProductById(item.productId);
                 const unitPrice = item.unitPrice !== undefined
                     ? parseFloat(item.unitPrice)
                     : parseFloat(product ? product.price : 0) || 0;

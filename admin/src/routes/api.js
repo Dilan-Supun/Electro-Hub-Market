@@ -11,7 +11,9 @@ const customerController = require('../controllers/customerController');
 const orderController = require('../controllers/orderController');
 const shippingController = require('../controllers/shippingController');
 const documentController = require('../controllers/documentController');
+const communicationsController = require('../controllers/communicationsController');
 const db = require('../utils/db');
+const sqlite = require('../utils/sqlite');
 const logger = require('../utils/logger');
 const facebookService = require('../services/facebookService');
 const whatsappService = require('../services/whatsappService');
@@ -160,6 +162,9 @@ router.get('/logs', authenticate, async (req, res) => {
     res.json(await db.read('logs'));
 });
 
+// Communications
+router.get('/communications/status', authenticate, communicationsController.getStatus);
+
 // Settings
 router.get('/settings', authenticate, async (req, res) => {
     res.json(await db.getSettings());
@@ -297,19 +302,36 @@ router.post('/whatsapp/notify/:orderId', authenticate, async (req, res) => {
     }
 });
 
+// Send a test WhatsApp message
+router.post('/whatsapp/test', authenticate, async (req, res) => {
+    try {
+        const { phone } = req.body;
+        const testPhone = phone || process.env.WA_TEST_RECIPIENT;
+        if (!testPhone) return res.status(400).json({ error: 'Test phone number not provided and WA_TEST_RECIPIENT not in .env' });
+
+        const result = await whatsappService.sendText(testPhone, 'Hello from Electro Hub! This is a test message from your Admin Panel. ⚡');
+        await logger.log('whatsapp test', { phone: testPhone });
+        res.json({ success: true, result });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // ── Gemini AI Text Generation ─────────────────────────────────────
 
 router.post('/ai/generate-text', authenticate, async (req, res) => {
     try {
         const { type, productId, customPrompt } = req.body;
-        const settings = await db.getSettings();
-        const apiKey = settings.geminiApiKey || process.env.GEMINI_API_KEY;
+        const apiKey = process.env.GEMINI_API_KEY;
 
         let result;
-        if (type === 'description' || type === 'fb-caption' || type === 'hashtags') {
+        if (customPrompt) {
+            // If a specific prompt is provided, use it directly
+            result = await geminiService.generateText(customPrompt, apiKey);
+        } else if (type === 'description' || type === 'fb-caption' || type === 'hashtags') {
             if (!productId) return res.status(400).json({ error: 'productId is required for product text generation' });
-            const products = await db.read('products');
-            const product = products.find(p => p.id === productId);
+            
+            const product = await sqlite.getProductById(productId);
             if (!product) return res.status(404).json({ error: 'Product not found' });
 
             if (type === 'description') {
@@ -319,8 +341,6 @@ router.post('/ai/generate-text', authenticate, async (req, res) => {
             } else {
                 result = await geminiService.generateHashtags(product, apiKey);
             }
-        } else if (customPrompt) {
-            result = await geminiService.generateText(customPrompt, apiKey);
         } else {
             return res.status(400).json({ error: 'Provide type or customPrompt' });
         }
@@ -328,6 +348,7 @@ router.post('/ai/generate-text', authenticate, async (req, res) => {
         await logger.log('ai generate text', { type, productId });
         res.json({ success: true, result });
     } catch (err) {
+        console.error('AI Route Error:', err);
         res.status(500).json({ error: err.message });
     }
 });

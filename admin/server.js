@@ -4,6 +4,7 @@ const path = require('path');
 const cors = require('cors');
 const { exec } = require('child_process');
 const apiRoutes = require('./src/routes/api');
+const productController = require('./src/controllers/productController');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,14 +21,20 @@ app.use('/', express.static(path.join(__dirname, '..')));
 app.use('/api', apiRoutes);
 
 // Special Route: Publish to GitHub (Kept for simplicity)
-app.post('/api/publish', (req, res) => {
-    const cwd = path.join(__dirname, '..');
-    exec('git add . && git commit -m "Admin: Update products" && git push', { cwd }, (error, stdout, stderr) => {
-        if (error && !stdout.includes('nothing to commit')) {
-            return res.status(500).json({ error: 'Publish failed' });
-        }
-        res.json({ success: true, message: 'Published to GitHub' });
-    });
+app.post('/api/publish', async (req, res) => {
+    try {
+        await productController.generatePublicStats();
+        
+        const cwd = path.join(__dirname, '..');
+        exec('git add . && git commit -m "Admin: Update products & stats" && git push', { cwd }, (error, stdout, stderr) => {
+            if (error && !stdout.includes('nothing to commit')) {
+                return res.status(500).json({ error: 'Publish failed' });
+            }
+            res.json({ success: true, message: 'Published to GitHub' });
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to update stats before publish' });
+    }
 });
 
 app.listen(PORT, () => {

@@ -8,12 +8,13 @@
     "description": "Dual NE5532 preamp board. Bass, mid, treble, volume controls. DIY amplifier and home audio.",
     "price": "200",
     "link": "products/xh-a901-preamp.html",
-    "image": null,
+    "image": "",
     "svg": "<rect x=\"70\" y=\"108\" width=\"280\" height=\"100\" rx=\"8\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><circle cx=\"140\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><circle cx=\"210\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><circle cx=\"280\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><text x=\"140\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">BASS</text><text x=\"210\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">MID</text><text x=\"280\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">TRB</text>",
-    "stock": "0",
+    "stock": "3",
     "features": [],
     "buyingDelivery": [],
-    "updatedAt": "2026-04-27T08:20:34.706Z"
+    "updatedAt": "2026-04-28T15:28:36.651Z",
+    "tags": []
   },
   {
     "id": "vhm-314-bluetooth",
@@ -83,7 +84,10 @@
     ],
     "svg": "",
     "link": "product.html?id=dji-neo-6-in-1-filter-pack",
-    "badge": "DJI"
+    "badge": "DJI",
+    "stock": "1",
+    "tags": [],
+    "updatedAt": "2026-04-28T15:21:06.026Z"
   },
   {
     "id": "wifi-smart-power-meter-with-40a-switch",
@@ -164,6 +168,8 @@
     ],
     "svg": "",
     "link": "product.html?id=irs2092-class-d-amplifier",
-    "stock": 10
+    "stock": "9",
+    "updatedAt": "2026-04-28T15:20:14.704Z",
+    "tags": []
   }
 ]
