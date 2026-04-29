@@ -53,8 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // WhatsApp Button
   const waBtn = document.getElementById('whatsapp-btn');
   if (waBtn) {
+    const shopPhone = (typeof shopSettings !== 'undefined' && shopSettings.shopPhone) ? formatPhoneForLink(shopSettings.shopPhone) : "94764413256";
     const waMessage = encodeURIComponent(`Hi, I'm interested in the ${product.title}`);
-    waBtn.href = `https://wa.me/94764413256?text=${waMessage}`;
+    waBtn.href = `https://wa.me/${shopPhone.startsWith('0') ? '94' + shopPhone.substring(1) : shopPhone}?text=${waMessage}`;
   }
 
   // Add to Cart Button

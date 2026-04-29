@@ -27,6 +27,13 @@ function renderCartPage() {
 
     cart.forEach(item => {
         // Try to parse price if it's a string like "Rs. 6,950"
+        let displayPrice = item.price;
+        if (displayPrice === null || displayPrice === undefined || displayPrice === 0) {
+            displayPrice = "Contact for Price";
+        } else if (typeof displayPrice === 'number') {
+            displayPrice = `Rs. ${displayPrice.toLocaleString()}`;
+        }
+
         const priceStr = String(item.price || "0");
         const numericPrice = parseInt(priceStr.replace(/[^0-9]/g, '')) || 0;
         total += numericPrice * item.quantity;
@@ -36,7 +43,7 @@ function renderCartPage() {
                 <img src="${item.image}" alt="${item.title}">
                 <div class="cart-item-info">
                     <h3>${item.title}</h3>
-                    <div class="cart-item-price">${item.price}</div>
+                    <div class="cart-item-price">${displayPrice}</div>
                     <button class="btn-text" onclick="Cart.remove('${item.id}')" style="color: var(--color-accent); font-size: 12px; margin-top: 4px; border: none; background: none; cursor: pointer; padding: 0;">Remove</button>
                 </div>
                 <div class="cart-qty">
