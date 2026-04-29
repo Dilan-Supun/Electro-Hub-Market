@@ -112,6 +112,30 @@
                             <button id="btn-wa-notify" class="btn-success btn-block">Send Notification</button>
                         </div>
                     </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h3>📩 Incoming WhatsApp Messages</h3>
+                        <button id="btn-refresh-msgs" class="btn-outline btn-sm">🔄 Refresh</button>
+                    </div>
+                    <div id="msg-list-container" style="max-height: 400px; overflow-y: auto;">
+                        <table class="table" style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="text-align: left; border-bottom: 1px solid var(--border);">
+                                    <th style="padding: 1rem;">From</th>
+                                    <th style="padding: 1rem;">Message</th>
+                                    <th style="padding: 1rem;">Time</th>
+                                    <th style="padding: 1rem;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="msg-tbody">
+                                <!-- Messages will be loaded here -->
+                                <tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-muted);">No messages yet.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </main>

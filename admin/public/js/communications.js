@@ -74,7 +74,33 @@ document.addEventListener('DOMContentLoaded', () => {
             orders = orderData;
             waOrderSelect.innerHTML = orders.slice(0, 20).map(o => `<option value="${o.id}">Order #${o.id} - ${o.customerName || 'Customer'}</option>`).join('');
         }
+        
+        await loadMessages();
     }
+
+    async function loadMessages() {
+        const tbody = document.getElementById('msg-tbody');
+        if (!tbody) return;
+
+        const messages = await apiFetch('/api/communications');
+        if (messages && messages.length > 0) {
+            tbody.innerHTML = messages.reverse().map(m => `
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 1rem; font-weight: 700;">${m.from}</td>
+                    <td style="padding: 1rem;">${m.text}</td>
+                    <td style="padding: 1rem; font-size: 0.8rem; color: var(--text-muted);">${new Date(m.timestamp).toLocaleString()}</td>
+                    <td style="padding: 1rem;">
+                        <a href="https://wa.me/${m.from}" target="_blank" class="btn-outline btn-sm">💬 Reply</a>
+                    </td>
+                </tr>
+            `).join('');
+        } else {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-muted);">No messages yet.</td></tr>';
+        }
+    }
+
+    const btnRefreshMsgs = document.getElementById('btn-refresh-msgs');
+    if (btnRefreshMsgs) btnRefreshMsgs.onclick = loadMessages;
 
     // --- Facebook Actions ---
     btnGenCaption.onclick = async () => {
@@ -153,17 +179,11 @@ document.addEventListener('DOMContentLoaded', () => {
         btnWaTest.disabled = true;
         btnWaTest.textContent = '⏳ Sending...';
 
-        // We use a generic test endpoint if available, or just send a text
-        // For now, let's assume we have a test endpoint or just send a text via generic notify
         const res = await apiFetch('/api/whatsapp/test', {
             method: 'POST',
             body: JSON.stringify({ phone })
         });
         
-        // If notify/test doesn't exist, we'll need to add it or use another
-        // Wait, the user said "Calls POST /api/whatsapp/test"
-        // I should check if that exists. If not, I'll add it.
-
         btnWaTest.disabled = false;
         btnWaTest.textContent = 'Send Test Message';
 

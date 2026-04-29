@@ -67,22 +67,70 @@
 
   <main id="main">
 
-    <section class="hero" style="padding-bottom: var(--space-8);">
-      <div class="container" style="text-align: center;">
-        <div id="shop-image-huge-container" style="margin-bottom: var(--space-8); display: none;">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <div class="eyebrow" id="hero-motto">Sri Lanka &middot; Fast delivery available</div>
+          <h1 id="hero-slogan">Quality electronics, great prices.</h1>
+          <p class="lead">Browse our listings below. Every item is checked before listing. Contact us directly to buy &mdash; no middlemen, no delays.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#listings">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              Browse listings
+            </a>
+            <a class="btn btn-secondary" href="contact.html">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              Contact us
+            </a>
+          </div>
+        </div>
+        <div class="hero-image-container" id="shop-image-huge-container">
           <!-- Shop logo will be injected here if exists -->
         </div>
-        <div class="eyebrow" id="hero-motto">Sri Lanka &middot; Fast delivery available</div>
-        <h1 id="hero-slogan">Quality electronics, great prices.</h1>
-        <p class="lead">Browse our listings below. Every item is checked before listing. Contact us directly to buy &mdash; no middlemen, no delays.</p>
-        <div class="cta-row">
-          <a class="btn btn-primary" href="#listings">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-            Browse listings
+      </div>
+    </section>
+
+    <!-- Trust Bar -->
+    <section class="trust-bar" style="background: var(--color-surface-2); padding: var(--space-12) 0; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+      <div class="container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-8); text-align: center;">
+        <div class="trust-item">
+          <div style="font-size: 2.5rem; margin-bottom: 1rem;">🚀</div>
+          <div style="font-weight: 700; font-size: var(--text-base); margin-bottom: 0.25rem;">Fast Delivery</div>
+          <p style="font-size: var(--text-sm); color: var(--color-text-muted);">Islandwide shipping in 1-3 days</p>
+        </div>
+        <div class="trust-item">
+          <div style="font-size: 2.5rem; margin-bottom: 1rem;">✅</div>
+          <div style="font-weight: 700; font-size: var(--text-base); margin-bottom: 0.25rem;">Genuine Products</div>
+          <p style="font-size: var(--text-sm); color: var(--color-text-muted);">100% quality checked electronics</p>
+        </div>
+        <div class="trust-item">
+          <div style="font-size: 2.5rem; margin-bottom: 1rem;">📱</div>
+          <div style="font-weight: 700; font-size: var(--text-base); margin-bottom: 0.25rem;">WhatsApp Order</div>
+          <p style="font-size: var(--text-sm); color: var(--color-text-muted);">Easy ordering via WhatsApp</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Categories -->
+    <section class="section" style="padding: var(--space-16) 0 var(--space-8);">
+      <div class="container">
+        <h2 style="margin-bottom: var(--space-10); text-align: center;">Featured Categories</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-6);">
+          <a href="#catalog" class="card" style="text-align: center; padding: var(--space-8); transition: transform 0.3s ease; border-radius: var(--radius-2xl);" onclick="document.querySelector('[data-filter=\'Drone\']').click()">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🚁</div>
+            <div style="font-weight: 700;">Drones & Parts</div>
           </a>
-          <a class="btn btn-secondary" href="#contact">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.59 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.6a16 16 0 0 0 5.59 5.59l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            Contact us
+          <a href="#catalog" class="card" style="text-align: center; padding: var(--space-8); transition: transform 0.3s ease; border-radius: var(--radius-2xl);" onclick="document.querySelector('[data-filter=\'Audio\']').click()">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🎧</div>
+            <div style="font-weight: 700;">Audio Systems</div>
+          </a>
+          <a href="#catalog" class="card" style="text-align: center; padding: var(--space-8); transition: transform 0.3s ease; border-radius: var(--radius-2xl);" onclick="document.querySelector('[data-filter=\'Modules\']').click()">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🔌</div>
+            <div style="font-weight: 700;">Electronic Modules</div>
+          </a>
+          <a href="#catalog" class="card" style="text-align: center; padding: var(--space-8); transition: transform 0.3s ease; border-radius: var(--radius-2xl);" onclick="document.querySelector('[data-filter=\'all\']').click()">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">✨</div>
+            <div style="font-weight: 700;">View All</div>
           </a>
         </div>
       </div>

@@ -271,7 +271,64 @@ router.post('/facebook/bulk-sync', authenticate, async (req, res) => {
 
 // ── WhatsApp Integration ──────────────────────────────────────────
 
-// Send an order status notification to the customer via WhatsApp
+// Webhook Verification (for Meta)
+router.get('/whatsapp/webhook', (req, res) => {
+    const mode = req.query['hub.mode'];
+    const token = req.query['hub.verify_token'];
+    const challenge = req.query['hub.challenge'];
+
+    if (mode && token) {
+        if (mode === 'subscribe' && token === (process.env.WA_VERIFY_TOKEN || 'electro_hub_secret')) {
+            console.log('✅ WhatsApp Webhook Verified!');
+            res.status(200).send(challenge);
+        } else {
+            res.sendStatus(403);
+        }
+    }
+});
+
+// Receive Webhook Events
+router.post('/whatsapp/webhook', async (req, res) => {
+    try {
+        const entry = req.body.entry && req.body.entry[0];
+        const changes = entry && entry.changes && entry.changes[0];
+        const value = changes && changes.value;
+        const messages = value && value.messages;
+
+        if (messages && messages[0]) {
+            const msg = messages[0];
+            const from = msg.from;
+            const text = msg.text ? msg.text.body : '';
+            const timestamp = msg.timestamp;
+
+            console.log(`📩 New WhatsApp from ${from}: ${text}`);
+
+            // Save to communications log
+            const logs = await db.read('communications') || [];
+            logs.push({
+                id: `msg_${Date.now()}`,
+                from,
+                text,
+                timestamp: new Date(timestamp * 1000).toISOString(),
+                type: 'incoming',
+                platform: 'whatsapp'
+            });
+            await db.write('communications', logs.slice(-100)); // Keep last 100
+        }
+        res.sendStatus(200);
+    } catch (err) {
+        console.error('Webhook Error:', err);
+        res.sendStatus(500);
+    }
+});
+
+// Get recent communications
+router.get('/communications', authenticate, async (req, res) => {
+    const logs = await db.read('communications') || [];
+    res.json(logs);
+});
+
+// Send an order status notification...
 router.post('/whatsapp/notify/:orderId', authenticate, async (req, res) => {
     try {
         const order = await sqlite.getOrderById(req.params.orderId);
