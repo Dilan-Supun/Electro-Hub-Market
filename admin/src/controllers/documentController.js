@@ -29,9 +29,10 @@ const documentController = {
                 name: settings.shopName || 'Electro Hub',
                 address: settings.shopAddress || '',
                 phone: settings.shopPhone || '',
+                phone2: settings.shopPhone2 || '',
                 email: settings.shopEmail || '',
                 website: settings.shopWebsite || 'www.electrohub.lk',
-                logoPath: settings.watermarkLogoPath || null
+                logoPath: settings.shopLogoPath || null
             };
 
             const statusColor = STATUS_COLORS[order.status] || '#64748b';
@@ -91,7 +92,7 @@ const documentController = {
   <div class="header">
     <div>
       ${shop.logoPath ? `<img src="/${shop.logoPath}" class="shop-logo" alt="logo">` : `<div class="shop-name">${shop.name}</div>`}
-      <div class="shop-meta">${[shop.address, shop.phone, shop.email, shop.website].filter(Boolean).join(' &nbsp;|&nbsp; ')}</div>
+      <div class="shop-meta">${[shop.address, shop.phone, shop.phone2, shop.email, shop.website].filter(Boolean).join(' &nbsp;|&nbsp; ')}</div>
     </div>
     <div class="invoice-meta">
       <div class="invoice-id">INVOICE</div>

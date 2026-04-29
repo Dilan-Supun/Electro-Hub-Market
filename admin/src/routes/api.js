@@ -171,6 +171,7 @@ router.get('/settings', authenticate, async (req, res) => {
 });
 router.post('/settings', authenticate, async (req, res) => {
     await db.write('settings', req.body);
+    await productController.syncSettingsToLive();
     await logger.log('update settings');
     res.json({ success: true });
 });
@@ -203,6 +204,7 @@ router.post('/settings/upload-shop-image', authenticate, shopImageUpload.single(
     const settings = await db.getSettings();
     settings.shopLogoPath = relPath;
     await db.write('settings', settings);
+    await productController.syncSettingsToLive();
     await logger.log('upload shop logo', { path: relPath });
     res.json({ success: true, shopLogoPath: relPath });
 });

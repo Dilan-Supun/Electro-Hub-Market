@@ -26,11 +26,15 @@ const db = {
                 watermarkSize: 24,
                 watermarkPosition: 'bottom-right',
                 watermarkLogoPath: null,
-                shopName: 'Electro Hub',
-                shopAddress: '',
-                shopPhone: '',
-                shopEmail: '',
+                shopName: 'Electro Hub Market',
+                shopAddress: 'No. 95A/1, Hallambage Watta, Palatuwa, Matara',
+                shopPhone: '076 441 3256',
+                shopPhone2: '071 396 7483',
+                shopEmail: 'electrohub@example.com',
                 shopWebsite: 'www.electrohub.lk',
+                shopMotto: 'Sri Lanka · Fast delivery available',
+                shopSlogan: 'Quality electronics, great prices.',
+                shopLogoPath: null,
                 geminiPrompt: 'Remove the background, keep the product shape and branding accurate, improve lighting, reduce shadows, center the product, and place it on a clean white studio background for e-commerce use.'
             };
         }

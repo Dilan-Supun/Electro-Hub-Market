@@ -152,8 +152,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 'set-shop-name': 'shopName',
                 'set-shop-address': 'shopAddress',
                 'set-shop-phone': 'shopPhone',
+                'set-shop-phone2': 'shopPhone2',
                 'set-shop-email': 'shopEmail',
                 'set-shop-website': 'shopWebsite',
+                'set-shop-motto': 'shopMotto',
+                'set-shop-slogan': 'shopSlogan',
                 'set-fb-page-id': 'fbPageId',
                 'set-fb-catalog-id': 'fbCatalogId',
                 'set-wa-phone-id': 'waPhoneNumberId'
@@ -814,6 +817,49 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    // --- Shop Image Upload ---
+    const shopImageInput = document.getElementById('shop-logo-input');
+    const shopImageUploadZone = document.getElementById('shop-logo-upload-zone');
+    const shopImagePreview = document.getElementById('shop-logo-preview');
+    const shopImagePrompt = document.getElementById('shop-logo-prompt');
+    const shopImageStatus = document.getElementById('shop-logo-status');
+
+    if (shopImageUploadZone) {
+        shopImageUploadZone.addEventListener('click', () => shopImageInput && shopImageInput.click());
+    }
+
+    if (shopImageInput) {
+        shopImageInput.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Instant local preview
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                if (shopImagePreview) { shopImagePreview.src = ev.target.result; shopImagePreview.style.display = 'block'; }
+                if (shopImagePrompt) shopImagePrompt.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+
+            // Upload to server
+            if (shopImageStatus) { shopImageStatus.textContent = 'Uploading…'; shopImageStatus.style.display = 'block'; }
+            const formData = new FormData();
+            formData.append('shopImage', file);
+            try {
+                const res = await fetch('/api/settings/upload-shop-image', { method: 'POST', body: formData });
+                const data = await res.json();
+                if (data.success) {
+                    currentSettings.shopLogoPath = data.shopLogoPath;
+                    if (shopImageStatus) shopImageStatus.textContent = `✅ Image saved: ${file.name}`;
+                } else {
+                    if (shopImageStatus) shopImageStatus.textContent = '❌ Upload failed: ' + (data.error || 'Unknown error');
+                }
+            } catch (err) {
+                if (shopImageStatus) shopImageStatus.textContent = '❌ Upload error';
+            }
+        };
+    }
+
     // --- Shop Info Form ---
     const shopForm = document.getElementById('shop-form');
     if (shopForm) {
@@ -824,8 +870,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 shopName: document.getElementById('set-shop-name').value,
                 shopAddress: document.getElementById('set-shop-address').value,
                 shopPhone: document.getElementById('set-shop-phone').value,
+                shopPhone2: document.getElementById('set-shop-phone2').value,
                 shopEmail: document.getElementById('set-shop-email').value,
                 shopWebsite: document.getElementById('set-shop-website').value,
+                shopMotto: document.getElementById('set-shop-motto').value,
+                shopSlogan: document.getElementById('set-shop-slogan').value,
                 shopUrl: document.getElementById('set-shop-website').value // Sync both for compatibility
             };
             const res = await apiFetch('/api/settings', { method: 'POST', body: JSON.stringify(payload) });

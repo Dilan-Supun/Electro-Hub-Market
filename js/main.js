@@ -74,4 +74,6 @@ function initProducts() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', initProducts);
+document.addEventListener('DOMContentLoaded', () => {
+  initProducts();
+});

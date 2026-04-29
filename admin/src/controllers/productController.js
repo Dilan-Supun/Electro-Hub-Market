@@ -146,6 +146,28 @@ const productController = {
             await fs.writeFile(filePath, content);
         } catch (error) {
         }
+    },
+
+    async syncSettingsToLive() {
+        try {
+            const settings = await db.getSettings();
+            const liveSettings = {
+                shopName: settings.shopName || 'Electro Hub Market',
+                shopMotto: settings.shopMotto || 'Sri Lanka · Fast delivery available',
+                shopSlogan: settings.shopSlogan || 'Quality electronics, great prices.',
+                shopPhone: settings.shopPhone || '076 441 3256',
+                shopPhone2: settings.shopPhone2 || '071 396 7483',
+                shopEmail: settings.shopEmail || 'electrohub@example.com',
+                shopAddress: settings.shopAddress || 'No. 95A/1, Hallambage Watta, Palatuwa, Matara',
+                shopWebsite: settings.shopWebsite || 'www.electrohub.lk',
+                shopLogoPath: settings.shopLogoPath || null
+            };
+            const filePath = path.join(__dirname, '../../../js/settings-data.js');
+            const content = `const shopSettings = ${JSON.stringify(liveSettings, null, 2)};\n`;
+            await fs.writeFile(filePath, content);
+        } catch (error) {
+            console.error('Error syncing settings to live:', error);
+        }
     }
 };
 

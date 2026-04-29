@@ -27,7 +27,8 @@ function renderCartPage() {
 
     cart.forEach(item => {
         // Try to parse price if it's a string like "Rs. 6,950"
-        const numericPrice = parseInt(item.price.replace(/[^0-9]/g, '')) || 0;
+        const priceStr = String(item.price || "0");
+        const numericPrice = parseInt(priceStr.replace(/[^0-9]/g, '')) || 0;
         total += numericPrice * item.quantity;
 
         html += `
@@ -60,7 +61,10 @@ function renderCartPage() {
 }
 
 function sendWhatsAppOrder(cart, total) {
-    let message = "Hello Electro Hub! I'd like to place an order:\n\n";
+    const shopName = (typeof shopSettings !== 'undefined' && shopSettings.shopName) ? shopSettings.shopName : "Electro Hub";
+    const shopPhone = (typeof shopSettings !== 'undefined' && shopSettings.shopPhone) ? shopSettings.shopPhone.replace(/\s/g, '') : "94764413256";
+    
+    let message = `Hello ${shopName}! I'd like to place an order:\n\n`;
     
     cart.forEach((item, index) => {
         message += `${index + 1}. ${item.title}\n`;
@@ -71,6 +75,6 @@ function sendWhatsAppOrder(cart, total) {
     message += `---------------------------\n`;
     message += `Please confirm availability and delivery charges.`;
 
-    const waLink = `https://wa.me/94764413256?text=${encodeURIComponent(message)}`;
+    const waLink = `https://wa.me/${shopPhone.startsWith('0') ? '94' + shopPhone.substring(1) : shopPhone}?text=${encodeURIComponent(message)}`;
     window.open(waLink, '_blank');
 }

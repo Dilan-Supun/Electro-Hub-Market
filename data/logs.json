@@ -1,5 +1,67 @@
 [
   {
+    "id": 1777461884706,
+    "timestamp": "2026-04-29T11:24:44.706Z",
+    "action": "delete customer",
+    "details": {
+      "id": "CUST-9949"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777461873691,
+    "timestamp": "2026-04-29T11:24:33.691Z",
+    "action": "delete order",
+    "details": {
+      "id": "ORD-20260429-15727"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777461862218,
+    "timestamp": "2026-04-29T11:24:22.218Z",
+    "action": "update settings",
+    "details": {},
+    "admin": "admin"
+  },
+  {
+    "id": 1777461842666,
+    "timestamp": "2026-04-29T11:24:02.666Z",
+    "action": "upload shop logo",
+    "details": {
+      "path": "data/shop/shop-logo.jpeg"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777460353913,
+    "timestamp": "2026-04-29T10:59:13.913Z",
+    "action": "update settings",
+    "details": {},
+    "admin": "admin"
+  },
+  {
+    "id": 1777460315732,
+    "timestamp": "2026-04-29T10:58:35.732Z",
+    "action": "create order",
+    "details": {
+      "id": "ORD-20260429-15727",
+      "customer": "dfgdsg",
+      "total": 2950
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777460303541,
+    "timestamp": "2026-04-29T10:58:23.541Z",
+    "action": "add customer",
+    "details": {
+      "id": "CUST-9949",
+      "name": "dfgdsg"
+    },
+    "admin": "admin"
+  },
+  {
     "id": 1777458219329,
     "timestamp": "2026-04-29T10:23:39.329Z",
     "action": "ai generate text",

@@ -9,5 +9,10 @@
   "shopPhone": "0764413256",
   "shopEmail": "electrosupun@gmail.com",
   "geminiPrompt": "Remove the background, keep the product shape and branding accurate, improve lighting, reduce shadows, center the product, and place it on a clean white studio background for e-commerce use.",
-  "shopUrl": "https://dilan-supun.github.io/Electro-Hub-Market/index.html"
+  "shopUrl": "https://dilan-supun.github.io/Electro-Hub-Market/index.html",
+  "shopWebsite": "https://dilan-supun.github.io/Electro-Hub-Market/index.html",
+  "shopLogoPath": "data/shop/shop-logo.jpeg",
+  "shopPhone2": "0764413256",
+  "shopMotto": "Sri Lanka · Fast delivery available",
+  "shopSlogan": "Quality electronics, great prices"
 }

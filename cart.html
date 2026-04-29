@@ -77,13 +77,24 @@
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="index.html">
-        <div class="brand-mark">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+      <a class="brand" href="index.html" aria-label="Electro Hub Market home">
+        <div class="brand-mark" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/>
+          </svg>
         </div>
-        <div>Electro Hub Market</div>
+        <div>
+          <div id="shop-name-header-small" style="font-size:var(--text-xs); color:var(--color-text-muted); text-transform:uppercase; letter-spacing:.08em;">Online store</div>
+          <div id="shop-name-header">Electro Hub Market</div>
+        </div>
       </a>
       <div class="header-right">
+        <div class="header-contact">
+          <a href="tel:0764413256" id="header-phone-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.59 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.6a16 16 0 0 0 5.59 5.59l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span id="header-phone-text">0764 413 256</span>
+          </a>
+        </div>
         <a href="index.html" class="btn btn-secondary">Continue Shopping</a>
         <button class="theme-toggle" data-theme-toggle aria-label="Switch theme">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -117,11 +128,17 @@
     </div>
 
     <div id="empty-cart-msg" class="empty-cart" style="display: none;">
+      <div>
+        <div id="shop-name-header-small" style="font-size:var(--text-xs); color:var(--color-text-muted); text-transform:uppercase; letter-spacing:.08em;">Online store</div>
+        <div id="shop-name-header">Electro Hub Market</div>
+      </div>
       <p style="font-size: var(--text-lg); color: var(--color-text-muted); margin-bottom: var(--space-6);">Your cart is empty.</p>
       <a href="index.html" class="btn btn-primary">Start Shopping</a>
     </div>
   </main>
 
+  <script src="js/settings-data.js"></script>
+  <script src="js/common.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/cart-page.js"></script>
   

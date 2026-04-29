@@ -23,7 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('meta-description').content = product.description;
   
   // Update UI
-  const displayPrice = product.price.toString().startsWith('Rs.') ? product.price : `Rs. ${product.price}`;
+  let displayPrice = "Contact for Price";
+  if (product.price !== null && product.price !== undefined) {
+    displayPrice = product.price.toString().startsWith('Rs.') ? product.price : `Rs. ${product.price.toLocaleString()}`;
+  }
+  
   document.getElementById('product-title').textContent = product.title;
   document.getElementById('product-condition').textContent = product.condition;
   document.getElementById('product-description').textContent = product.description;
