@@ -25,8 +25,10 @@ async function getDb() {
             name TEXT NOT NULL,
             email TEXT,
             phone TEXT,
+            phone2 TEXT,
             address TEXT,
             city TEXT,
+            district TEXT,
             postalCode TEXT,
             notes TEXT,
             createdAt TEXT,
@@ -39,6 +41,8 @@ async function getDb() {
             customerName TEXT,
             customerAddress TEXT,
             customerPhone TEXT,
+            customerPhone2 TEXT,
+            customerDistrict TEXT,
             customerEmail TEXT,
             items TEXT NOT NULL,
             subtotal REAL DEFAULT 0,
@@ -91,6 +95,23 @@ async function getDb() {
             updatedAt TEXT
         );
     `);
+
+    // Migrations for new columns (phone2, district)
+    const migrations = [
+        ['customers', 'phone2'],
+        ['customers', 'district'],
+        ['orders', 'customerPhone2'],
+        ['orders', 'customerDistrict']
+    ];
+
+    migrations.forEach(([table, column]) => {
+        try {
+            dbInstance.run(`ALTER TABLE ${table} ADD COLUMN ${column} TEXT`);
+            console.log(`[SQLite] Migrated: Added ${column} to ${table}`);
+        } catch (e) {
+            // Column likely already exists
+        }
+    });
     saveDb();
     return dbInstance;
 }

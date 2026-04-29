@@ -169,5 +169,41 @@
     "stored_filename": "final_1777383379737.jpg",
     "image_url": "images/products/studio/final/final_1777383379737.jpg",
     "created_at": "2026-04-28T13:36:19.748Z"
+  },
+  {
+    "product_id": "studio",
+    "file_type": "jpg",
+    "source_type": "final",
+    "original_filename": "watermarked_1777436380660.jpg",
+    "stored_filename": "watermarked_1777436380660.jpg",
+    "image_url": "images/products/studio/final/watermarked_1777436380660.jpg",
+    "created_at": "2026-04-29T04:19:40.668Z"
+  },
+  {
+    "product_id": "studio",
+    "file_type": "jpg",
+    "source_type": "final",
+    "original_filename": "watermarked_1777436419988.jpg",
+    "stored_filename": "watermarked_1777436419988.jpg",
+    "image_url": "images/products/studio/final/watermarked_1777436419988.jpg",
+    "created_at": "2026-04-29T04:20:19.997Z"
+  },
+  {
+    "product_id": "studio",
+    "file_type": "jpg",
+    "source_type": "final",
+    "original_filename": "watermarked_1777436446808.jpg",
+    "stored_filename": "watermarked_1777436446808.jpg",
+    "image_url": "images/products/studio/final/watermarked_1777436446808.jpg",
+    "created_at": "2026-04-29T04:20:46.815Z"
+  },
+  {
+    "product_id": "studio",
+    "file_type": "jpg",
+    "source_type": "final",
+    "original_filename": "watermarked_1777436762267.jpg",
+    "stored_filename": "watermarked_1777436762267.jpg",
+    "image_url": "images/products/studio/final/watermarked_1777436762267.jpg",
+    "created_at": "2026-04-29T04:26:02.279Z"
   }
 ]

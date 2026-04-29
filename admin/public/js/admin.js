@@ -866,7 +866,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let list = currentCustomers.filter(c =>
             c.name.toLowerCase().includes(search) ||
             (c.email || '').toLowerCase().includes(search) ||
-            (c.phone || '').includes(search)
+            (c.phone || '').includes(search) ||
+            (c.phone2 || '').includes(search) ||
+            (c.city || '').toLowerCase().includes(search) ||
+            (c.district || '').toLowerCase().includes(search) ||
+            (c.notes || '').toLowerCase().includes(search)
         );
         const total = document.getElementById('cust-total');
         if (total) total.textContent = currentCustomers.length;
@@ -881,9 +885,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td style="font-family:monospace;font-size:0.8rem;">${c.id}</td>
                 <td style="font-weight:600;">${c.name}</td>
                 <td>${c.email || '<span style="color:var(--text-muted)">—</span>'}</td>
-                <td>${c.phone || '<span style="color:var(--text-muted)">—</span>'}</td>
-                <td>${c.city || '<span style="color:var(--text-muted)">—</span>'}</td>
+                <td>
+                    <div style="font-size:0.85rem;">${c.phone || '—'}</div>
+                    ${c.phone2 ? `<div style="font-size:0.75rem; color:var(--text-muted);">Secondary: ${c.phone2}</div>` : ''}
+                </td>
+                <td>
+                    <div>${c.city || '—'}</div>
+                    ${c.district ? `<div style="font-size:0.7rem; color:var(--text-muted);">${c.district}</div>` : ''}
+                </td>
                 <td style="font-size:0.8rem;color:var(--text-muted);">${c.createdAt ? new Date(c.createdAt).toLocaleDateString() : '—'}</td>
+                <td>
+                    ${c.notes ? `<span title="${c.notes.replace(/"/g, '&quot;')}" style="cursor:help; font-size:1.2rem;">📝</span>` : '<span style="color:var(--text-muted)">—</span>'}
+                </td>
                 <td>
                     <div style="display:flex;gap:0.4rem;">
                         <button class="btn-edit-action" data-cid="${c.id}">Edit</button>
@@ -914,15 +927,137 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('c-name').value = c.name;
             document.getElementById('c-email').value = c.email || '';
             document.getElementById('c-phone').value = c.phone || '';
+            document.getElementById('c-phone2').value = c.phone2 || '';
             document.getElementById('c-address').value = c.address || '';
             document.getElementById('c-city').value = c.city || '';
+            document.getElementById('c-district').value = c.district || '';
             document.getElementById('c-postal').value = c.postalCode || '';
             document.getElementById('c-notes').value = c.notes || '';
         } else {
             document.getElementById('customer-modal-title').textContent = 'Add Customer';
             document.getElementById('c-id').readOnly = false;
+            // Generate a random ID for new customers
+            document.getElementById('c-id').value = 'CUST-' + Math.floor(1000 + Math.random() * 9000);
         }
+        document.getElementById('c-smart-paste').value = '';
         document.getElementById('customer-modal').style.display = 'flex';
+    }
+
+    function parseCustomerText(text) {
+        if (!text) return {};
+        // Clean up whitespace and handle multiple spaces
+        const rawLines = text.split('\n').map(l => l.trim()).filter(l => l);
+        if (rawLines.length === 0) return {};
+
+        const data = {
+            phone1: '',
+            phone2: '',
+            name: '',
+            address: '',
+            city: '',
+            district: ''
+        };
+
+        // 1. Extract all phone numbers line by line to prevent cross-line matching
+        const cleanNumbers = [];
+        const phoneRegex = /(?:\+94|0)?7[0-9\s-]{8,12}/g;
+        
+        for (const line of rawLines) {
+            const matches = line.match(phoneRegex);
+            if (matches) {
+                matches.forEach(m => {
+                    // Extract only digits and leading plus
+                    let clean = m.replace(/[^\d+]/g, '');
+                    
+                    // Normalize Sri Lankan mobile numbers
+                    if (clean.startsWith('7') && clean.length === 9) {
+                        clean = '0' + clean;
+                    } else if (clean.startsWith('94') && clean.length === 11) {
+                        clean = '+' + clean;
+                    }
+
+                    if (clean.length >= 10 && clean.length <= 13) {
+                        if (!cleanNumbers.includes(clean)) cleanNumbers.push(clean);
+                    }
+                });
+            }
+        }
+        
+        if (cleanNumbers.length > 0) data.phone1 = cleanNumbers[0];
+        if (cleanNumbers.length > 1) data.phone2 = cleanNumbers[1];
+
+        // 2. Try Template detection (lines with colons)
+        const findValue = (keys) => {
+            for (const line of rawLines) {
+                for (const key of keys) {
+                    if (line.toLowerCase().includes(key.toLowerCase())) {
+                        const parts = line.split(/[:：]/);
+                        if (parts.length > 1) return parts.slice(1).join(':').trim();
+                    }
+                }
+            }
+            return null;
+        };
+
+        data.name = findValue(['Contact Name', 'නම']);
+        data.address = findValue(['Address', 'ලිපිනය']);
+        data.district = findValue(['District', 'දිස්ත්රික්කය']);
+        data.city = findValue(['Nearest City', 'නගරය']);
+        
+        // If template detection found name/address, we're likely done with parsing
+        if (data.name && data.address) return data;
+
+        // 3. Raw Text Heuristics (no labels)
+        // Filter out lines that are just phone numbers
+        const contentLines = rawLines.filter(line => {
+            const clean = line.replace(/[\s-]/g, '');
+            return !clean.match(/^[0-9+]{9,12}$/);
+        });
+
+        if (contentLines.length > 0) {
+            // First line is almost always the name
+            if (!data.name) data.name = contentLines[0];
+
+            if (contentLines.length > 1) {
+                // If we have at least 2 lines left, try to identify city/district
+                // Often the last 1-2 lines are City and District
+                const lastIdx = contentLines.length - 1;
+                
+                if (contentLines.length >= 3) {
+                    if (!data.district) data.district = contentLines[lastIdx];
+                    if (!data.city) data.city = contentLines[lastIdx - 1];
+                    if (!data.address) data.address = contentLines.slice(1, lastIdx - 1).join(', ');
+                } else {
+                    // Only 2 lines: Name and City/Address
+                    if (!data.city) data.city = contentLines[1];
+                    if (!data.address) data.address = contentLines[1];
+                }
+            }
+        }
+
+        return data;
+    }
+
+    const btnDetect = document.getElementById('btn-c-detect');
+    if (btnDetect) {
+        btnDetect.onclick = () => {
+            const text = document.getElementById('c-smart-paste').value;
+            const detected = parseCustomerText(text);
+            
+            if (detected.name) document.getElementById('c-name').value = detected.name;
+            if (detected.address) document.getElementById('c-address').value = detected.address;
+            if (detected.district) document.getElementById('c-district').value = detected.district;
+            if (detected.city) document.getElementById('c-city').value = detected.city;
+            if (detected.phone1) document.getElementById('c-phone').value = detected.phone1;
+            if (detected.phone2) document.getElementById('c-phone2').value = detected.phone2;
+
+            if (Object.keys(detected).some(k => detected[k])) {
+                btnDetect.textContent = '✅ Detected!';
+                setTimeout(() => btnDetect.textContent = '🔍 Detect & Auto-Fill', 2000);
+            } else {
+                alert('Could not detect details. Please check the format.');
+            }
+        };
     }
 
     async function deleteCustomer(id) {
@@ -943,8 +1078,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: document.getElementById('c-name').value.trim(),
                 email: document.getElementById('c-email').value.trim(),
                 phone: document.getElementById('c-phone').value.trim(),
+                phone2: document.getElementById('c-phone2').value.trim(),
                 address: document.getElementById('c-address').value.trim(),
                 city: document.getElementById('c-city').value.trim(),
+                district: document.getElementById('c-district').value.trim(),
                 postalCode: document.getElementById('c-postal').value.trim(),
                 notes: document.getElementById('c-notes').value.trim()
             };

@@ -32,18 +32,19 @@ const productsData = [
       "Delivery fee depends on item weight and location"
     ],
     "tags": [
+      "Class D Amplifier",
       "IRS2092",
-      "Class D amplifier",
-      "High power audio",
-      "Speaker protection",
-      "Audio amplifier board",
-      "Digital amplifier",
-      "DIY audio"
+      "Amplifier Board",
+      "Speaker Protection",
+      "High Power Amplifier",
+      "Audio Amplifier",
+      "Digital Amplifier",
+      "Power Amplifier Module"
     ],
     "image": "images/products/media__1__1777089796499.jpeg",
     "isDeleted": false,
     "createdAt": "2026-04-28T16:53:04.653Z",
-    "updatedAt": "2026-04-28T17:31:30.968Z",
+    "updatedAt": "2026-04-29T04:14:42.593Z",
     "meta": "Audio electronics · High power Class D amp",
     "link": "product.html?id=irs2092-class-d-amplifier",
     "svg": "",

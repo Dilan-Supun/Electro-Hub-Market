@@ -1,5 +1,248 @@
 [
   {
+    "id": 1777450365335,
+    "timestamp": "2026-04-29T08:12:45.335Z",
+    "action": "delete customer",
+    "details": {
+      "id": "1"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777450362428,
+    "timestamp": "2026-04-29T08:12:42.428Z",
+    "action": "delete customer",
+    "details": {
+      "id": "2"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777450068683,
+    "timestamp": "2026-04-29T08:07:48.683Z",
+    "action": "delete order",
+    "details": {
+      "id": "ORD-20260428-77246"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777450065825,
+    "timestamp": "2026-04-29T08:07:45.825Z",
+    "action": "delete order",
+    "details": {
+      "id": "ORD-20260428-75989"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777450063638,
+    "timestamp": "2026-04-29T08:07:43.638Z",
+    "action": "delete order",
+    "details": {
+      "id": "ORD-20260428-92485"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777450056776,
+    "timestamp": "2026-04-29T08:07:36.776Z",
+    "action": "edit customer",
+    "details": {
+      "id": "3",
+      "name": "Rohan sandanayaka"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777450052053,
+    "timestamp": "2026-04-29T08:07:32.053Z",
+    "action": "edit customer",
+    "details": {
+      "id": "3",
+      "name": "Rohan sandanayaka"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777445575149,
+    "timestamp": "2026-04-29T06:52:55.149Z",
+    "action": "update settings",
+    "details": {},
+    "admin": "admin"
+  },
+  {
+    "id": 1777445563358,
+    "timestamp": "2026-04-29T06:52:43.358Z",
+    "action": "update settings",
+    "details": {},
+    "admin": "admin"
+  },
+  {
+    "id": 1777445416430,
+    "timestamp": "2026-04-29T06:50:16.430Z",
+    "action": "create order",
+    "details": {
+      "id": "ORD-20260429-16424",
+      "customer": "Rohan Sandanayaka",
+      "total": 2950
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777445373098,
+    "timestamp": "2026-04-29T06:49:33.098Z",
+    "action": "add customer",
+    "details": {
+      "id": "3",
+      "name": "Rohan Sandanayaka"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777436762282,
+    "timestamp": "2026-04-29T04:26:02.282Z",
+    "action": "apply watermark",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777436378383.jpg"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777436753190,
+    "timestamp": "2026-04-29T04:25:53.190Z",
+    "action": "upload watermark logo",
+    "details": {
+      "path": "data/logo/logo.png"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777436446822,
+    "timestamp": "2026-04-29T04:20:46.822Z",
+    "action": "apply watermark",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777436378383.jpg"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777436441599,
+    "timestamp": "2026-04-29T04:20:41.599Z",
+    "action": "update settings",
+    "details": {},
+    "admin": "admin"
+  },
+  {
+    "id": 1777436432022,
+    "timestamp": "2026-04-29T04:20:32.022Z",
+    "action": "update settings",
+    "details": {},
+    "admin": "admin"
+  },
+  {
+    "id": 1777436420001,
+    "timestamp": "2026-04-29T04:20:20.001Z",
+    "action": "apply watermark",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777436378383.jpg"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777436412236,
+    "timestamp": "2026-04-29T04:20:12.236Z",
+    "action": "update settings",
+    "details": {},
+    "admin": "admin"
+  },
+  {
+    "id": 1777436380674,
+    "timestamp": "2026-04-29T04:19:40.674Z",
+    "action": "apply watermark",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777436378383.jpg"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777436370787,
+    "timestamp": "2026-04-29T04:19:30.787Z",
+    "action": "update settings",
+    "details": {},
+    "admin": "admin"
+  },
+  {
+    "id": 1777436366242,
+    "timestamp": "2026-04-29T04:19:26.242Z",
+    "action": "upload watermark logo",
+    "details": {
+      "path": "data/logo/logo.png"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777436259557,
+    "timestamp": "2026-04-29T04:17:39.557Z",
+    "action": "update settings",
+    "details": {},
+    "admin": "admin"
+  },
+  {
+    "id": 1777436082610,
+    "timestamp": "2026-04-29T04:14:42.610Z",
+    "action": "edit product",
+    "details": {
+      "id": "irs2092-class-d-amplifier",
+      "title": "IRS2092 High Power Class D Amplifier Board with Speaker Protection"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777436077402,
+    "timestamp": "2026-04-29T04:14:37.402Z",
+    "action": "ai generate text",
+    "details": {
+      "type": "hashtags",
+      "productId": "irs2092-class-d-amplifier"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777436062694,
+    "timestamp": "2026-04-29T04:14:22.694Z",
+    "action": "ai generate text",
+    "details": {
+      "type": "hashtags",
+      "productId": "irs2092-class-d-amplifier"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777436004464,
+    "timestamp": "2026-04-29T04:13:24.464Z",
+    "action": "ai generate text",
+    "details": {
+      "type": "fb-caption",
+      "productId": "irs2092-class-d-amplifier"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777397753216,
+    "timestamp": "2026-04-28T17:35:53.216Z",
+    "action": "ai generate text",
+    "details": {
+      "type": "fb-caption",
+      "productId": "irs2092-class-d-amplifier"
+    },
+    "admin": "admin"
+  },
+  {
     "id": 1777397491038,
     "timestamp": "2026-04-28T17:31:31.038Z",
     "action": "edit product",

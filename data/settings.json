@@ -1,12 +1,13 @@
 {
   "watermarkText": "Electro Hub",
-  "watermarkOpacity": 0.5,
+  "watermarkOpacity": 0.9,
   "watermarkSize": 24,
-  "watermarkPosition": "bottom-right",
-  "watermarkLogoPath": null,
-  "shopName": "Electro Market",
-  "shopAddress": "",
-  "shopPhone": "",
-  "shopEmail": "",
-  "geminiPrompt": "Remove the background, keep the product shape and branding accurate, improve lighting, reduce shadows, center the product, and place it on a clean white studio background for e-commerce use."
+  "watermarkPosition": "center",
+  "watermarkLogoPath": "data/logo/logo.png",
+  "shopName": "Electro Hub",
+  "shopAddress": "Palangathure East , Kochchikade",
+  "shopPhone": "0764413256",
+  "shopEmail": "electrosupun@gmail.com",
+  "geminiPrompt": "Remove the background, keep the product shape and branding accurate, improve lighting, reduce shadows, center the product, and place it on a clean white studio background for e-commerce use.",
+  "shopUrl": "https://dilan-supun.github.io/Electro-Hub-Market/index.html"
 }
