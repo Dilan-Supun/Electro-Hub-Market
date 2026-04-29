@@ -80,7 +80,9 @@ const mediaController = {
                 position: settings.watermarkPosition,
                 opacity: settings.watermarkOpacity,
                 size: settings.watermarkSize,
-                logoPath
+                logoPath,
+                useText: settings.watermarkUseText !== false,
+                useLogo: !!settings.watermarkUseLogo
             });
 
             const filename = `final_${Date.now()}.jpg`;
@@ -114,7 +116,9 @@ const mediaController = {
                 position: settings.watermarkPosition || 'bottom-right',
                 opacity: settings.watermarkOpacity !== undefined ? settings.watermarkOpacity : 0.5,
                 size: settings.watermarkSize,
-                logoPath
+                logoPath,
+                useText: settings.watermarkUseText !== false,
+                useLogo: !!settings.watermarkUseLogo
             });
 
             const filename = `watermarked_${Date.now()}.jpg`;

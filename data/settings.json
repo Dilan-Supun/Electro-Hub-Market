@@ -1,8 +1,8 @@
 {
   "watermarkText": "Electro Hub",
-  "watermarkOpacity": 0.9,
+  "watermarkOpacity": 0.6,
   "watermarkSize": 24,
-  "watermarkPosition": "bottom-right",
+  "watermarkPosition": "center",
   "watermarkLogoPath": "data/logo/logo.jpeg",
   "shopName": "Electro Hub",
   "shopAddress": "Palangathure East , Kochchikade",

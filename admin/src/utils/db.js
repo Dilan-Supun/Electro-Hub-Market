@@ -26,6 +26,8 @@ const db = {
                 watermarkSize: 24,
                 watermarkPosition: 'bottom-right',
                 watermarkLogoPath: null,
+                watermarkUseText: true,
+                watermarkUseLogo: false,
                 shopName: 'Electro Hub Market',
                 shopAddress: 'No. 95A/1, Hallambage Watta, Palatuwa, Matara',
                 shopPhone: '076 441 3256',

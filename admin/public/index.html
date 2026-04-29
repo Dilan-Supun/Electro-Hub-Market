@@ -386,17 +386,18 @@
                     <form id="settings-form" class="settings-card card">
                         <h3>🎨 Brand Watermarking</h3>
 
-                        <!-- Watermark type toggle -->
+                        <!-- Watermark selection (Independent) -->
                         <div class="form-group">
-                            <label>Watermark Type</label>
-                            <div class="wm-type-toggle">
-                                <label class="wm-type-opt">
-                                    <input type="radio" name="wm-type" id="wm-type-text" value="text" checked>
-                                    <span>✏️ Text</span>
+                            <div style="display: flex; gap: 2rem; margin-bottom: 1rem;">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="set-watermark-use-text" checked>
+                                    <span class="checkmark"></span>
+                                    Enable Text Watermark
                                 </label>
-                                <label class="wm-type-opt">
-                                    <input type="radio" name="wm-type" id="wm-type-logo" value="logo">
-                                    <span>🖼️ Logo / Image</span>
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="set-watermark-use-logo">
+                                    <span class="checkmark"></span>
+                                    Enable Logo Watermark
                                 </label>
                             </div>
                         </div>

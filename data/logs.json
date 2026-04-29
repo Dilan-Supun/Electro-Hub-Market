@@ -1,5 +1,191 @@
 [
   {
+    "id": 1777480024526,
+    "timestamp": "2026-04-29T16:27:04.526Z",
+    "action": "edit product",
+    "details": {
+      "id": "irs2092-class-d-amplifier",
+      "title": "IRS2092 High Power Class D Amplifier Board with Speaker Protection"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777480021556,
+    "timestamp": "2026-04-29T16:27:01.556Z",
+    "action": "upload product image",
+    "details": {
+      "productId": "irs2092-class-d-amplifier",
+      "path": "images/products/irs2092-class-d-amplifier/original/product_1777480021521.jpg"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777478869242,
+    "timestamp": "2026-04-29T16:07:49.242Z",
+    "action": "edit product",
+    "details": {
+      "id": "wifi-smart-power-meter-with-40a-switch",
+      "title": "WiFi Smart Power Meter with 40A Switch"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777478865391,
+    "timestamp": "2026-04-29T16:07:45.391Z",
+    "action": "ai generate text",
+    "details": {
+      "type": "hashtags",
+      "productId": "wifi-smart-power-meter-with-40a-switch"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777478819712,
+    "timestamp": "2026-04-29T16:06:59.712Z",
+    "action": "save final AI image",
+    "details": {
+      "productId": "studio",
+      "watermarked": true
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777478812717,
+    "timestamp": "2026-04-29T16:06:52.717Z",
+    "action": "apply watermark",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777478728651.JPG"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777478797560,
+    "timestamp": "2026-04-29T16:06:37.560Z",
+    "action": "update settings",
+    "details": {},
+    "admin": "admin"
+  },
+  {
+    "id": 1777478778781,
+    "timestamp": "2026-04-29T16:06:18.781Z",
+    "action": "apply watermark",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777478728651.JPG"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777478768426,
+    "timestamp": "2026-04-29T16:06:08.426Z",
+    "action": "update settings",
+    "details": {},
+    "admin": "admin"
+  },
+  {
+    "id": 1777478733170,
+    "timestamp": "2026-04-29T16:05:33.170Z",
+    "action": "apply watermark",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777478728651.JPG"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777478524831,
+    "timestamp": "2026-04-29T16:02:04.831Z",
+    "action": "create order",
+    "details": {
+      "id": "ORD-20260429-24820",
+      "customer": "B.R.N.C.niroshan",
+      "total": 3350
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777478498982,
+    "timestamp": "2026-04-29T16:01:38.982Z",
+    "action": "add customer",
+    "details": {
+      "id": "7",
+      "name": "B.R.N.C.niroshan"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777478429243,
+    "timestamp": "2026-04-29T16:00:29.243Z",
+    "action": "edit customer",
+    "details": {
+      "id": "6",
+      "name": "Kpg n l wejesinha (5)"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777478416666,
+    "timestamp": "2026-04-29T16:00:16.666Z",
+    "action": "delete customer",
+    "details": {
+      "id": "5"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777478343398,
+    "timestamp": "2026-04-29T15:59:03.398Z",
+    "action": "add customer",
+    "details": {
+      "id": "6",
+      "name": "Kpg n l wejesinha (5)"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777478224805,
+    "timestamp": "2026-04-29T15:57:04.805Z",
+    "action": "edit customer",
+    "details": {
+      "id": "5",
+      "name": "B.R.N.C.niroshan"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777478020681,
+    "timestamp": "2026-04-29T15:53:40.681Z",
+    "action": "create order",
+    "details": {
+      "id": "ORD-20260429-20670",
+      "customer": "Pasidu gimhan",
+      "total": 3350
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777477994954,
+    "timestamp": "2026-04-29T15:53:14.954Z",
+    "action": "create order",
+    "details": {
+      "id": "ORD-20260429-94925",
+      "customer": "Pasidu gimhan",
+      "total": 3350
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777477946720,
+    "timestamp": "2026-04-29T15:52:26.720Z",
+    "action": "add customer",
+    "details": {
+      "id": "1",
+      "name": "Pasidu gimhan"
+    },
+    "admin": "admin"
+  },
+  {
     "id": 1777463709117,
     "timestamp": "2026-04-29T11:55:09.117Z",
     "action": "update settings",

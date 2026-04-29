@@ -37,19 +37,20 @@ const imageService = {
     },
 
     async applyWatermark(inputBuffer, config) {
-        const { text, position, opacity, logoPath } = config;
+        const { text, position, opacity, logoPath, useText, useLogo } = config;
 
-        const image = await Jimp.read(inputBuffer);
+        let image = await Jimp.read(inputBuffer);
         const imgW = image.getWidth();
         const imgH = image.getHeight();
         const margin = Math.round(Math.min(imgW, imgH) * 0.03); // 3% margin
+        const safeOpacity = Math.min(Math.max(opacity || 0.5, 0.1), 1);
 
         // --- Image / logo overlay ---
-        if (logoPath && (await fs.pathExists(logoPath))) {
+        if (useLogo && logoPath && (await fs.pathExists(logoPath))) {
             const logo = await Jimp.read(logoPath);
             const logoW = Math.round(imgW * 0.22); // 22% of image width
             logo.resize(logoW, Jimp.AUTO);
-            logo.opacity(Math.min(Math.max(opacity, 0.1), 1));
+            logo.opacity(safeOpacity);
 
             let x = margin;
             let y = imgH - logo.getHeight() - margin;
@@ -65,50 +66,46 @@ const imageService = {
                 y = Math.round((imgH - logo.getHeight()) / 2);
             }
 
-            return image
-                .composite(logo, x, y, {
-                    mode: Jimp.BLEND_SOURCE_OVER,
-                    opacitySource: Math.min(Math.max(opacity, 0.1), 1),
-                    opacityDest: 1
-                })
-                .getBufferAsync(Jimp.MIME_JPEG);
+            image = image.composite(logo, x, y, {
+                mode: Jimp.BLEND_SOURCE_OVER,
+                opacitySource: safeOpacity,
+                opacityDest: 1
+            });
         }
 
         // --- Text watermark ---
-        const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
+        if (useText !== false) {
+            const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
+            const overlay = new Jimp(imgW, imgH, 0x00000000);
 
-        // Create a transparent overlay the same size as the source image so we
-        // can use Jimp's alignment helpers, then shift it into place.
-        const overlay = new Jimp(imgW, imgH, 0x00000000);
+            let alignX = Jimp.HORIZONTAL_ALIGN_CENTER;
+            let alignY = Jimp.VERTICAL_ALIGN_BOTTOM;
+            let printX = 0;
+            let printY = 0;
+            let printW = imgW;
+            let printH = imgH - margin;
 
-        let alignX = Jimp.HORIZONTAL_ALIGN_CENTER;
-        let alignY = Jimp.VERTICAL_ALIGN_BOTTOM;
-        let printX = 0;
-        let printY = 0;
-        let printW = imgW;
-        let printH = imgH - margin;
+            if (position === 'bottom-right') {
+                alignX = Jimp.HORIZONTAL_ALIGN_RIGHT;
+                printX = -margin;
+            } else if (position === 'bottom-center') {
+                alignX = Jimp.HORIZONTAL_ALIGN_CENTER;
+            } else if (position === 'center') {
+                alignY = Jimp.VERTICAL_ALIGN_MIDDLE;
+                printH = imgH;
+            }
 
-        if (position === 'bottom-right') {
-            alignX = Jimp.HORIZONTAL_ALIGN_RIGHT;
-            printX = -margin;
-        } else if (position === 'bottom-center') {
-            alignX = Jimp.HORIZONTAL_ALIGN_CENTER;
-        } else if (position === 'center') {
-            alignY = Jimp.VERTICAL_ALIGN_MIDDLE;
-            printH = imgH;
+            overlay.print(font, printX, printY, {
+                text: text || 'Electro Hub',
+                alignmentX: alignX,
+                alignmentY: alignY
+            }, printW, printH);
+
+            overlay.opacity(safeOpacity);
+            image = image.composite(overlay, 0, 0);
         }
 
-        overlay.print(font, printX, printY, {
-            text: text || 'Electro Hub',
-            alignmentX: alignX,
-            alignmentY: alignY
-        }, printW, printH);
-
-        overlay.opacity(Math.min(Math.max(opacity, 0.1), 1));
-
-        return image
-            .composite(overlay, 0, 0)
-            .getBufferAsync(Jimp.MIME_JPEG);
+        return image.getBufferAsync(Jimp.MIME_JPEG);
     }
 };
 

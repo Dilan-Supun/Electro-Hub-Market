@@ -176,13 +176,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const waTokenEl = document.getElementById('set-wa-access-token');
             if (waTokenEl && data.waAccessToken) waTokenEl.placeholder = '(saved)';
 
-            // Reflect active watermark type
+            // Reflect independent watermark states
+            const useTextCb = document.getElementById('set-watermark-use-text');
+            const useLogoCb = document.getElementById('set-watermark-use-logo');
+            if (useTextCb) {
+                useTextCb.checked = data.watermarkUseText !== false; // Default true
+                toggleWatermarkVisibility('text', useTextCb.checked);
+            }
+            if (useLogoCb) {
+                useLogoCb.checked = !!data.watermarkUseLogo; // Default false
+                toggleWatermarkVisibility('logo', useLogoCb.checked);
+            }
+
             if (data.watermarkLogoPath) {
-                const logoRadio = document.getElementById('wm-type-logo');
-                if (logoRadio) {
-                    logoRadio.checked = true;
-                    toggleWatermarkTypeUI('logo');
-                }
                 const logoStatus = document.getElementById('logo-status');
                 if (logoStatus) {
                     logoStatus.textContent = `Active logo: ${data.watermarkLogoPath.split('/').pop()}`;
@@ -616,6 +622,59 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.onclick = () => modal.style.display = 'none';
     });
 
+    // --- Product Image Upload (Modal) ---
+    const pImageInput = document.getElementById('p-image-input');
+    const pImageZone = document.getElementById('product-img-zone');
+    const pImagePreview = document.getElementById('p-image-preview');
+    const pImagePrompt = document.getElementById('p-image-prompt');
+    const pImageStatus = document.getElementById('p-image-status');
+    const pImagePathHidden = document.getElementById('p-image-path');
+
+    if (pImageZone) {
+        pImageZone.onclick = () => pImageInput && pImageInput.click();
+    }
+
+    if (pImageInput) {
+        pImageInput.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Preview local
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                if (pImagePreview) { pImagePreview.src = ev.target.result; pImagePreview.style.display = 'block'; }
+                if (pImagePrompt) pImagePrompt.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+
+            // Upload
+            if (pImageStatus) { pImageStatus.textContent = 'Uploading...'; pImageStatus.style.display = 'block'; }
+            
+            const formData = new FormData();
+            formData.append('image', file);
+
+            // If we are editing, use the product ID, otherwise use 'temp' or 'new'
+            const uploadId = editingId || 'new';
+            
+            try {
+                const res = await fetch(`/api/products/${uploadId}/upload-image`, {
+                    method: 'POST',
+                    headers: { 'authorization': localStorage.getItem('adminPassword') },
+                    body: formData
+                });
+                const data = await res.json();
+                if (data.success) {
+                    if (pImagePathHidden) pImagePathHidden.value = data.imagePath;
+                    if (pImageStatus) pImageStatus.textContent = '✅ Image uploaded';
+                } else {
+                    if (pImageStatus) pImageStatus.textContent = '❌ Upload failed: ' + (data.error || 'Unknown error');
+                }
+            } catch (err) {
+                if (pImageStatus) pImageStatus.textContent = '❌ Connection error';
+            }
+        };
+    }
+
     productForm.onsubmit = async (e) => {
         e.preventDefault();
         const formData = {
@@ -740,16 +799,15 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('log-type-filter').onchange = renderLogs;
 
     // --- Settings Form ---
-    function toggleWatermarkTypeUI(type) {
-        const textFields = document.getElementById('wm-text-fields');
-        const logoFields = document.getElementById('wm-logo-fields');
-        if (textFields) textFields.style.display = type === 'text' ? '' : 'none';
-        if (logoFields) logoFields.style.display = type === 'logo' ? '' : 'none';
+    function toggleWatermarkVisibility(type, visible) {
+        const fields = document.getElementById(`wm-${type}-fields`);
+        if (fields) fields.style.display = visible ? '' : 'none';
     }
 
-    document.querySelectorAll('input[name="wm-type"]').forEach(radio => {
-        radio.addEventListener('change', () => toggleWatermarkTypeUI(radio.value));
-    });
+    const useTextCb = document.getElementById('set-watermark-use-text');
+    const useLogoCb = document.getElementById('set-watermark-use-logo');
+    if (useTextCb) useTextCb.onchange = () => toggleWatermarkVisibility('text', useTextCb.checked);
+    if (useLogoCb) useLogoCb.onchange = () => toggleWatermarkVisibility('logo', useLogoCb.checked);
 
     const settingsForm = document.getElementById('settings-form');
     if (settingsForm) {
@@ -759,7 +817,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ...currentSettings,
                 watermarkText: document.getElementById('set-watermark-text').value,
                 watermarkPosition: document.getElementById('set-watermark-pos').value,
-                watermarkOpacity: parseFloat(document.getElementById('set-watermark-opacity').value) || 0.5
+                watermarkOpacity: parseFloat(document.getElementById('set-watermark-opacity').value) || 0.5,
+                watermarkUseText: document.getElementById('set-watermark-use-text').checked,
+                watermarkUseLogo: document.getElementById('set-watermark-use-logo').checked
             };
             const res = await apiFetch('/api/settings', {
                 method: 'POST',
