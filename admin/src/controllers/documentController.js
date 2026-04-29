@@ -30,6 +30,7 @@ const documentController = {
                 address: settings.shopAddress || '',
                 phone: settings.shopPhone || '',
                 email: settings.shopEmail || '',
+                website: settings.shopWebsite || 'www.electrohub.lk',
                 logoPath: settings.watermarkLogoPath || null
             };
 
@@ -60,7 +61,7 @@ const documentController = {
     .no-print { display: none !important; }
   }
   .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; padding-bottom: 24px; border-bottom: 2px solid #e2e8f0; }
-  .shop-logo { max-height: 60px; max-width: 160px; object-fit: contain; margin-bottom: 6px; }
+  .shop-logo { max-height: 80px; max-width: 280px; object-fit: contain; margin-bottom: 6px; }
   .shop-name { font-size: 24px; font-weight: 800; color: #2563eb; letter-spacing: -0.5px; }
   .shop-meta { font-size: 12px; color: #64748b; margin-top: 4px; line-height: 1.7; }
   .invoice-meta { text-align: right; }
@@ -90,7 +91,7 @@ const documentController = {
   <div class="header">
     <div>
       ${shop.logoPath ? `<img src="/${shop.logoPath}" class="shop-logo" alt="logo">` : `<div class="shop-name">${shop.name}</div>`}
-      <div class="shop-meta">${[shop.address, shop.phone, shop.email].filter(Boolean).join(' &nbsp;|&nbsp; ')}</div>
+      <div class="shop-meta">${[shop.address, shop.phone, shop.email, shop.website].filter(Boolean).join(' &nbsp;|&nbsp; ')}</div>
     </div>
     <div class="invoice-meta">
       <div class="invoice-id">INVOICE</div>
@@ -106,13 +107,15 @@ const documentController = {
       <div class="party-name">${shop.name}</div>
       <div class="party-detail">${shop.address ? shop.address.replace(/,/g, ',<br>') : ''}</div>
       ${shop.phone ? `<div class="party-detail">📞 ${shop.phone}</div>` : ''}
+      ${shop.website ? `<div class="party-detail">🌐 ${shop.website}</div>` : ''}
       ${shop.email ? `<div class="party-detail">✉ ${shop.email}</div>` : ''}
     </div>
     <div class="party-box">
       <div class="party-label">Bill To (Customer)</div>
-      <div class="party-name">${order.customerName}</div>
+      <div class="party-name">${order.customerName} ${order.customerId ? `<span style="font-size:11px; font-weight:400; color:#94a3b8;">(${order.customerId})</span>` : ''}</div>
       <div class="party-detail">${order.customerAddress ? order.customerAddress.replace(/,/g, ',<br>') : ''}</div>
-      ${order.customerPhone ? `<div class="party-detail">📞 ${order.customerPhone}</div>` : ''}
+      ${order.customerPhone ? `<div class="party-detail">📞 Primary: ${order.customerPhone}</div>` : ''}
+      ${order.customerPhone2 ? `<div class="party-detail">📞 Secondary: ${order.customerPhone2}</div>` : ''}
       ${order.customerEmail ? `<div class="party-detail">✉ ${order.customerEmail}</div>` : ''}
     </div>
   </div>
@@ -137,7 +140,7 @@ const documentController = {
 
   ${order.notes ? `<div class="notes"><strong>Notes:</strong> ${order.notes}</div>` : ''}
 
-  <div class="footer">Thank you for shopping with ${shop.name} &bull; Generated on ${new Date().toLocaleString()}</div>
+  <div class="footer">Thank you for shopping with ${shop.name} &bull; ${shop.website} &bull; Generated on ${new Date().toLocaleString()}</div>
   <button class="btn-print no-print" onclick="window.print()">🖨️ Print Invoice</button>
 </div>
 </body>
@@ -162,6 +165,7 @@ const documentController = {
                 address: settings.shopAddress || '',
                 phone: settings.shopPhone || '',
                 email: settings.shopEmail || '',
+                website: settings.shopWebsite || 'www.electrohub.lk',
                 logoPath: settings.watermarkLogoPath || null
             };
 
@@ -202,7 +206,7 @@ const documentController = {
   .text-medium { font-size: 14px; }
   .text-small { font-size: 11px; line-height: 1.4; }
 
-  .logo-img { max-height: 50px; max-width: 150px; object-fit: contain; }
+  .logo-img { max-height: 70px; max-width: 250px; object-fit: contain; }
   .fragile-box { border: 4px solid #000; color: #000; padding: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
   .fragile-icon { font-size: 32px; margin-bottom: 4px; }
   .fragile-text { font-weight: 900; font-size: 20px; }
@@ -227,7 +231,7 @@ const documentController = {
       <div class="label-small">From:</div>
       <div class="text-bold text-medium">${shop.name}</div>
       <div class="text-small">${shop.address}</div>
-      <div class="text-small">Phone: ${shop.phone}</div>
+      <div class="text-small">Phone: ${shop.phone} | Website: ${shop.website}</div>
     </div>
   </div>
 
@@ -249,7 +253,7 @@ const documentController = {
       <div class="label-small">Ship To:</div>
       <div class="text-bold text-large">${order.customerName}</div>
       <div class="text-small">${order.customerAddress}</div>
-      <div class="text-bold text-medium">Phone: ${order.customerPhone}</div>
+      <div class="text-bold text-medium">Phone: ${order.customerPhone} ${order.customerPhone2 ? ` / ${order.customerPhone2}` : ''}</div>
     </div>
   </div>
 

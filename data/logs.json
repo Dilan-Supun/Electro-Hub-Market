@@ -1,5 +1,260 @@
 [
   {
+    "id": 1777458219329,
+    "timestamp": "2026-04-29T10:23:39.329Z",
+    "action": "ai generate text",
+    "details": {
+      "type": "fb-caption",
+      "productId": "irs2092-class-d-amplifier"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777458162732,
+    "timestamp": "2026-04-29T10:22:42.732Z",
+    "action": "ai generate text",
+    "details": {
+      "type": "hashtags",
+      "productId": "irs2092-class-d-amplifier"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777458051759,
+    "timestamp": "2026-04-29T10:20:51.759Z",
+    "action": "delete customer",
+    "details": {
+      "id": "CUST-4463"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777458045312,
+    "timestamp": "2026-04-29T10:20:45.312Z",
+    "action": "delete order",
+    "details": {
+      "id": "ORD-20260429-00992"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777458000999,
+    "timestamp": "2026-04-29T10:20:00.999Z",
+    "action": "create order",
+    "details": {
+      "id": "ORD-20260429-00992",
+      "customer": "Danushka wijeweera",
+      "total": 2950
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777457949109,
+    "timestamp": "2026-04-29T10:19:09.109Z",
+    "action": "add customer",
+    "details": {
+      "id": "CUST-4463",
+      "name": "Danushka wijeweera"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777457904213,
+    "timestamp": "2026-04-29T10:18:24.213Z",
+    "action": "apply watermark",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777457877455.png"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777457899577,
+    "timestamp": "2026-04-29T10:18:19.577Z",
+    "action": "update settings",
+    "details": {},
+    "admin": "admin"
+  },
+  {
+    "id": 1777457879678,
+    "timestamp": "2026-04-29T10:17:59.678Z",
+    "action": "apply watermark",
+    "details": {
+      "productId": "studio",
+      "source": "images/studio/temp/studio_1777457877455.png"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777455053155,
+    "timestamp": "2026-04-29T09:30:53.155Z",
+    "action": "edit customer",
+    "details": {
+      "id": "5",
+      "name": "Kpg n  l  wejesinha"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777455004853,
+    "timestamp": "2026-04-29T09:30:04.853Z",
+    "action": "create order",
+    "details": {
+      "id": "ORD-20260429-04847",
+      "customer": "Kpg n  l  wejesinha",
+      "total": 5200
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777454941546,
+    "timestamp": "2026-04-29T09:29:01.546Z",
+    "action": "edit customer",
+    "details": {
+      "id": "5",
+      "name": "Kpg n  l  wejesinha"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777454917446,
+    "timestamp": "2026-04-29T09:28:37.446Z",
+    "action": "edit customer",
+    "details": {
+      "id": "5",
+      "name": "Kpg n  l  wejesinha"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777454883452,
+    "timestamp": "2026-04-29T09:28:03.452Z",
+    "action": "add customer",
+    "details": {
+      "id": "5",
+      "name": "Kpg n  l  wejesinha ,,,ambalangoda batapola nindana ,,,0767331265"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777454827423,
+    "timestamp": "2026-04-29T09:27:07.423Z",
+    "action": "create order",
+    "details": {
+      "id": "ORD-20260429-27417",
+      "customer": "Danushka wijeweera",
+      "total": 1250
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777454785484,
+    "timestamp": "2026-04-29T09:26:25.484Z",
+    "action": "add customer",
+    "details": {
+      "id": "4",
+      "name": "Danushka wijeweera"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777454777022,
+    "timestamp": "2026-04-29T09:26:17.022Z",
+    "action": "delete customer",
+    "details": {
+      "id": "CUST-8338"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777454757685,
+    "timestamp": "2026-04-29T09:25:57.685Z",
+    "action": "add customer",
+    "details": {
+      "id": "CUST-8338",
+      "name": "Danushka wijeweera"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777454240727,
+    "timestamp": "2026-04-29T09:17:20.727Z",
+    "action": "edit product",
+    "details": {
+      "id": "vhm-314-bluetooth",
+      "title": "VHM-314 Bluetooth 5.0 Audio Receiver"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777454209537,
+    "timestamp": "2026-04-29T09:16:49.537Z",
+    "action": "edit product",
+    "details": {
+      "id": "xh-a901-preamp",
+      "title": "XH-A901 NE5532 Tone Control PreAmp"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777454021816,
+    "timestamp": "2026-04-29T09:13:41.816Z",
+    "action": "create order",
+    "details": {
+      "id": "ORD-20260429-21810",
+      "customer": "Rohan sandanayaka",
+      "total": 2950
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777453995798,
+    "timestamp": "2026-04-29T09:13:15.798Z",
+    "action": "delete order",
+    "details": {
+      "id": "ORD-20260429-16424"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777453990848,
+    "timestamp": "2026-04-29T09:13:10.848Z",
+    "action": "delete customer",
+    "details": {
+      "id": "2"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777453986167,
+    "timestamp": "2026-04-29T09:13:06.167Z",
+    "action": "add customer",
+    "details": {
+      "id": "2",
+      "name": "Rohan sandanayaka"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777453910668,
+    "timestamp": "2026-04-29T09:11:50.668Z",
+    "action": "upload watermark logo",
+    "details": {
+      "path": "data/logo/logo.jpeg"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777450923313,
+    "timestamp": "2026-04-29T08:22:03.313Z",
+    "action": "edit customer",
+    "details": {
+      "id": "3",
+      "name": "Rohan sandanayaka"
+    },
+    "admin": "admin"
+  },
+  {
     "id": 1777450365335,
     "timestamp": "2026-04-29T08:12:45.335Z",
     "action": "delete customer",

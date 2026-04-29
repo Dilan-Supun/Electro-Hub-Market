@@ -153,14 +153,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 'set-shop-address': 'shopAddress',
                 'set-shop-phone': 'shopPhone',
                 'set-shop-email': 'shopEmail',
-                'set-shop-url': 'shopUrl',
+                'set-shop-website': 'shopWebsite',
                 'set-fb-page-id': 'fbPageId',
                 'set-fb-catalog-id': 'fbCatalogId',
                 'set-wa-phone-id': 'waPhoneNumberId'
             };
             for (const [id, key] of Object.entries(fields)) {
                 const el = document.getElementById(id);
-                if (el) el.value = data[key] || '';
+                if (el) {
+                    // Fallback for legacy shopUrl to shopWebsite
+                    let val = data[key] || '';
+                    if (key === 'shopWebsite' && !val && data.shopUrl) val = data.shopUrl;
+                    el.value = val;
+                }
             }
             // Don't pre-fill token fields for security — just show placeholder if set
             const fbTokenEl = document.getElementById('set-fb-access-token');
@@ -820,7 +825,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 shopAddress: document.getElementById('set-shop-address').value,
                 shopPhone: document.getElementById('set-shop-phone').value,
                 shopEmail: document.getElementById('set-shop-email').value,
-                shopUrl: document.getElementById('set-shop-url').value
+                shopWebsite: document.getElementById('set-shop-website').value,
+                shopUrl: document.getElementById('set-shop-website').value // Sync both for compatibility
             };
             const res = await apiFetch('/api/settings', { method: 'POST', body: JSON.stringify(payload) });
             if (res && res.success) {
