@@ -80,7 +80,14 @@ function sendWhatsAppOrder(cart, total) {
 
     message += `Estimated Total: Rs. ${total.toLocaleString()}\n`;
     message += `---------------------------\n`;
-    message += `Please confirm availability and delivery charges.`;
+    message += `Please confirm availability and delivery charges.\n\n`;
+    message += `My Details:\n`;
+    message += `Name:\n`;
+    message += `Address:\n`;
+    message += `District:\n`;
+    message += `Nearest City:\n`;
+    message += `Phone (Alternative):\n`;
+    message += `---------------------------\n`;
 
     const waLink = `https://wa.me/${shopPhone.startsWith('0') ? '94' + shopPhone.substring(1) : shopPhone}?text=${encodeURIComponent(message)}`;
     window.open(waLink, '_blank');

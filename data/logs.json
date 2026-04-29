@@ -1,5 +1,21 @@
 [
   {
+    "id": 1777463709117,
+    "timestamp": "2026-04-29T11:55:09.117Z",
+    "action": "update settings",
+    "details": {},
+    "admin": "admin"
+  },
+  {
+    "id": 1777463645487,
+    "timestamp": "2026-04-29T11:54:05.487Z",
+    "action": "upload shop logo",
+    "details": {
+      "path": "data/shop/shop-logo.jpeg"
+    },
+    "admin": "admin"
+  },
+  {
     "id": 1777461884706,
     "timestamp": "2026-04-29T11:24:44.706Z",
     "action": "delete customer",

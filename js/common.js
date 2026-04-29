@@ -50,6 +50,12 @@ function applySettings() {
     if (brandMark) {
       brandMark.innerHTML = `<img src="${s.shopLogoPath}" alt="Logo" style="width:100%; height:100%; object-fit:contain; border-radius:4px;">`;
     }
+
+    const hugeContainer = document.getElementById('shop-image-huge-container');
+    if (hugeContainer) {
+      hugeContainer.innerHTML = `<img src="${s.shopLogoPath}" alt="${s.shopName}" style="max-width: 320px; height: auto; border-radius: var(--radius-xl); box-shadow: var(--shadow-lg);">`;
+      hugeContainer.style.display = 'block';
+    }
   }
 }
 
