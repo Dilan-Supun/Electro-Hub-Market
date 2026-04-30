@@ -1,5 +1,123 @@
 [
   {
+    "id": 1777517653296,
+    "timestamp": "2026-04-30T02:54:13.296Z",
+    "action": "edit product",
+    "details": {
+      "id": "9",
+      "title": "12V MPPT Solar Charge Controller 3S 18650 Battery Charger Module"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777517547172,
+    "timestamp": "2026-04-30T02:52:27.172Z",
+    "action": "edit product",
+    "details": {
+      "id": "9",
+      "title": "12V MPPT Solar Charge Controller 3S 18650 Battery Charger Module"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777517519062,
+    "timestamp": "2026-04-30T02:51:59.062Z",
+    "action": "add product",
+    "details": {
+      "id": "9",
+      "title": "This CN3722-based module is a compact MPPT (Maximum Power Point Tracking) solar charge controller designed to charge 3S (11.1 V nominal) lithium-ion battery packs directly from 12–18 V solar panels. It maximizes energy harvest under varying sunlight conditions and includes onboard protection features for safe multi-cell charging"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777517506596,
+    "timestamp": "2026-04-30T02:51:46.596Z",
+    "action": "ai generate text",
+    "details": {
+      "type": "hashtags",
+      "productId": null
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777517474080,
+    "timestamp": "2026-04-30T02:51:14.080Z",
+    "action": "ai generate text",
+    "details": {
+      "type": "description",
+      "productId": null
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777517453882,
+    "timestamp": "2026-04-30T02:50:53.882Z",
+    "action": "ai generate text",
+    "details": {
+      "type": "description",
+      "productId": null
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777516718292,
+    "timestamp": "2026-04-30T02:38:38.292Z",
+    "action": "add product",
+    "details": {
+      "id": "8",
+      "title": "60W TPA3118  Class-D  Amplifier"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777516463102,
+    "timestamp": "2026-04-30T02:34:23.102Z",
+    "action": "ai generate text",
+    "details": {
+      "type": "description",
+      "productId": null
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777482612775,
+    "timestamp": "2026-04-29T17:10:12.775Z",
+    "action": "ai generate text",
+    "details": {
+      "type": "fb-caption",
+      "productId": "irs2092-class-d-amplifier"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777482047033,
+    "timestamp": "2026-04-29T17:00:47.033Z",
+    "action": "delete product",
+    "details": {
+      "id": "dji-neo-6-in-1-filter-pack"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777482035408,
+    "timestamp": "2026-04-29T17:00:35.408Z",
+    "action": "delete product",
+    "details": {
+      "id": "4"
+    },
+    "admin": "admin"
+  },
+  {
+    "id": 1777480759517,
+    "timestamp": "2026-04-29T16:39:19.517Z",
+    "action": "edit product",
+    "details": {
+      "id": "wifi-smart-power-meter-with-40a-switch",
+      "title": "WiFi Smart Power Meter with 40A Switch"
+    },
+    "admin": "admin"
+  },
+  {
     "id": 1777480024526,
     "timestamp": "2026-04-29T16:27:04.526Z",
     "action": "edit product",

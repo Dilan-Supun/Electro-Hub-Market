@@ -1,5 +1,5 @@
 const statsData = {
   "totalProducts": 8,
-  "categories": 3,
-  "lastUpdated": "2026-04-29T16:27:07.252Z"
+  "categories": 2,
+  "lastUpdated": "2026-04-30T02:54:15.502Z"
 };
