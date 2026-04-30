@@ -13,9 +13,17 @@
       "High charging efficiency and fast charging capability",
       "Built-in battery protection for safe and reliable operation",
       "Compact and easy to integrate into solar energy projects",
-      "Supports a wide input voltage range suitable for various solar panels"
+      "Supports a wide input voltage range suitable for various solar panels",
+      "Input Voltage: 6V to 20V DC (solar panel input)",
+      "Output Voltage: 12.6V (for 3S Li-ion batteries)",
+      "Charging Current: Up to 3A (adjustable with external resistor)",
+      "MPPT Efficiency: > 98%",
+      "Battery Type: 3S 12.6V Lithium-ion Battery Pack",
+      "Operating Temperature: -40°C to +85°C"
     ],
-    "buyingDelivery": [],
+    "buyingDelivery": [
+      "1 x CN3722 12V MPPT Solar Charge Controller Module for 3S Lithium-ion Battery"
+    ],
     "tags": [
       "MPPT",
       "Solar Charge Controller",
@@ -28,7 +36,7 @@
     "image": "",
     "isDeleted": false,
     "createdAt": "2026-04-30T02:51:59.052Z",
-    "updatedAt": "2026-04-30T02:54:13.289Z",
+    "updatedAt": "2026-04-30T02:55:35.699Z",
     "meta": null,
     "link": null,
     "svg": null,

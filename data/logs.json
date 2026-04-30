@@ -1,5 +1,15 @@
 [
   {
+    "id": 1777517735711,
+    "timestamp": "2026-04-30T02:55:35.711Z",
+    "action": "edit product",
+    "details": {
+      "id": "9",
+      "title": "12V MPPT Solar Charge Controller 3S 18650 Battery Charger Module"
+    },
+    "admin": "admin"
+  },
+  {
     "id": 1777517653296,
     "timestamp": "2026-04-30T02:54:13.296Z",
     "action": "edit product",
