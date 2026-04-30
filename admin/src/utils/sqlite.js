@@ -278,6 +278,7 @@ module.exports = {
             features: this.parseJson(p.features),
             buyingDelivery: this.parseJson(p.buyingDelivery),
             tags: this.parseJson(p.tags),
+            images: this.parseJson(p.images),
             isDeleted: !!p.isDeleted
         }));
     },
@@ -294,6 +295,7 @@ module.exports = {
             features: this.parseJson(p.features),
             buyingDelivery: this.parseJson(p.buyingDelivery),
             tags: this.parseJson(p.tags),
+            images: this.parseJson(p.images),
             isDeleted: !!p.isDeleted
         };
     },

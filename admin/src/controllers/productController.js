@@ -37,6 +37,12 @@ const productController = {
             }
 
             const existing = await sqlite.getProductById(productData.id);
+            
+            // Auto-generate link if missing or null
+            if (!productData.link || productData.link === 'null') {
+                productData.link = `product.html?id=${productData.id}`;
+            }
+
             if (existing) {
                 await sqlite.upsertProduct(productData);
                 await logger.log('edit product', { id: productData.id, title: productData.title });

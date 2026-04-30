@@ -38,9 +38,9 @@ const productsData = [
     "createdAt": "2026-04-30T02:51:59.052Z",
     "updatedAt": "2026-04-30T02:55:35.699Z",
     "meta": null,
-    "link": null,
+    "link": "product.html?id=9",
     "svg": null,
-    "images": null,
+    "images": [],
     "badge": null
   },
   {
@@ -59,9 +59,9 @@ const productsData = [
     "createdAt": "2026-04-30T02:38:38.284Z",
     "updatedAt": "2026-04-30T02:38:38.284Z",
     "meta": null,
-    "link": null,
+    "link": "product.html?id=8",
     "svg": null,
-    "images": null,
+    "images": [],
     "badge": null
   },
   {
@@ -189,7 +189,7 @@ const productsData = [
     "meta": "Up to 3A · 96% eff.",
     "link": "products/mp1584-buck-converter.html",
     "svg": "<rect x=\"130\" y=\"113\" width=\"160\" height=\"90\" rx=\"6\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><rect x=\"165\" y=\"138\" width=\"90\" height=\"40\" rx=\"4\" fill=\"currentColor\" opacity=\"0.10\"/><text x=\"210\" y=\"161\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.68\" font-family=\"sans-serif\" font-weight=\"bold\">MP1584</text><circle cx=\"312\" cy=\"158\" r=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.42\"/><text x=\"312\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"8\" fill=\"currentColor\" opacity=\"0.55\" font-family=\"sans-serif\">ADJ</text><text x=\"210\" y=\"252\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.42\" font-family=\"sans-serif\">4.75–23V → 1–17V · 96% eff.</text>",
-    "images": null,
+    "images": [],
     "badge": null
   },
   {
@@ -210,7 +210,7 @@ const productsData = [
     "meta": "12V · Class D",
     "link": "products/pam8610-amplifier.html",
     "svg": "<rect x=\"80\" y=\"93\" width=\"260\" height=\"130\" rx=\"8\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><rect x=\"155\" y=\"123\" width=\"110\" height=\"70\" rx=\"4\" fill=\"currentColor\" opacity=\"0.10\"/><text x=\"210\" y=\"161\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"13\" fill=\"currentColor\" opacity=\"0.68\" font-family=\"sans-serif\" font-weight=\"bold\">PAM8610</text><text x=\"210\" y=\"262\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.42\" font-family=\"sans-serif\">2×10W (8Ω) · 2×15W (4Ω)</text>",
-    "images": null,
+    "images": [],
     "badge": null
   },
   {
@@ -231,7 +231,7 @@ const productsData = [
     "meta": "BT 5.0 · Stereo",
     "link": "products/vhm-314-bluetooth.html",
     "svg": "<rect x=\"100\" y=\"88\" width=\"220\" height=\"140\" rx=\"10\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><path d=\"M200 138 l20 20 -20 20 m20-40 l0 80\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\" opacity=\"0.60\"/><path d=\"M200 158 l-12-12 m12 12 l-12 12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" opacity=\"0.38\"/><text x=\"210\" y=\"268\" text-anchor=\"middle\" font-size=\"11\" fill=\"currentColor\" opacity=\"0.42\" font-family=\"sans-serif\">BT 5.0 · A2DP · AVRCP</text>",
-    "images": null,
+    "images": [],
     "badge": null
   },
   {
@@ -252,7 +252,7 @@ const productsData = [
     "meta": "2ch Stereo · 12–24V",
     "link": "products/xh-a901-preamp.html",
     "svg": "<rect x=\"70\" y=\"108\" width=\"280\" height=\"100\" rx=\"8\" fill=\"none\" stroke=\"currentColor\" opacity=\"0.45\"/><circle cx=\"140\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><circle cx=\"210\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><circle cx=\"280\" cy=\"158\" r=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" opacity=\"0.50\"/><text x=\"140\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">BASS</text><text x=\"210\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">MID</text><text x=\"280\" y=\"162\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"9\" fill=\"currentColor\" opacity=\"0.60\" font-family=\"sans-serif\">TRB</text>",
-    "images": null,
+    "images": [],
     "badge": null
   }
 ];
